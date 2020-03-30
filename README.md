@@ -1,6 +1,8 @@
 # Gitlab Notify Extension
 
-This extension aims to poll merge requests you are assigned to and the ones you created.
+This browser extension aims to poll merge requests you are assigned to and the ones you created.
+
+![Preview of the browser extension: 30/03/2020](./preview.png)
 
 ## Setup
 
