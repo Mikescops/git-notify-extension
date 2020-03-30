@@ -140,13 +140,15 @@ const pollMR = (cb: Callback<boolean>) => {
                 (results, cb) => {
                     const { mrAssigned, mrToReview } = results.reviewRequests;
                     const { mrGiven, mrReviewed } = results.givenRequests;
+                    const lastUpdateDateUnix = new Date().getTime();
 
                     browser.storage.local
                         .set({
                             mrAssigned,
                             mrToReview,
                             mrGiven,
-                            mrReviewed
+                            mrReviewed,
+                            lastUpdateDateUnix
                         })
                         .then(() => cb())
                         .catch((error) => cb(error));
@@ -178,7 +180,9 @@ browser.runtime.onMessage.addListener((message) => {
             return Promise.resolve({ error: ERROR_TRACKER.message });
         }
 
-        return Promise.resolve(browser.storage.local.get(['mrAssigned', 'mrGiven', 'mrToReview', 'mrReviewed']));
+        return Promise.resolve(
+            browser.storage.local.get(['mrAssigned', 'mrGiven', 'mrToReview', 'mrReviewed', 'lastUpdateDateUnix'])
+        );
     }
 
     if (message.type === 'pollMR') {

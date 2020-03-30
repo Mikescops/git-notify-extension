@@ -1,5 +1,5 @@
-export const calculateTimeElapsed = (date: number) => {
-    const startStamp = new Date(date).getTime();
+export const calculateTimeElapsed = (timestamp: number) => {
+    const startStamp = new Date(timestamp).getTime();
     const newDate = new Date();
     const newStamp = newDate.getTime();
     let diff = Math.round((newStamp - startStamp) / 1000);
@@ -17,4 +17,8 @@ export const calculateTimeElapsed = (date: number) => {
         return `${h}h ${m}min`;
     }
     return `${m} minutes`;
+};
+
+export const getHumanReadableDate = (timestamp: number) => {
+    return new Date(timestamp).toUTCString();
 };

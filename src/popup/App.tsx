@@ -1,20 +1,32 @@
 import { hot } from 'react-hot-loader';
 import { browser } from 'webextension-polyfill-ts';
 import React, { useState, useCallback } from 'react';
-import { Button, FilterList, Flex, Text, ProgressBar, TabNav, Label, theme as primer } from '@primer/components';
+import {
+    Button,
+    FilterList,
+    Flex,
+    Text,
+    ProgressBar,
+    TabNav,
+    Label,
+    theme as primer,
+    Tooltip
+} from '@primer/components';
 import { ThemeProvider } from 'styled-components';
 import Octicon, { Sync, Gear } from '@primer/octicons-react';
 import { MergeRequest } from './components/MergeRequest';
 import './style.css';
 import { MergeRequestsDetails } from '../background/types';
+import { getHumanReadableDate } from './helpers';
 
 const App = () => {
     const [mrList, updateList] = useState(null);
     const [mrToReview, setMrToReview] = useState(0);
     const [mrReviewed, setMrReviewed] = useState(0);
     const [mrRatio, setMrRatio] = useState(100);
+    const [lastUpdateDateUnix, setLastUpdateDateUnix] = useState(0);
 
-    const [tabSelected, setTabSelected] = useState(0);
+    const [tabSelected, setTabSelected] = useState('0');
 
     const openSettings = useCallback(() => browser.runtime.openOptionsPage(), []);
 
@@ -58,6 +70,7 @@ const App = () => {
                 setMrToReview(response.mrToReview);
                 setMrReviewed(response.mrReviewed);
                 setMrRatio(Math.floor(((mrNewList.length - response.mrToReview) / mrNewList.length) * 100));
+                setLastUpdateDateUnix(response.lastUpdateDateUnix);
             })
             .catch((error) => console.error(error));
     }, []);
@@ -73,9 +86,9 @@ const App = () => {
                     <TabNav.Link
                         onClick={sendMsg}
                         data-key={'getMRs'}
-                        data-id={0}
+                        data-id={'0'}
                         href="#MR"
-                        className={tabSelected === 0 ? 'selected' : ''}
+                        className={tabSelected === '0' ? 'selected' : ''}
                     >
                         To Review{' '}
                         <Label variant="small" bg="#dc3545">
@@ -85,9 +98,9 @@ const App = () => {
                     <TabNav.Link
                         onClick={sendMsg}
                         data-key={'getMyMRs'}
-                        data-id={1}
+                        data-id={'1'}
                         href="#MyMR"
-                        className={tabSelected === 1 ? 'selected' : ''}
+                        className={tabSelected === '1' ? 'selected' : ''}
                     >
                         Under Review{' '}
                         <Label variant="small" bg="#28a745">
@@ -105,9 +118,12 @@ const App = () => {
                     />
 
                     <div style={{ marginTop: '8px' }}>
-                        <Button onClick={sendMsg} variant={'small'} mr={2}>
-                            <Octicon icon={Sync} /> Refresh
-                        </Button>
+                        <Tooltip aria-label={'Last update: ' + getHumanReadableDate(lastUpdateDateUnix)} direction="n">
+                            <Button onClick={sendMsg} variant={'small'} mr={2}>
+                                <Octicon icon={Sync} /> Refresh
+                            </Button>
+                        </Tooltip>
+
                         <Button onClick={openSettings} variant={'small'}>
                             <Octicon icon={Gear} /> Options
                         </Button>
