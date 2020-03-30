@@ -1,0 +1,102 @@
+{
+    "parserOptions": {
+        "parser": "@typescript-eslint/parser",
+        "ecmaVersion": 2019,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "lib": ["es2019", "dom"]
+    },
+    "globals": {
+        "browser": "writable"
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+        "prettier/@typescript-eslint", // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+        "plugin:prettier/recommended", // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+        "plugin:compat/recommended" // Allow compat for browser functions
+    ],
+    "plugins": ["@typescript-eslint"],
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true,
+        "webextensions": true
+    },
+    "rules": {
+        "brace-style": "error",
+        "block-scoped-var": "error",
+        "camelcase": "off",
+        "comma-style": ["error", "last"],
+        "comma-dangle": "error",
+        "curly": ["error", "all"],
+        "dot-notation": "error",
+        "eqeqeq": ["error", "allow-null"],
+        "eol-last": "error",
+        "guard-for-in": "error",
+        "indent": ["error", 4],
+        "keyword-spacing": "error",
+        "max-len": ["error", 120],
+        "new-cap": "off",
+        "no-bitwise": "error",
+        "no-caller": "error",
+        "no-cond-assign": ["error", "except-parens"],
+        "no-debugger": "error",
+        "no-empty": "error",
+        "no-eval": "error",
+        "no-extend-native": "error",
+        "no-irregular-whitespace": "error",
+        "no-iterator": "error",
+        "no-loop-func": "error",
+        "no-lonely-if": "error",
+        "no-mixed-spaces-and-tabs": "error",
+        "no-multiple-empty-lines": "error",
+        "no-multi-str": "error",
+        "no-new": "error",
+        "no-plusplus": [
+            "error",
+            {
+                "allowForLoopAfterthoughts": true
+            }
+        ],
+        "no-proto": "error",
+        "no-sequences": "error",
+        "no-undef": "error",
+        "no-unused-vars": "error",
+        "no-with": "error",
+        "no-trailing-spaces": "error",
+        "one-var": ["error", "never"],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "space-in-parens": ["error", "never"],
+        "space-before-blocks": "error",
+        "space-before-function-paren": [
+            "error",
+            {
+                "anonymous": "always",
+                "named": "never"
+            }
+        ],
+        "space-unary-ops": "error",
+        "spaced-comment": "error",
+        "valid-typeof": "error",
+        "wrap-iife": ["error", "inside"],
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-inferrable-types": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+                "varsIgnorePattern": "[iI]gnored",
+                "argsIgnorePattern": "^_"
+            }
+        ]
+    },
+    "settings": {
+        "react": {
+            "version": "^16.13.0"
+        }
+    }
+}

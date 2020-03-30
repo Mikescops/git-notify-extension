@@ -1,0 +1,18 @@
+{
+    "manifest_version": 2,
+    "version": "1.2.0",
+    "name": "Gitlab Notify",
+    "short_name": "Gitlab Notify",
+    "description": "Don't miss any Gitlab Merge Requests and rocket up your productivity.",
+    "icons": {
+        "48": "assets/icons/icon48.png",
+        "96": "assets/icons/icon96.png",
+        "128": "assets/icons/icon128.png"
+    },
+    "web_accessible_resources": [
+        "assets/*"
+    ],
+    "permissions": [
+        "storage"
+    ]
+}
