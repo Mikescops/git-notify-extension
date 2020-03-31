@@ -5,7 +5,7 @@ import { getSettings } from './utils/getSettings';
 import { fetchMRExtraInfo } from './utils/fetchMRExtraInfo';
 import { MergeRequests, GetSettingsResponse, MergeRequestsDetails } from './types';
 
-let ERROR_TRACKER: Error;
+let ERROR_TRACKER: Error | null;
 
 const pollMR = (cb: Callback<boolean>) => {
     interface ReviewRequests {
@@ -74,6 +74,10 @@ const pollMR = (cb: Callback<boolean>) => {
                                     return cb(error);
                                 }
 
+                                if (!mrAssignedDetails) {
+                                    return cb(new Error('Could not fetch merge requests assigned.'));
+                                }
+
                                 let mrToReview = 0;
                                 mrAssignedDetails.forEach((mr) => {
                                     if (!mr.approvals.user_has_approved) {
@@ -112,6 +116,10 @@ const pollMR = (cb: Callback<boolean>) => {
                             return fetchMRExtraInfo(gitlabApi, mrGivenList, (error, mrGivenDetails) => {
                                 if (error) {
                                     return cb(error);
+                                }
+
+                                if (!mrGivenDetails) {
+                                    return cb(new Error('Could not fetch merge requests given.'));
                                 }
 
                                 let mrReviewed = 0;
@@ -155,7 +163,7 @@ const pollMR = (cb: Callback<boolean>) => {
                 }
             ]
         },
-        (error: Error) => {
+        (error) => {
             if (error) {
                 ERROR_TRACKER = error;
                 console.error('POLL API', error);

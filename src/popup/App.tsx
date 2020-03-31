@@ -20,7 +20,8 @@ import { MergeRequestsDetails } from '../background/types';
 import { getHumanReadableDate } from './helpers';
 
 const App = () => {
-    const [mrList, updateList] = useState(null);
+    const fetchingContentState = <Text>Fetching content...</Text>;
+    const [mrList, updateList] = useState(fetchingContentState);
     const [mrToReview, setMrToReview] = useState(0);
     const [mrReviewed, setMrReviewed] = useState(0);
     const [mrRatio, setMrRatio] = useState(100);
@@ -32,6 +33,16 @@ const App = () => {
 
     let type = 'getMRs';
 
+    interface SendMsgResponse {
+        mrAssigned: MergeRequestsDetails[];
+        mrToReview: number;
+        mrGiven: MergeRequestsDetails[];
+        mrReviewed: number;
+        lastUpdateDateUnix: number;
+    }
+    interface SendMsgError {
+        error: string;
+    }
     const sendMsg = useCallback((event: any) => {
         if (event && event.target.dataset.key) {
             setTabSelected(event.target.dataset.id);
@@ -39,14 +50,14 @@ const App = () => {
         }
         browser.runtime
             .sendMessage({ type: 'getMRs' })
-            .then((response) => {
+            .then((response: SendMsgResponse | SendMsgError) => {
                 if (!response) {
                     // This could infinite loop, so let's see for a correct retry
                     console.log('Retrying');
                     return setTimeout(sendMsg(type), 1000);
                 }
 
-                if (response.error) {
+                if ('error' in response) {
                     return updateList(
                         <Text as="p" m={2}>
                             {response.error}
@@ -54,7 +65,7 @@ const App = () => {
                     );
                 }
 
-                let mrNewList: MergeRequestsDetails[] = null;
+                let mrNewList: MergeRequestsDetails[];
                 if (type === 'getMRs') {
                     mrNewList = response.mrAssigned;
                 } else {
@@ -66,7 +77,7 @@ const App = () => {
                     return <MergeRequest mr={mr} key={mr.id} />;
                 });
 
-                updateList(listItems);
+                updateList(<FilterList className={'mrList'}>{listItems}</FilterList>);
                 setMrToReview(response.mrToReview);
                 setMrReviewed(response.mrReviewed);
                 setMrRatio(Math.floor(((mrNewList.length - response.mrToReview) / mrNewList.length) * 100));
@@ -75,7 +86,7 @@ const App = () => {
             .catch((error) => console.error(error));
     }, []);
 
-    if (!mrList) {
+    if (mrList === fetchingContentState) {
         sendMsg(null);
     }
 
@@ -108,7 +119,7 @@ const App = () => {
                         </Label>
                     </TabNav.Link>
                 </TabNav>
-                <FilterList className={'mrList'}>{mrList}</FilterList>
+                {mrList}
                 <Flex flexWrap="nowrap">
                     <ProgressBar
                         progress={mrRatio}

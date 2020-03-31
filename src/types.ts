@@ -5,9 +5,9 @@ declare global {
 
     type CallbackWithTypedError<E extends Error, T> = (error: E, results?: T) => void;
 
-    type Callback<T> = (error: Error, results?: T) => void;
+    type Callback<T> = (error: Error | null, results?: T) => void;
 
-    type Callback2<T1, T2> = (error: Error, result1?: T1, result2?: T2) => void;
+    type Callback2<T1, T2> = (error: Error | null, result1?: T1, result2?: T2) => void;
 
     type Returns<T> = () => T;
 

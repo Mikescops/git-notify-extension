@@ -20,7 +20,7 @@
         "noLib": false,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
-        "strictNullChecks": false,
+        "strictNullChecks": true,
         "sourceMap": true,
         "jsx": "react",
         "skipLibCheck": true

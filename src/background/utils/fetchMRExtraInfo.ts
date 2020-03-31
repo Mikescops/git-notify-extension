@@ -51,6 +51,10 @@ export const fetchMRExtraInfo = (
                         return cb(error);
                     }
 
+                    if (!results) {
+                        return cb(new Error(`Cannot fetch merge requests details for mr id: ${mr.id}`));
+                    }
+
                     mrAssignedWithDetails.push({
                         ...mr,
                         approvals: results.approvals,
