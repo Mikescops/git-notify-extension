@@ -15,6 +15,7 @@ import {
 import { ThemeProvider } from 'styled-components';
 import Octicon, { Sync, Gear } from '@primer/octicons-react';
 import { MergeRequest } from './components/MergeRequest';
+import emptyInbox from './assets/empty_inbox.svg';
 import './style.css';
 import { MergeRequestsDetails } from '../background/types';
 import { getHumanReadableDate } from './helpers';
@@ -73,11 +74,16 @@ const App = () => {
                 }
                 console.log('Displayed list', mrNewList);
 
-                const listItems = mrNewList.map((mr) => {
-                    return <MergeRequest mr={mr} key={mr.id} />;
-                });
+                if (mrNewList.length === 0) {
+                    updateList(<img src={emptyInbox} className={'emptyInbox'} />);
+                } else {
+                    const listItems = mrNewList.map((mr) => {
+                        return <MergeRequest mr={mr} key={mr.id} />;
+                    });
 
-                updateList(<FilterList className={'mrList'}>{listItems}</FilterList>);
+                    updateList(<FilterList className={'mrList'}>{listItems}</FilterList>);
+                }
+
                 setMrToReview(response.mrToReview);
                 setMrReviewed(response.mrReviewed);
                 setMrRatio(Math.floor(((mrNewList.length - response.mrToReview) / mrNewList.length) * 100));

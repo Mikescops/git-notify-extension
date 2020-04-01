@@ -65,3 +65,9 @@ body {
     color: #fff;
     background-color: forestgreen;
 }
+
+.emptyInbox {
+    display: block;
+    width: 200px;
+    margin: 25px auto;
+}
