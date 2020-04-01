@@ -71,3 +71,8 @@ body {
     width: 200px;
     margin: 25px auto;
 }
+
+.progressBar {
+    flex: 1;
+    margin: 18px 10px 5px 5px;
+}

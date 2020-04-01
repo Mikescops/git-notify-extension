@@ -23,8 +23,8 @@ import { getHumanReadableDate } from './helpers';
 const App = () => {
     const fetchingContentState = <Text>Fetching content...</Text>;
     const [mrList, updateList] = useState(fetchingContentState);
-    const [mrToReview, setMrToReview] = useState(0);
-    const [mrReviewed, setMrReviewed] = useState(0);
+    const [mrToReview, setMrToReview] = useState('0');
+    const [mrReviewed, setMrReviewed] = useState('0');
     const [mrRatio, setMrRatio] = useState(100);
     const [lastUpdateDateUnix, setLastUpdateDateUnix] = useState(0);
 
@@ -84,9 +84,9 @@ const App = () => {
                     updateList(<FilterList className={'mrList'}>{listItems}</FilterList>);
                 }
 
-                setMrToReview(response.mrToReview);
-                setMrReviewed(response.mrReviewed);
-                setMrRatio(Math.floor(((mrNewList.length - response.mrToReview) / mrNewList.length) * 100));
+                setMrToReview(`${response.mrToReview}`);
+                setMrReviewed(`${response.mrReviewed} / ${response.mrGiven.length}`);
+                setMrRatio(Math.floor(((mrNewList.length - response.mrToReview) / mrNewList.length) * 100) || 100);
                 setLastUpdateDateUnix(response.lastUpdateDateUnix);
             })
             .catch((error) => console.error(error));
@@ -120,19 +120,22 @@ const App = () => {
                         className={tabSelected === '1' ? 'selected' : ''}
                     >
                         Under Review{' '}
-                        <Label variant="small" bg="#28a745">
-                            {mrReviewed}
-                        </Label>
+                        <Tooltip aria-label={mrReviewed + ' have been reviewed'} direction="s">
+                            <Label variant="small" bg="#28a745">
+                                {mrReviewed}
+                            </Label>
+                        </Tooltip>
                     </TabNav.Link>
                 </TabNav>
                 {mrList}
                 <Flex flexWrap="nowrap">
-                    <ProgressBar
-                        progress={mrRatio}
-                        m={3}
-                        style={{ flex: 1 }}
-                        title={`${mrRatio}% done, keep the good reviews!`}
-                    />
+                    <Tooltip
+                        className={'progressBar'}
+                        aria-label={`${mrRatio}% done, keep the good reviews!`}
+                        direction="n"
+                    >
+                        <ProgressBar progress={mrRatio} />
+                    </Tooltip>
 
                     <div style={{ marginTop: '8px' }}>
                         <Tooltip aria-label={'Last update: ' + getHumanReadableDate(lastUpdateDateUnix)} direction="n">
