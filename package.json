@@ -10,6 +10,8 @@
     "copy-config:setup": "cp src/config/config.prod.js src/config/config.dev.js",
     "copy-config:dev": "cp src/config/config.dev.js src/config/config.js",
     "copy-config:prod": "cp src/config/config.prod.js src/config/config.js",
+    "lint": "tsc --noEmit --rootDir src/ && eslint webpack*.js \"src/**/*.ts{,x}\"",
+    "lint:fix": "npm run lint -- --quiet --fix",
     "zip": "yarn neutrino-webextension-zip"
   },
   "author": "Corentin Mors (corentin@pixelswap.fr)",
