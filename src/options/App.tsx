@@ -9,11 +9,11 @@ import './style.css';
 const App = () => {
     const getSettings = browser.storage.local.get(['gitlabToken', 'gitlabAddress']);
 
-    const [gitlabToken, insertGitlabToken] = useState(null);
-    const [gitlabAddress, insertGitlabAddress] = useState(null);
+    const [gitlabToken, insertGitlabToken] = useState('null');
+    const [gitlabAddress, insertGitlabAddress] = useState('null');
     const [testSuccess, updateTestSuccess] = useState(null);
 
-    if (gitlabToken === null || gitlabAddress === null) {
+    if (gitlabToken === 'null' || gitlabAddress === 'null') {
         getSettings.then((settings) => {
             insertGitlabToken(settings.gitlabToken ? settings.gitlabToken : '');
             insertGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : '');

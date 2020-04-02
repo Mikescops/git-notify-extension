@@ -10,7 +10,8 @@ import {
     TabNav,
     Label,
     theme as primer,
-    Tooltip
+    Tooltip,
+    Flash
 } from '@primer/components';
 import { ThemeProvider } from 'styled-components';
 import Octicon, { Sync, Gear } from '@primer/octicons-react';
@@ -60,9 +61,9 @@ const App = () => {
 
                 if ('error' in response) {
                     return updateList(
-                        <Text as="p" m={2}>
+                        <Flash m={2} scheme="red">
                             {response.error}
-                        </Text>
+                        </Flash>
                     );
                 }
 
@@ -137,7 +138,7 @@ const App = () => {
                         <ProgressBar progress={mrRatio} />
                     </Tooltip>
 
-                    <div style={{ marginTop: '8px' }}>
+                    <div style={{ marginTop: '6px' }}>
                         <Tooltip aria-label={'Last update: ' + getHumanReadableDate(lastUpdateDateUnix)} direction="n">
                             <Button onClick={sendMsg} variant={'small'} mr={2}>
                                 <Octicon icon={Sync} /> Refresh
