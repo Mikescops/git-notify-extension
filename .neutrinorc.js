@@ -32,7 +32,7 @@ module.exports = {
         typescript(),
         react({
             html: {
-                title: 'Gitlab Merge Request'
+                title: 'GitLab Notify'
             }
         }),
         copy({

@@ -1,7 +1,7 @@
 {
   "name": "gitlab-notify",
   "version": "1.2.0",
-  "description": "Don't miss any Gitlab Merge Requests and rocket up your productivity.",
+  "description": "Don't miss any GitLab merge requests and rocket up your productivity.",
   "main": "index.js",
   "scripts": {
     "start": "npm run copy-config:dev && webpack-dev-server --mode development --open --port 5003",

@@ -1,4 +1,4 @@
-# Gitlab Notify Extension
+# GitLab Notify Extension
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/mikescops/gitlab-notify-extension) ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/mikescops/gitlab-notify-extension/Lint%20&%20Build%20CI/master) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ekfpkkhpemajcbniegjicehdphdabhop) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ekfpkkhpemajcbniegjicehdphdabhop) ![Mozilla Add-on](https://img.shields.io/amo/v/gitlab-notify) ![Mozilla Add-on](https://img.shields.io/amo/users/gitlab-notify)
 
@@ -14,7 +14,7 @@ Install dependencies:
 
 `npm ci`
 
-Copy dev config file and set your personal Gitlab token in it:
+Copy dev config file and set your personal GitLab token in it:
 
 `npm run copy-config:setup`
 
