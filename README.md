@@ -4,6 +4,8 @@
 
 This browser extension aims to poll merge requests you are assigned to and the ones you created.
 
+[Chrome Web Store](https://chrome.google.com/webstore/detail/ekfpkkhpemajcbniegjicehdphdabhop) | [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/gitlab-notify/)
+
 ![Preview of the browser extension: 30/03/2020](./preview.png)
 
 ## Setup
