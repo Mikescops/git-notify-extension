@@ -4,7 +4,7 @@ export interface MergeRequests {
     title: string;
     description: string;
     project_id: number;
-    created_at: number;
+    created_at: string;
     source_branch: string;
     merge_status: string;
     web_url: string;
@@ -37,10 +37,42 @@ export interface User {
 }
 
 export interface Comment {
+    id: number;
+    created_at: string;
+    updated_at: string;
     system: boolean;
+    author: User;
+    body: string;
+    noteable_id: number;
+    noteable_idd: number;
+    // missing types here
+}
+
+export interface Notification {
+    content: string;
 }
 
 export interface GetSettingsResponse {
     token: string;
     address: string;
+}
+
+export interface ReviewRequests {
+    mrAssigned: MergeRequestsDetails[];
+    mrToReview: number;
+}
+
+export interface ReviewGiven {
+    mrGiven: MergeRequestsDetails[];
+    mrReviewed: number;
+}
+
+export interface ReviewChanges {
+    newCommentsAssigned: Comment[];
+    newCommentsGiven: Comment[];
+    notifications: Notification[];
+}
+
+export interface StoredData extends ReviewRequests, ReviewGiven {
+    reviewChanges: ReviewChanges;
 }
