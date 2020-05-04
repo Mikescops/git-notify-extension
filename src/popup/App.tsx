@@ -18,7 +18,7 @@ import Octicon, { Sync, Gear } from '@primer/octicons-react';
 import { MergeRequest } from './components/MergeRequest';
 import emptyInbox from './assets/empty_inbox.svg';
 import './style.css';
-import { MergeRequestsDetails } from '../background/types';
+import { MergeRequestsDetails, StoredData, Comment } from '../background/types';
 import { getHumanReadableDate } from './helpers';
 
 const App = () => {
@@ -35,11 +35,7 @@ const App = () => {
 
     let type = 'getMRs';
 
-    interface SendMsgResponse {
-        mrAssigned: MergeRequestsDetails[];
-        mrToReview: number;
-        mrGiven: MergeRequestsDetails[];
-        mrReviewed: number;
+    interface SendMsgResponse extends StoredData {
         lastUpdateDateUnix: number;
     }
     interface SendMsgError {
@@ -68,10 +64,13 @@ const App = () => {
                 }
 
                 let mrNewList: MergeRequestsDetails[];
+                let commentsNewList: Comment[];
                 if (type === 'getMRs') {
                     mrNewList = response.mrAssigned;
+                    commentsNewList = response.reviewChanges.newCommentsAssigned;
                 } else {
                     mrNewList = response.mrGiven;
+                    commentsNewList = response.reviewChanges.newCommentsGiven;
                 }
                 console.log('Displayed list', mrNewList);
 
@@ -79,7 +78,8 @@ const App = () => {
                     updateList(<img src={emptyInbox} className={'emptyInbox'} />);
                 } else {
                     const listItems = mrNewList.map((mr) => {
-                        return <MergeRequest mr={mr} key={mr.id} />;
+                        const comments = commentsNewList.filter((comment) => comment.noteable_id === mr.id);
+                        return <MergeRequest mr={mr} comments={comments} key={mr.id} />;
                     });
 
                     updateList(<FilterList className={'mrList'}>{listItems}</FilterList>);

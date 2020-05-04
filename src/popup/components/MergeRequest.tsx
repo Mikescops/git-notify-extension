@@ -3,14 +3,17 @@ import { BranchName, FilterList, Flex, Box, Link, Label } from '@primer/componen
 import Octicon, { GitMerge, IssueClosed, IssueOpened, Clock, CommentDiscussion } from '@primer/octicons-react';
 import { Avatars } from './Avatars';
 import { calculateTimeElapsed } from '../helpers';
-import { MergeRequestsDetails } from '../../background/types';
+import { MergeRequestsDetails, Comment } from '../../background/types';
 
 interface Props {
     mr: MergeRequestsDetails;
+    comments: Comment[];
 }
 
 export const MergeRequest = (props: Props) => {
     const mr = props.mr;
+    const newCommentsCount = props.comments.length;
+    const hasNewComments = newCommentsCount > 0;
 
     let mrApproved = false;
     if (mr.approvals.user_has_approved) {
@@ -50,7 +53,8 @@ export const MergeRequest = (props: Props) => {
                             </Label>
                         )}
                         <Label variant="medium" bg="white" color="black" className={'mrLabel'}>
-                            <Octicon icon={CommentDiscussion} /> {mr.comments.length}
+                            <Octicon icon={CommentDiscussion} /> {mr.comments.length}{' '}
+                            {hasNewComments ? '(+' + newCommentsCount + ')' : null}
                         </Label>
                         <Label variant="medium" bg="white" color="#8e8e8e" className={'mrLabel'}>
                             <Octicon icon={Clock} /> {timeElapsed}

@@ -3,26 +3,18 @@ import { browser } from 'webextension-polyfill-ts';
 import { Gitlab } from 'gitlab'; // All Resources
 import { getSettings } from './utils/getSettings';
 import { fetchMRExtraInfo } from './utils/fetchMRExtraInfo';
-import { MergeRequests, GetSettingsResponse, MergeRequestsDetails } from './types';
+import { MergeRequests, GetSettingsResponse, ReviewRequests, ReviewGiven, StoredData, ReviewChanges } from './types';
 
 let ERROR_TRACKER: Error | null;
 
 const pollMR = (cb: Callback<boolean>) => {
-    interface ReviewRequests {
-        mrAssigned: MergeRequestsDetails[];
-        mrToReview: number;
-    }
-
-    interface ReviewGiven {
-        mrGiven: MergeRequestsDetails[];
-        mrReviewed: number;
-    }
-
     interface AsyncResults {
         getSettings: GetSettingsResponse;
         gitlabApi: Gitlab;
         reviewRequests: ReviewRequests;
         givenRequests: ReviewGiven;
+        getStoredData: StoredData;
+        computeChanges: ReviewChanges;
         saveLocalStorage: void;
     }
 
@@ -142,12 +134,70 @@ const pollMR = (cb: Callback<boolean>) => {
                         });
                 }
             ],
+            getStoredData: [
+                'reviewRequests',
+                'givenRequests',
+                (_results, cb) => {
+                    browser.storage.local
+                        .get(['mrAssigned', 'mrGiven', 'mrToReview', 'mrReviewed', 'reviewChanges'])
+                        .then((data) => cb(null, data as StoredData))
+                        .catch((error) => cb(error));
+                }
+            ],
+            computeChanges: [
+                'reviewRequests',
+                'givenRequests',
+                'getStoredData',
+                (results, cb) => {
+                    /** Get all comments (stored and received) */
+                    const storedCommentsAssigned = results.getStoredData.mrAssigned.flatMap((mr) => mr.comments);
+                    const storedCommentsGiven = results.getStoredData.mrGiven.flatMap((mr) => mr.comments);
+
+                    const receivedCommentsAssigned = results.reviewRequests.mrAssigned.flatMap((mr) => mr.comments);
+                    const receivedCommentsGiven = results.givenRequests.mrGiven.flatMap((mr) => mr.comments);
+
+                    /** Filter only new comments */
+                    const newCommentsAssigned = receivedCommentsAssigned
+                        .filter((comment) => !storedCommentsAssigned.some((y) => comment.id === y.id))
+                        .concat(results.getStoredData.reviewChanges?.newCommentsAssigned);
+
+                    const newCommentsGiven = receivedCommentsGiven
+                        .filter((comment) => !storedCommentsGiven.some((y) => comment.id === y.id))
+                        .concat(results.getStoredData.reviewChanges?.newCommentsGiven);
+
+                    /** Filter only new comments tagging user */
+                    const ownerName = 'username'; // to be changed
+                    const PATTERN = new RegExp(`@${ownerName}`);
+                    const receivedCommentsAssignedTagged = receivedCommentsAssigned.filter((comment) =>
+                        PATTERN.test(comment.body)
+                    );
+                    const newCommentsGivenTagged = newCommentsGiven.filter((comment) => PATTERN.test(comment.body));
+
+                    console.log(receivedCommentsAssignedTagged, newCommentsGivenTagged);
+
+                    /** Prepare notification (?) */
+                    // TBD
+
+                    /** Send result */
+                    const computedChanges = {
+                        newCommentsAssigned,
+                        newCommentsGiven,
+                        notifications: []
+                    };
+
+                    // console.log(computedChanges);
+
+                    return cb(null, computedChanges);
+                }
+            ],
             saveLocalStorage: [
                 'reviewRequests',
                 'givenRequests',
+                'computeChanges',
                 (results, cb) => {
                     const { mrAssigned, mrToReview } = results.reviewRequests;
                     const { mrGiven, mrReviewed } = results.givenRequests;
+                    const reviewChanges = results.computeChanges;
                     const lastUpdateDateUnix = new Date().getTime();
 
                     browser.storage.local
@@ -156,6 +206,7 @@ const pollMR = (cb: Callback<boolean>) => {
                             mrToReview,
                             mrGiven,
                             mrReviewed,
+                            reviewChanges,
                             lastUpdateDateUnix
                         })
                         .then(() => cb())
@@ -189,7 +240,14 @@ browser.runtime.onMessage.addListener((message) => {
         }
 
         return Promise.resolve(
-            browser.storage.local.get(['mrAssigned', 'mrGiven', 'mrToReview', 'mrReviewed', 'lastUpdateDateUnix'])
+            browser.storage.local.get([
+                'mrAssigned',
+                'mrGiven',
+                'mrToReview',
+                'mrReviewed',
+                'reviewChanges',
+                'lastUpdateDateUnix'
+            ])
         );
     }
 
