@@ -72,7 +72,7 @@ const App = () => {
                     mrNewList = response.mrGiven;
                     commentsNewList = response.reviewChanges.newCommentsGiven;
                 }
-                console.log('Displayed list', mrNewList);
+                console.log('Displayed list', mrNewList, commentsNewList);
 
                 if (mrNewList.length === 0) {
                     updateList(<img src={emptyInbox} className={'emptyInbox'} />);

@@ -150,8 +150,10 @@ const pollMR = (cb: Callback<boolean>) => {
                 'getStoredData',
                 (results, cb) => {
                     /** Get all comments (stored and received) */
-                    const storedCommentsAssigned = results.getStoredData.mrAssigned.flatMap((mr) => mr.comments);
-                    const storedCommentsGiven = results.getStoredData.mrGiven.flatMap((mr) => mr.comments);
+                    const storedData = results.getStoredData;
+
+                    const storedCommentsAssigned = storedData.mrAssigned?.flatMap((mr) => mr.comments) || [];
+                    const storedCommentsGiven = storedData.mrGiven?.flatMap((mr) => mr.comments) || [];
 
                     const receivedCommentsAssigned = results.reviewRequests.mrAssigned.flatMap((mr) => mr.comments);
                     const receivedCommentsGiven = results.givenRequests.mrGiven.flatMap((mr) => mr.comments);
@@ -159,21 +161,27 @@ const pollMR = (cb: Callback<boolean>) => {
                     /** Filter only new comments */
                     const newCommentsAssigned = receivedCommentsAssigned
                         .filter((comment) => !storedCommentsAssigned.some((y) => comment.id === y.id))
-                        .concat(results.getStoredData.reviewChanges?.newCommentsAssigned);
+                        .concat(
+                            storedData.reviewChanges?.newCommentsAssigned
+                                ? storedData.reviewChanges.newCommentsAssigned
+                                : []
+                        );
 
                     const newCommentsGiven = receivedCommentsGiven
                         .filter((comment) => !storedCommentsGiven.some((y) => comment.id === y.id))
-                        .concat(results.getStoredData.reviewChanges?.newCommentsGiven);
+                        .concat(
+                            storedData.reviewChanges?.newCommentsGiven ? storedData.reviewChanges.newCommentsGiven : []
+                        );
 
                     /** Filter only new comments tagging user */
                     const ownerName = 'username'; // to be changed
                     const PATTERN = new RegExp(`@${ownerName}`);
-                    const receivedCommentsAssignedTagged = receivedCommentsAssigned.filter((comment) =>
+                    const newCommentsAssignedTagged = newCommentsAssigned.filter((comment) =>
                         PATTERN.test(comment.body)
                     );
                     const newCommentsGivenTagged = newCommentsGiven.filter((comment) => PATTERN.test(comment.body));
 
-                    console.log(receivedCommentsAssignedTagged, newCommentsGivenTagged);
+                    console.log(newCommentsAssignedTagged, newCommentsGivenTagged);
 
                     /** Prepare notification (?) */
                     // TBD
