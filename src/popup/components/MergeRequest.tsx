@@ -1,7 +1,7 @@
 import React from 'react';
 import { BranchName, FilterList, Flex, Box, Link, Label } from '@primer/components';
-import Octicon, { GitMerge, IssueClosed, IssueOpened, Clock, CommentDiscussion } from '@primer/octicons-react';
-import { Avatars } from './Avatars';
+import Octicon, { GitMerge, IssueClosed, IssueOpened, Clock, CommentDiscussion, Plus } from '@primer/octicons-react';
+import { AvatarWithTooltip } from './AvatarWithTooltip';
 import { calculateTimeElapsed } from '../helpers';
 import { MergeRequestsDetails } from '../../background/types';
 
@@ -9,9 +9,7 @@ interface Props {
     mr: MergeRequestsDetails;
 }
 
-export const MergeRequest = (props: Props) => {
-    const mr = props.mr;
-
+export const MergeRequest = ({ mr }: Props) => {
     let mrApproved = false;
     if (mr.approvals.user_has_approved) {
         mrApproved = true;
@@ -19,9 +17,9 @@ export const MergeRequest = (props: Props) => {
 
     const timeElapsed = calculateTimeElapsed(mr.created_at);
 
-    const listAvatars = mr.assignees.splice(0, 3).map((assignee) => {
-        return <Avatars mr={mr} assignee={assignee} key={assignee.id} />;
-    });
+    const avatars = mr.assignees
+        .slice(0, 3)
+        .map((assignee) => <AvatarWithTooltip mr={mr} assignee={assignee} key={assignee.id} />);
 
     return (
         <FilterList.Item as="div" className={mrApproved ? 'mrApproved mrItem' : 'mrItem'}>
@@ -57,7 +55,10 @@ export const MergeRequest = (props: Props) => {
                         </Label>
                     </div>
                 </Box>
-                <Box className={'avatarsList'}>{listAvatars}</Box>
+                <Box className={'avatarsList'}>
+                    {avatars}
+                    {mr.assignees.length > 3 ? <Octicon icon={Plus} /> : ''}
+                </Box>
             </Flex>
         </FilterList.Item>
     );
