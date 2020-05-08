@@ -16,14 +16,12 @@ const App = () => {
     const [isGitlabAddressInLocalStorage, setIsGitlabAddressInLocalStorage] = useState(false);
 
     useEffect(() => {
-        if (gitlabToken === '' || gitlabAddress === '') {
-            getSettings.then((settings) => {
-                setGitlabToken(settings.gitlabToken ? settings.gitlabToken : '');
-                setIsGitlabTokenInLocalStorage(settings.gitlabToken);
-                setGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : '');
-                setIsGitlabAddressInLocalStorage(settings.gitlabAddress);
-            });
-        }
+        getSettings.then((settings) => {
+            setGitlabToken(settings.gitlabToken ? settings.gitlabToken : '');
+            setIsGitlabTokenInLocalStorage(settings.gitlabToken);
+            setGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : '');
+            setIsGitlabAddressInLocalStorage(settings.gitlabAddress);
+        });
     }, []);
 
     const updateGitlabToken = (event: any) => {

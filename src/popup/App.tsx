@@ -68,7 +68,7 @@ const App = () => {
     }, []);
 
     // call fetch data at component mount
-    useEffect(() => fetchData(), []);
+    useEffect(() => fetchData(), [fetchData]);
 
     const getContent = useCallback(() => {
         if (appStatus === 'idle') {
