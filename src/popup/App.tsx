@@ -128,25 +128,13 @@ const App = () => {
         <ThemeProvider theme={primer}>
             <div className={'container'}>
                 <TabNav aria-label="Main" mb={2}>
-                    <TabNav.Link
-                        onClick={() => setCurrentTab(0)}
-                        data-key={'getMRs'}
-                        data-id={'0'}
-                        href="#MR"
-                        className={currentTab === 0 ? 'selected' : ''}
-                    >
+                    <TabNav.Link onClick={() => setCurrentTab(0)} className={currentTab === 0 ? 'selected' : ''}>
                         To Review{' '}
                         <Label variant="small" bg="#dc3545">
                             {mrData ? mrData.mrToReview : 0}
                         </Label>
                     </TabNav.Link>
-                    <TabNav.Link
-                        onClick={() => setCurrentTab(1)}
-                        data-key={'getMyMRs'}
-                        data-id={'1'}
-                        href="#MyMR"
-                        className={currentTab === 1 ? 'selected' : ''}
-                    >
+                    <TabNav.Link onClick={() => setCurrentTab(1)} className={currentTab === 1 ? 'selected' : ''}>
                         Under Review{' '}
                         <Tooltip aria-label={mrData.mrReviewed + ' have been reviewed'} direction="s">
                             <Label variant="small" bg="#28a745">
