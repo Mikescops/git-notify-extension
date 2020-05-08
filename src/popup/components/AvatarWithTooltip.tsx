@@ -8,7 +8,7 @@ interface Props {
     assignee: User;
 }
 
-export const Avatars = (props: Props) => {
+export const AvatarWithTooltip = (props: Props) => {
     const { mr, assignee } = props;
 
     let approved = null;
