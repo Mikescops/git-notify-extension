@@ -94,7 +94,7 @@ const App = () => {
 
         console.log('Displayed list', mrList);
 
-        if (mrList.length === 0) {
+        if (!mrList || mrList.length === 0) {
             return <img src={emptyInbox} className={'emptyInbox'} />;
         }
         return (
@@ -116,7 +116,11 @@ const App = () => {
         } else {
             mrList = mrData.mrGiven;
         }
-        return Math.floor(((mrList.length - mrData.mrToReview) / mrList.length) * 100);
+        let rate = 0;
+        if (mrList && mrList.length > 0) {
+            rate = (mrList.length - mrData.mrToReview) / mrList.length;
+        }
+        return Math.floor(rate * 100);
     };
 
     return (
@@ -162,10 +166,7 @@ const App = () => {
 
                     <div style={{ marginTop: '6px' }}>
                         <Tooltip
-                            aria-label={
-                                'Last update: ' +
-                                getHumanReadableDate(mrData !== null ? mrData.lastUpdateDateUnix : Date.now())
-                            }
+                            aria-label={'Last update: ' + getHumanReadableDate(mrData.lastUpdateDateUnix)}
                             direction="n"
                         >
                             <Button onClick={() => fetchData} variant={'small'} mr={2}>
