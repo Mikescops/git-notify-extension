@@ -9,7 +9,7 @@ export interface MergeRequestSendMessageReply {
     mrGiven: MergeRequestsDetails[];
     mrReviewed: number;
     lastUpdateDateUnix: number;
-    error: string;
+    error?: string;
 }
 
 export const getMergeRequestList = async (): Promise<MergeRequestSendMessageReply> => {
@@ -25,10 +25,8 @@ export const getMergeRequestList = async (): Promise<MergeRequestSendMessageRepl
                 lastUpdateDateUnix: Date.now()
             };
         }
-
         return response;
     } catch (error) {
-        console.error(error);
         return {
             error: error,
             mrAssigned: [],

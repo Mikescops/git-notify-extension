@@ -28,7 +28,6 @@ const App = () => {
     const [appStatus, setAppStatus] = useState<AppStatus>('idle');
     const [errorMessage, setErrorMessage] = useState('');
     const [mrData, setMrData] = useState<MergeRequestSendMessageReply>({
-        error: '',
         mrAssigned: [],
         mrToReview: 0,
         mrGiven: [],
@@ -42,7 +41,7 @@ const App = () => {
 
     // useEffect vs useCallback
     // https://medium.com/@infinitypaul/reactjs-useeffect-usecallback-simplified-91e69fb0e7a3
-    const fetchData = useEffect(() => {
+    const fetchData = useCallback(() => {
         setAppStatus('loading');
         getMergeRequestList()
             .then((response) => {
@@ -53,10 +52,9 @@ const App = () => {
                 }
 
                 setMrData(response);
-
-                if (response.error !== '') {
+                if (response.error && response.error !== '') {
                     setAppStatus('error');
-                    setErrorMessage(response.error);
+                    setErrorMessage(response.error ? response.error : '');
                     return;
                 }
 
@@ -69,7 +67,10 @@ const App = () => {
             });
     }, []);
 
-    const getContent = () => {
+    // call fetch data at component mount
+    useEffect(() => fetchData(), []);
+
+    const getContent = useCallback(() => {
         if (appStatus === 'idle') {
             return <Text>Fetching content...</Text>;
         }
@@ -79,9 +80,11 @@ const App = () => {
         }
 
         if (appStatus === 'error') {
-            <Flash m={2} scheme="red">
-                {errorMessage}
-            </Flash>;
+            return (
+                <Flash m={2} scheme="red">
+                    {errorMessage}
+                </Flash>
+            );
         }
 
         // show data
@@ -91,8 +94,6 @@ const App = () => {
         } else {
             mrList = mrData.mrGiven;
         }
-
-        console.log('Displayed list', mrList);
 
         if (!mrList || mrList.length === 0) {
             return <img src={emptyInbox} className={'emptyInbox'} />;
@@ -104,9 +105,9 @@ const App = () => {
                 ))}
             </FilterList>
         );
-    };
+    }, [appStatus, mrData, currentTab]);
 
-    const getMrRatio = () => {
+    const getMrRatio = useCallback(() => {
         if (appStatus !== 'success' || mrData === null) {
             return 100;
         }
@@ -121,7 +122,7 @@ const App = () => {
             rate = (mrList.length - mrData.mrToReview) / mrList.length;
         }
         return Math.floor(rate * 100);
-    };
+    }, [appStatus, mrData, currentTab]);
 
     return (
         <ThemeProvider theme={primer}>
@@ -136,7 +137,7 @@ const App = () => {
                     >
                         To Review{' '}
                         <Label variant="small" bg="#dc3545">
-                            {mrData.mrToReview}
+                            {mrData ? mrData.mrToReview : 0}
                         </Label>
                     </TabNav.Link>
                     <TabNav.Link
@@ -149,7 +150,7 @@ const App = () => {
                         Under Review{' '}
                         <Tooltip aria-label={mrData.mrReviewed + ' have been reviewed'} direction="s">
                             <Label variant="small" bg="#28a745">
-                                {mrData.mrReviewed}
+                                {mrData ? mrData.mrReviewed : 0}
                             </Label>
                         </Tooltip>
                     </TabNav.Link>
@@ -169,7 +170,7 @@ const App = () => {
                             aria-label={'Last update: ' + getHumanReadableDate(mrData.lastUpdateDateUnix)}
                             direction="n"
                         >
-                            <Button onClick={() => fetchData} variant={'small'} mr={2}>
+                            <Button onClick={fetchData} variant={'small'} mr={2}>
                                 <Octicon icon={Sync} /> Refresh
                             </Button>
                         </Tooltip>
