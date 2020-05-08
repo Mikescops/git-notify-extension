@@ -42,6 +42,7 @@
     "eslint-plugin-compat": "^3.5.1",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^4.0.0",
     "neutrino": "^9.1.0",
     "neutrino-typescript": "git+https://github.com/davidje13/neutrino-typescript.git#semver:^1.0.10",
     "neutrino-webextension": "^1.0.3",

@@ -105,7 +105,7 @@ const App = () => {
                 ))}
             </FilterList>
         );
-    }, [appStatus, mrData, currentTab]);
+    }, [appStatus, mrData, currentTab, errorMessage]);
 
     const getMrRatio = useCallback(() => {
         if (appStatus !== 'success' || mrData === null) {
