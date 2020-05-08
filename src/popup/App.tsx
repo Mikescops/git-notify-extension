@@ -50,14 +50,13 @@ const App = () => {
                     setErrorMessage('Something went wrong');
                     return;
                 }
-
-                setMrData(response);
                 if (response.error && response.error !== '') {
                     setAppStatus('error');
                     setErrorMessage(response.error ? response.error : '');
                     return;
                 }
 
+                setMrData(response);
                 setAppStatus('success');
             })
             .catch((error) => {
@@ -124,6 +123,8 @@ const App = () => {
         return Math.floor(rate * 100);
     }, [appStatus, mrData, currentTab]);
 
+    const mrDataReviewRatio = mrData ? `${mrData.mrReviewed} / ${mrData.mrGiven.length}` : 'Uknown';
+
     return (
         <ThemeProvider theme={primer}>
             <div className={'container'}>
@@ -136,7 +137,7 @@ const App = () => {
                     </TabNav.Link>
                     <TabNav.Link onClick={() => setCurrentTab(1)} className={currentTab === 1 ? 'selected' : ''}>
                         Under Review{' '}
-                        <Tooltip aria-label={mrData.mrReviewed + ' have been reviewed'} direction="s">
+                        <Tooltip aria-label={`${mrDataReviewRatio}  have been reviewed`} direction="s">
                             <Label variant="small" bg="#28a745">
                                 {mrData ? mrData.mrReviewed : 0}
                             </Label>
