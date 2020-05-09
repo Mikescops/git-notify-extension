@@ -39,6 +39,13 @@ const App = () => {
 
     const openSettings = useCallback(() => browser.runtime.openOptionsPage(), []);
 
+    const applySettings = useCallback(() => {
+        const getSettings = browser.storage.local.get(['defaultTab']);
+        getSettings.then((settings) => {
+            setCurrentTab(settings.defaultTab ? settings.defaultTab : 0);
+        });
+    }, []);
+
     // useEffect vs useCallback
     // https://medium.com/@infinitypaul/reactjs-useeffect-usecallback-simplified-91e69fb0e7a3
     const fetchData = useCallback(() => {
@@ -66,8 +73,9 @@ const App = () => {
             });
     }, []);
 
-    // call fetch data at component mount
+    // call fetch data and apply settings at component mount
     useEffect(() => fetchData(), [fetchData]);
+    useEffect(() => applySettings(), [applySettings]);
 
     const getContent = useCallback(() => {
         if (appStatus === 'idle') {

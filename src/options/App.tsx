@@ -6,11 +6,12 @@ import { ThemeProvider } from 'styled-components';
 import Octicon, { Key, Server, CloudUpload, Check } from '@primer/octicons-react';
 import './style.css';
 
-const getSettings = browser.storage.local.get(['gitlabToken', 'gitlabAddress']);
+const getSettings = browser.storage.local.get(['gitlabToken', 'gitlabAddress', 'defaultTab']);
 
 const App = () => {
     const [gitlabToken, setGitlabToken] = useState('');
     const [gitlabAddress, setGitlabAddress] = useState('');
+    const [defaultTab, setDefaultTab] = useState(0);
     const [testSuccess, setTestSuccess] = useState(null);
     const [isGitlabTokenInLocalStorage, setIsGitlabTokenInLocalStorage] = useState(false);
     const [isGitlabAddressInLocalStorage, setIsGitlabAddressInLocalStorage] = useState(false);
@@ -21,6 +22,7 @@ const App = () => {
             setIsGitlabTokenInLocalStorage(settings.gitlabToken);
             setGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : '');
             setIsGitlabAddressInLocalStorage(settings.gitlabAddress);
+            setDefaultTab(settings.defaultTab ? settings.defaultTab : '');
         });
     }, []);
 
@@ -37,6 +39,13 @@ const App = () => {
         browser.storage.local.set({ gitlabAddress: event.target.value }).then(() => {
             console.log('Configuration Updated');
             setIsGitlabAddressInLocalStorage(true);
+        });
+    };
+
+    const updateDefaultTab = (event: any) => {
+        setDefaultTab(event.target.value);
+        browser.storage.local.set({ defaultTab: parseInt(event.target.value) }).then(() => {
+            console.log('Configuration Updated');
         });
     };
 
@@ -76,6 +85,20 @@ const App = () => {
                 aria-label="gitlab-address"
             />{' '}
             {isGitlabAddressInLocalStorage ? <Octicon icon={Check} /> : ''}
+            <br />
+            <br />
+            <Text as="strong" mt={2}>
+                Default tab
+            </Text>
+            <br />
+            <select name="default-tab" onChange={updateDefaultTab}>
+                <option selected={defaultTab === 0} value="0">
+                    To Review
+                </option>
+                <option selected={defaultTab === 1} value="1">
+                    Under Review
+                </option>
+            </select>
             <hr />
             <div>
                 <Button onClick={testConnection} variant={'small'}>
