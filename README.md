@@ -33,6 +33,6 @@ To build prod:
 
 ## Authors
 
-| [![twitter/mikescops](https://avatars0.githubusercontent.com/u/4266283?s=100&v=4)](https://pixelswap.fr 'Personal Website') |
-| --------------------------------------------------------------------------------------------------------------------------- |
-| [Corentin Mors](https://pixelswap.fr/)                                                                                      |
+| [![twitter/mikescops](https://avatars0.githubusercontent.com/u/4266283?s=100&v=4)](https://pixelswap.fr 'Personal Website') | [![twitter/PolaDuco](https://avatars0.githubusercontent.com/u/45568537?s=100&v=4)](https://twitter.com/PolaDuco 'Twitter') |
+| --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| [Corentin Mors](https://pixelswap.fr/)                                                                                      | [Paola Ducolin](https://twitter.com/PolaDuco)                                                                              |
