@@ -1,5 +1,5 @@
 import React from 'react';
-import { BranchName, FilterList, Flex, Box, Link, Label } from '@primer/components';
+import { BranchName, FilterList, Flex, Box, Link, Label, Tooltip } from '@primer/components';
 import Octicon, { GitMerge, IssueClosed, IssueOpened, Clock, CommentDiscussion, Plus } from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
 import { calculateTimeElapsed } from '../helpers';
@@ -56,7 +56,18 @@ export const MergeRequest = ({ mr }: Props) => {
                     </div>
                 </Box>
                 <Box className={'avatarsList'}>
-                    {avatars} {mr.assignees.length > 3 ? <Octicon icon={Plus} /> : ''}
+                    {avatars}{' '}
+                    {mr.assignees.length > 3 ? (
+                        <Tooltip
+                            className={'moreAssigneesIcon'}
+                            aria-label={`and ${mr.assignees.length - 3} more`}
+                            direction="w"
+                        >
+                            <Octicon icon={Plus} />
+                        </Tooltip>
+                    ) : (
+                        ''
+                    )}
                 </Box>
             </Flex>
         </FilterList.Item>

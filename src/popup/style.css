@@ -66,6 +66,21 @@ body {
     background-color: forestgreen;
 }
 
+.moreAssigneesIcon {
+    display: inline-block;
+    background: #eee;
+    max-height: 40px;
+    vertical-align: middle;
+    text-align: center;
+    border-radius: 3px;
+    padding: 12px 6px;
+    margin-left: -4px;
+}
+
+.moreAssigneesIcon:hover {
+    background: #ddd;
+}
+
 .emptyInbox {
     display: block;
     width: 200px;
