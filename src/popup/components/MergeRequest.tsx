@@ -56,8 +56,7 @@ export const MergeRequest = ({ mr }: Props) => {
                     </div>
                 </Box>
                 <Box className={'avatarsList'}>
-                    {avatars}
-                    {mr.assignees.length > 3 ? <Octicon icon={Plus} /> : ''}
+                    {avatars} {mr.assignees.length > 3 ? <Octicon icon={Plus} /> : ''}
                 </Box>
             </Flex>
         </FilterList.Item>
