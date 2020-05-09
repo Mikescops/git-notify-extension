@@ -87,7 +87,7 @@ const App = () => {
         }
 
         // show data
-        let mrList = [];
+        let mrList: MergeRequestsDetails[] = [];
         if (currentTab === 0) {
             mrList = mrData.mrAssigned;
         } else {
@@ -123,19 +123,27 @@ const App = () => {
         return Math.floor(rate * 100);
     }, [appStatus, mrData, currentTab]);
 
-    const mrDataReviewRatio = mrData ? `${mrData.mrReviewed} / ${mrData.mrGiven.length}` : 'Uknown';
+    const mrDataReviewRatio = mrData ? `${mrData.mrReviewed} / ${mrData.mrGiven.length}` : 'Unknown';
 
     return (
         <ThemeProvider theme={primer}>
             <div className={'container'}>
                 <TabNav aria-label="Main" mb={2}>
-                    <TabNav.Link onClick={() => setCurrentTab(0)} className={currentTab === 0 ? 'selected' : ''}>
+                    <TabNav.Link
+                        href="#ToReview"
+                        onClick={() => setCurrentTab(0)}
+                        className={currentTab === 0 ? 'selected' : ''}
+                    >
                         To Review{' '}
                         <Label variant="small" bg="#dc3545">
                             {mrData ? mrData.mrToReview : 0}
                         </Label>
                     </TabNav.Link>
-                    <TabNav.Link onClick={() => setCurrentTab(1)} className={currentTab === 1 ? 'selected' : ''}>
+                    <TabNav.Link
+                        href="#UnderReview"
+                        onClick={() => setCurrentTab(1)}
+                        className={currentTab === 1 ? 'selected' : ''}
+                    >
                         Under Review{' '}
                         <Tooltip aria-label={`${mrDataReviewRatio}  have been reviewed`} direction="s">
                             <Label variant="small" bg="#28a745">
