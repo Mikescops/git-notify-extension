@@ -1,5 +1,5 @@
 body {
-    font-family: "Arial";
+    font-family: Arial;
 }
 
 .container {
@@ -23,13 +23,13 @@ body {
     text-decoration: none;
     color: black !important;
 
-    max-width: 600px;
+    max-width: 530px;
     text-overflow: ellipsis;
     overflow: hidden;
 }
 
 .mrBranchName {
-    max-width: 400px;
+    max-width: 320px;
     text-overflow: ellipsis;
     overflow: hidden;
 }
@@ -45,7 +45,7 @@ body {
 }
 
 .avatarsList {
-    width: 144px;
+    max-width: 200px;
     text-align: end;
 }
 
