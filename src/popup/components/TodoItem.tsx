@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import { browser } from 'webextension-polyfill-ts';
 import { Avatar, Button, Box, FilterList, Flex, Label, Link, Text } from '@primer/components';
 import Octicon, { Clock } from '@primer/octicons-react';
 import { calculateTimeElapsed } from '../helpers';
@@ -30,9 +31,21 @@ const actionToText = (author: string, action: string) => {
 };
 
 export const TodoItem = ({ todo }: Props) => {
+    const [visibility, setVisibility] = useState(true);
+
     const timeElapsed = calculateTimeElapsed(todo.created_at);
+
+    const setTodoAsDone = useCallback(() => {
+        browser.runtime.sendMessage({ type: 'setTodoAsDone', todoId: todo.id }).then((error) => {
+            if (error) {
+                console.error(error);
+            }
+            setVisibility(false);
+        });
+    }, [todo.id]);
+
     return (
-        <FilterList.Item as="div" className={'mrItem'}>
+        <FilterList.Item as="div" className={visibility ? 'mrItem' : 'hidden'}>
             <Flex flexWrap="nowrap">
                 <Box className={'avatarsList'}>
                     <Avatar src={todo.author.avatar_url} alt={todo.author.name} size={40} mr={2} />
@@ -51,7 +64,7 @@ export const TodoItem = ({ todo }: Props) => {
                     </div>
                 </Box>
                 <Box mr={2}>
-                    <Button>Done</Button>
+                    <Button onClick={setTodoAsDone}>Done</Button>
                 </Box>
             </Flex>
         </FilterList.Item>

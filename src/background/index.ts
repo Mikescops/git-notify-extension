@@ -1,9 +1,10 @@
 import * as async from 'async';
 import { browser } from 'webextension-polyfill-ts';
-import { Gitlab } from 'gitlab'; // All Resources
+import { Gitlab } from '@gitbeaker/browser';
 import { getSettings } from './utils/getSettings';
 import { fetchMRExtraInfo } from './utils/fetchMRExtraInfo';
-import { MergeRequests, GetSettingsResponse, MergeRequestsDetails, Todo } from './types';
+import { MergeRequests, GetSettingsResponse, MergeRequestsDetails, Todo, GitlabAPI } from './types';
+import { setTodoAsDone } from './setTodoAsDone';
 
 let ERROR_TRACKER: Error | null;
 
@@ -20,7 +21,7 @@ const pollMR = (cb: Callback<boolean>) => {
 
     interface AsyncResults {
         getSettings: GetSettingsResponse;
-        gitlabApi: Gitlab;
+        gitlabApi: GitlabAPI;
         reviewRequests: ReviewRequests;
         givenRequests: ReviewGiven;
         todos: Todo[];
@@ -68,8 +69,8 @@ const pollMR = (cb: Callback<boolean>) => {
                         scope: 'assigned_to_me',
                         wip: 'no'
                     })
-                        .then((response) => {
-                            const mrAssignedList = response as MergeRequests[];
+                        .then((response: MergeRequests[]) => {
+                            const mrAssignedList = response;
                             return fetchMRExtraInfo(gitlabApi, mrAssignedList, (error, mrAssignedDetails) => {
                                 if (error) {
                                     return cb(error);
@@ -112,8 +113,8 @@ const pollMR = (cb: Callback<boolean>) => {
                         state: 'opened',
                         scope: 'created_by_me'
                     })
-                        .then((response) => {
-                            const mrGivenList = response as MergeRequests[];
+                        .then((response: MergeRequests[]) => {
+                            const mrGivenList = response;
                             return fetchMRExtraInfo(gitlabApi, mrGivenList, (error, mrGivenDetails) => {
                                 if (error) {
                                     return cb(error);
@@ -151,8 +152,8 @@ const pollMR = (cb: Callback<boolean>) => {
                     gitlabApi.Todos.all({
                         state: 'pending'
                     })
-                        .then((response) => {
-                            return cb(null, response as Todo[]);
+                        .then((response: Todo[]) => {
+                            return cb(null, response);
                         })
                         .catch((error: Error) => {
                             if (error) {
@@ -224,5 +225,9 @@ browser.runtime.onMessage.addListener((message) => {
 
     if (message.type === 'pollMR') {
         return new Promise((resolve) => pollMR((_error, result) => resolve(result)));
+    }
+
+    if (message.type === 'setTodoAsDone') {
+        return new Promise((resolve) => setTodoAsDone(message.todoId, (error) => resolve(error)));
     }
 });

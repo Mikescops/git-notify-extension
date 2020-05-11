@@ -1,3 +1,5 @@
+export type GitlabAPI = any;
+
 export interface MergeRequests {
     id: number;
     iid: number;

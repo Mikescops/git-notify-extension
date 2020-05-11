@@ -6,6 +6,10 @@ body {
     min-width: 500px;
 }
 
+.hidden {
+    display: none;
+}
+
 .mrList {
     overflow: auto;
     overflow: overlay; /* This is a fix for Chrome */

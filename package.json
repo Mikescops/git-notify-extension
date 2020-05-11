@@ -22,11 +22,11 @@
   ],
   "dependencies": {
     "6d": "^1.0.63",
+    "@gitbeaker/browser": "^19.4.0",
     "@primer/components": "^16.0.0",
     "@primer/css": "^14.2.0",
     "@primer/octicons-react": "^9.6.0",
-    "async": "^3.2.0",
-    "gitlab": "^14.2.2"
+    "async": "^3.2.0"
   },
   "devDependencies": {
     "@neutrinojs/copy": "^9.1.0",
