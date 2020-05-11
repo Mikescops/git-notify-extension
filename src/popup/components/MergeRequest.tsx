@@ -48,7 +48,7 @@ export const MergeRequest = ({ mr }: Props) => {
                             </Label>
                         )}
                         <Label variant="medium" bg="white" color="black" className={'mrLabel'}>
-                            <Octicon icon={CommentDiscussion} /> {mr.comments.length}
+                            <Octicon icon={CommentDiscussion} /> {mr.user_notes_count}
                         </Label>
                         <Label variant="medium" bg="white" color="#8e8e8e" className={'mrLabel'}>
                             <Octicon icon={Clock} /> {timeElapsed}

@@ -10,6 +10,7 @@ export interface MergeRequests {
     web_url: string;
     author: User;
     assignees: User[];
+    user_notes_count: number;
     // missing types here
 }
 
