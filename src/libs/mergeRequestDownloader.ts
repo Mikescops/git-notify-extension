@@ -1,5 +1,5 @@
 import { browser } from 'webextension-polyfill-ts';
-import { MergeRequestsDetails } from '../background/types';
+import { MergeRequestsDetails, Todo } from '../background/types';
 
 const REQUEST_TYPE_GET_MERGE_REQUESTS = 'getMRs';
 
@@ -8,6 +8,7 @@ export interface MergeRequestSendMessageReply {
     mrToReview: number;
     mrGiven: MergeRequestsDetails[];
     mrReviewed: number;
+    todos: Todo[];
     lastUpdateDateUnix: number;
     error?: string;
 }
@@ -23,6 +24,7 @@ export const getMergeRequestList = (): Promise<MergeRequestSendMessageReply> => 
                     mrToReview: 0,
                     mrGiven: [],
                     mrReviewed: 0,
+                    todos: [],
                     lastUpdateDateUnix: Date.now()
                 };
             }
@@ -35,6 +37,7 @@ export const getMergeRequestList = (): Promise<MergeRequestSendMessageReply> => 
                 mrToReview: 0,
                 mrGiven: [],
                 mrReviewed: 0,
+                todos: [],
                 lastUpdateDateUnix: Date.now()
             };
         });

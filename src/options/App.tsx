@@ -98,6 +98,9 @@ const App = () => {
                 <option selected={defaultTab === 1} value="1">
                     Under Review
                 </option>
+                <option selected={defaultTab === 2} value="2">
+                    To-Do List
+                </option>
             </select>
             <hr />
             <div>

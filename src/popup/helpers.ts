@@ -1,4 +1,4 @@
-export const calculateTimeElapsed = (timestamp: number) => {
+export const calculateTimeElapsed = (timestamp: number | string) => {
     const startStamp = new Date(timestamp).getTime();
     const newDate = new Date();
     const newStamp = newDate.getTime();

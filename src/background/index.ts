@@ -3,7 +3,7 @@ import { browser } from 'webextension-polyfill-ts';
 import { Gitlab } from 'gitlab'; // All Resources
 import { getSettings } from './utils/getSettings';
 import { fetchMRExtraInfo } from './utils/fetchMRExtraInfo';
-import { MergeRequests, GetSettingsResponse, MergeRequestsDetails } from './types';
+import { MergeRequests, GetSettingsResponse, MergeRequestsDetails, Todo } from './types';
 
 let ERROR_TRACKER: Error | null;
 
@@ -23,6 +23,7 @@ const pollMR = (cb: Callback<boolean>) => {
         gitlabApi: Gitlab;
         reviewRequests: ReviewRequests;
         givenRequests: ReviewGiven;
+        todos: Todo[];
         saveLocalStorage: void;
     }
 
@@ -142,12 +143,32 @@ const pollMR = (cb: Callback<boolean>) => {
                         });
                 }
             ],
+            todos: [
+                'gitlabApi',
+                (results, cb) => {
+                    const { gitlabApi } = results;
+
+                    gitlabApi.Todos.all({
+                        state: 'pending'
+                    })
+                        .then((response) => {
+                            return cb(null, response as Todo[]);
+                        })
+                        .catch((error: Error) => {
+                            if (error) {
+                                return cb(error);
+                            }
+                        });
+                }
+            ],
             saveLocalStorage: [
                 'reviewRequests',
                 'givenRequests',
+                'todos',
                 (results, cb) => {
                     const { mrAssigned, mrToReview } = results.reviewRequests;
                     const { mrGiven, mrReviewed } = results.givenRequests;
+                    const { todos } = results;
                     const lastUpdateDateUnix = new Date().getTime();
 
                     browser.storage.local
@@ -156,6 +177,7 @@ const pollMR = (cb: Callback<boolean>) => {
                             mrToReview,
                             mrGiven,
                             mrReviewed,
+                            todos,
                             lastUpdateDateUnix
                         })
                         .then(() => cb())
@@ -189,7 +211,14 @@ browser.runtime.onMessage.addListener((message) => {
         }
 
         return Promise.resolve(
-            browser.storage.local.get(['mrAssigned', 'mrGiven', 'mrToReview', 'mrReviewed', 'lastUpdateDateUnix'])
+            browser.storage.local.get([
+                'mrAssigned',
+                'mrGiven',
+                'mrToReview',
+                'mrReviewed',
+                'todos',
+                'lastUpdateDateUnix'
+            ])
         );
     }
 
