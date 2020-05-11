@@ -38,7 +38,7 @@ export const TodoItem = ({ todo }: Props) => {
     const setTodoAsDone = useCallback(() => {
         browser.runtime.sendMessage({ type: 'setTodoAsDone', todoId: todo.id }).then((error) => {
             if (error) {
-                console.error(error);
+                return console.error(error);
             }
             setVisibility(false);
         });
