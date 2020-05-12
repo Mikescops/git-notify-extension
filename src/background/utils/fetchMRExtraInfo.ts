@@ -1,15 +1,18 @@
 import * as async from 'async';
 import { MergeRequestsDetails, MergeRequests, Comment, Approvals, GitlabAPI } from '../types';
 
-export const fetchMRExtraInfo = (
-    gitlabApi: GitlabAPI,
-    mrAssignedList: MergeRequests[],
-    cb: Callback<MergeRequestsDetails[]>
-) => {
+interface FetchMRExtraInfoParams {
+    gitlabCE: boolean;
+    gitlabApi: GitlabAPI;
+    mrList: MergeRequests[];
+}
+
+export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<MergeRequestsDetails[]>) => {
+    const { gitlabApi, mrList, gitlabCE } = params;
     const mrAssignedWithDetails: MergeRequestsDetails[] = [];
 
     async.forEach(
-        mrAssignedList,
+        mrList,
         (mr, cb) => {
             interface AsyncResults {
                 approvals: Approvals;
@@ -18,7 +21,19 @@ export const fetchMRExtraInfo = (
 
             async.auto<AsyncResults>(
                 {
-                    approvals: (cb) =>
+                    approvals: (cb) => {
+                        if (gitlabCE === true) {
+                            const alternateResponse = {
+                                // eslint-disable-next-line @typescript-eslint/camelcase
+                                user_has_approved: false,
+                                approved: false,
+                                // eslint-disable-next-line @typescript-eslint/camelcase
+                                approved_by: []
+                            };
+
+                            return cb(null, alternateResponse);
+                        }
+
                         gitlabApi.MergeRequests.approvals(mr.project_id, {
                             mergerequestIId: mr.iid
                         })
@@ -28,9 +43,15 @@ export const fetchMRExtraInfo = (
                             })
                             .catch((error: Error) => {
                                 if (error) {
-                                    return cb(error);
+                                    return cb(
+                                        new Error(
+                                            `You are likely using GitLab CE.
+                                            Please check the box in the options.`
+                                        )
+                                    );
                                 }
-                            }),
+                            });
+                    },
                     comments: (cb) =>
                         gitlabApi.MergeRequestNotes.all(mr.project_id, mr.iid)
                             .then((response: Comment[]) => {

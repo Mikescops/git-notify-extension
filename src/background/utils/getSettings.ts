@@ -4,11 +4,15 @@ import { GetSettingsResponse } from '../types';
 
 export const getSettings = (cb: Callback<GetSettingsResponse>) => {
     if (config.mode === 'production') {
-        browser.storage.local.get(['gitlabToken', 'gitlabAddress']).then((settings) => {
-            return cb(null, { token: settings.gitlabToken, address: settings.gitlabAddress });
+        browser.storage.local.get(['gitlabCE', 'gitlabToken', 'gitlabAddress']).then((settings) => {
+            return cb(null, {
+                gitlabCE: settings.gitlabCE,
+                token: settings.gitlabToken,
+                address: settings.gitlabAddress
+            });
         });
     } else {
-        const { token, address } = config;
-        return cb(null, { token, address });
+        const { gitlabCE, token, address } = config;
+        return cb(null, { gitlabCE, token, address });
     }
 };
