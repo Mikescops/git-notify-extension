@@ -6,9 +6,10 @@ import { ThemeProvider } from 'styled-components';
 import Octicon, { Key, Server, CloudUpload, Check } from '@primer/octicons-react';
 import './style.css';
 
-const getSettings = browser.storage.local.get(['gitlabToken', 'gitlabAddress', 'defaultTab']);
+const getSettings = browser.storage.local.get(['gitlabCE', 'gitlabToken', 'gitlabAddress', 'defaultTab']);
 
 const App = () => {
+    const [gitlabCE, setGitlabCE] = useState(false);
     const [gitlabToken, setGitlabToken] = useState('');
     const [gitlabAddress, setGitlabAddress] = useState('');
     const [defaultTab, setDefaultTab] = useState(0);
@@ -18,6 +19,7 @@ const App = () => {
 
     useEffect(() => {
         getSettings.then((settings) => {
+            setGitlabCE(settings.gitlabCE ? settings.gitlabCE : false);
             setGitlabToken(settings.gitlabToken ? settings.gitlabToken : '');
             setIsGitlabTokenInLocalStorage(settings.gitlabToken);
             setGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : '');
@@ -25,6 +27,13 @@ const App = () => {
             setDefaultTab(settings.defaultTab ? settings.defaultTab : '');
         });
     }, []);
+
+    const updateGitlabCE = (event: any) => {
+        setGitlabCE(event.target.checked);
+        browser.storage.local.set({ gitlabCE: event.target.checked }).then(() => {
+            console.log('Configuration Updated');
+        });
+    };
 
     const updateGitlabToken = (event: any) => {
         setGitlabToken(event.target.value);
@@ -55,6 +64,22 @@ const App = () => {
 
     return (
         <ThemeProvider theme={primer}>
+            <Text as="strong" mt={2}>
+                Using Gitlab Community Edition? (approvals are a premium feature)
+            </Text>
+            <br />
+            <label>
+                <input
+                    type="checkbox"
+                    name="gitlabCE"
+                    value="Gitlab CE Mode"
+                    onChange={updateGitlabCE}
+                    checked={gitlabCE ? true : false}
+                />{' '}
+                Gitlab CE Mode
+            </label>
+            <br />
+            <br />
             <Text as="strong" mt={2}>
                 Personal Gitlab Tuken (api + read_user)
             </Text>

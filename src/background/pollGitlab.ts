@@ -54,9 +54,10 @@ export const pollGitlab = (cb: Callback<boolean>) => {
                 }
             ],
             reviewRequests: [
+                'getSettings',
                 'gitlabApi',
                 (results, cb) => {
-                    const { gitlabApi } = results;
+                    const { gitlabApi, getSettings } = results;
 
                     gitlabApi.MergeRequests.all({
                         state: 'opened',
@@ -64,30 +65,36 @@ export const pollGitlab = (cb: Callback<boolean>) => {
                         wip: 'no'
                     })
                         .then((response: MergeRequests[]) => {
-                            const mrAssignedList = response;
-                            return fetchMRExtraInfo(gitlabApi, mrAssignedList, (error, mrAssignedDetails) => {
-                                if (error) {
-                                    return cb(error);
-                                }
-
-                                if (!mrAssignedDetails) {
-                                    return cb(new Error('Could not fetch merge requests assigned.'));
-                                }
-
-                                let mrToReview = 0;
-                                mrAssignedDetails.forEach((mr) => {
-                                    if (!mr.approvals.user_has_approved) {
-                                        mrToReview += 1;
+                            return fetchMRExtraInfo(
+                                {
+                                    gitlabApi,
+                                    mrList: response,
+                                    gitlabCE: getSettings.gitlabCE
+                                },
+                                (error, mrAssignedDetails) => {
+                                    if (error) {
+                                        return cb(error);
                                     }
-                                });
 
-                                setBadge(mrToReview === 0 ? '' : mrToReview.toString(), 'blue');
+                                    if (!mrAssignedDetails) {
+                                        return cb(new Error('Could not fetch merge requests assigned.'));
+                                    }
 
-                                return cb(null, {
-                                    mrAssigned: mrAssignedDetails,
-                                    mrToReview
-                                });
-                            });
+                                    let mrToReview = 0;
+                                    mrAssignedDetails.forEach((mr) => {
+                                        if (!mr.approvals.user_has_approved) {
+                                            mrToReview += 1;
+                                        }
+                                    });
+
+                                    setBadge(mrToReview === 0 ? '' : mrToReview.toString(), 'blue');
+
+                                    return cb(null, {
+                                        mrAssigned: mrAssignedDetails,
+                                        mrToReview
+                                    });
+                                }
+                            );
                         })
                         .catch((error: Error) => {
                             if (error) {
@@ -97,37 +104,44 @@ export const pollGitlab = (cb: Callback<boolean>) => {
                 }
             ],
             givenRequests: [
+                'getSettings',
                 'gitlabApi',
                 (results, cb) => {
-                    const { gitlabApi } = results;
+                    const { gitlabApi, getSettings } = results;
 
                     gitlabApi.MergeRequests.all({
                         state: 'opened',
                         scope: 'created_by_me'
                     })
                         .then((response: MergeRequests[]) => {
-                            const mrGivenList = response;
-                            return fetchMRExtraInfo(gitlabApi, mrGivenList, (error, mrGivenDetails) => {
-                                if (error) {
-                                    return cb(error);
-                                }
-
-                                if (!mrGivenDetails) {
-                                    return cb(new Error('Could not fetch merge requests given.'));
-                                }
-
-                                let mrReviewed = 0;
-                                mrGivenDetails.forEach((mr) => {
-                                    if (mr.approvals.approved) {
-                                        mrReviewed += 1;
+                            return fetchMRExtraInfo(
+                                {
+                                    gitlabApi,
+                                    mrList: response,
+                                    gitlabCE: getSettings.gitlabCE
+                                },
+                                (error, mrGivenDetails) => {
+                                    if (error) {
+                                        return cb(error);
                                     }
-                                });
 
-                                return cb(null, {
-                                    mrGiven: mrGivenDetails,
-                                    mrReviewed
-                                });
-                            });
+                                    if (!mrGivenDetails) {
+                                        return cb(new Error('Could not fetch merge requests given.'));
+                                    }
+
+                                    let mrReviewed = 0;
+                                    mrGivenDetails.forEach((mr) => {
+                                        if (mr.approvals.approved) {
+                                            mrReviewed += 1;
+                                        }
+                                    });
+
+                                    return cb(null, {
+                                        mrGiven: mrGivenDetails,
+                                        mrReviewed
+                                    });
+                                }
+                            );
                         })
                         .catch((error: Error) => {
                             if (error) {

@@ -66,6 +66,7 @@ export interface TodoTarget {
 }
 
 export interface GetSettingsResponse {
+    gitlabCE: boolean;
     token: string;
     address: string;
 }
