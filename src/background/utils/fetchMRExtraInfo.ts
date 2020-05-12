@@ -1,9 +1,8 @@
 import * as async from 'async';
-import { Gitlab } from 'gitlab';
-import { MergeRequestsDetails, MergeRequests, Comment, Approvals } from '../types';
+import { MergeRequestsDetails, MergeRequests, Comment, Approvals, GitlabAPI } from '../types';
 
 export const fetchMRExtraInfo = (
-    gitlabApi: Gitlab,
+    gitlabApi: GitlabAPI,
     mrAssignedList: MergeRequests[],
     cb: Callback<MergeRequestsDetails[]>
 ) => {
@@ -23,19 +22,19 @@ export const fetchMRExtraInfo = (
                         gitlabApi.MergeRequests.approvals(mr.project_id, {
                             mergerequestIId: mr.iid
                         })
-                            .then((response) => {
-                                const details = response as Approvals;
+                            .then((response: Approvals) => {
+                                const details = response;
                                 return cb(null, details);
                             })
-                            .catch((error) => {
+                            .catch((error: Error) => {
                                 if (error) {
                                     return cb(error);
                                 }
                             }),
                     comments: (cb) =>
                         gitlabApi.MergeRequestNotes.all(mr.project_id, mr.iid)
-                            .then((response) => {
-                                const notes: Comment[] = response as Comment[];
+                            .then((response: Comment[]) => {
+                                const notes: Comment[] = response;
                                 const comments = notes.filter((note) => note.system === false);
 
                                 return cb(null, comments);

@@ -6,6 +6,10 @@ body {
     min-width: 500px;
 }
 
+.hidden {
+    display: none !important;
+}
+
 .mrList {
     overflow: auto;
     overflow: overlay; /* This is a fix for Chrome */
@@ -42,6 +46,15 @@ body {
 
 .mrApproved {
     opacity: 0.5;
+}
+
+.todoBody {
+    max-width: 350px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    line-height: 20px;
+    margin-right: 5px;
 }
 
 .avatarsList {

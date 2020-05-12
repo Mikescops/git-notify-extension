@@ -16,11 +16,13 @@ import {
 import { ThemeProvider } from 'styled-components';
 import Octicon, { Sync, Gear } from '@primer/octicons-react';
 import { MergeRequest } from './components/MergeRequest';
-import emptyInbox from './assets/empty_inbox.svg';
-import './style.css';
-import { MergeRequestsDetails } from '../background/types';
+import { TodoItem } from './components/TodoItem';
+import { MergeRequestsDetails, Todo } from '../background/types';
 import { getHumanReadableDate } from './helpers';
 import { getMergeRequestList, MergeRequestSendMessageReply } from '../libs/mergeRequestDownloader';
+
+import './style.css';
+import emptyInbox from './assets/empty_inbox.svg';
 
 type AppStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -32,6 +34,7 @@ const App = () => {
         mrToReview: 0,
         mrGiven: [],
         mrReviewed: 0,
+        todos: [],
         lastUpdateDateUnix: Date.now()
     });
 
@@ -91,6 +94,19 @@ const App = () => {
                 <Flash m={2} scheme="red">
                     {errorMessage}
                 </Flash>
+            );
+        }
+
+        if (currentTab === 2) {
+            if (!mrData.todos || mrData.todos.length === 0) {
+                return <img src={emptyInbox} className={'emptyInbox'} />;
+            }
+            return (
+                <FilterList className={'mrList'}>
+                    {mrData.todos.map((todo: Todo) => (
+                        <TodoItem todo={todo} key={todo.id} />
+                    ))}
+                </FilterList>
             );
         }
 
@@ -158,6 +174,16 @@ const App = () => {
                                 {mrData ? mrData.mrReviewed : 0}
                             </Label>
                         </Tooltip>
+                    </TabNav.Link>
+                    <TabNav.Link
+                        href="#ToDoList"
+                        onClick={() => setCurrentTab(2)}
+                        className={currentTab === 2 ? 'selected' : ''}
+                    >
+                        To-Do List{' '}
+                        <Label variant="small" bg="#1f78d1">
+                            {mrData ? mrData.todos.length : 0}
+                        </Label>
                     </TabNav.Link>
                 </TabNav>
                 {getContent()}

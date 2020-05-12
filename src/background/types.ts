@@ -1,3 +1,5 @@
+export type GitlabAPI = any;
+
 export interface MergeRequests {
     id: number;
     iid: number;
@@ -39,6 +41,28 @@ export interface User {
 
 export interface Comment {
     system: boolean;
+    // missing types here
+}
+
+export interface Todo {
+    id: number;
+    author: User;
+    action_name: string;
+    target_url: string;
+    target: TodoTarget;
+    body: string;
+    created_at: string;
+    updated_at: string;
+    state: string;
+    // missing types here
+}
+
+export interface TodoTarget {
+    id: number;
+    iid: number;
+    title: string;
+    author: User;
+    // missing types here
 }
 
 export interface GetSettingsResponse {

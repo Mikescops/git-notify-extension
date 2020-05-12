@@ -1,9 +1,10 @@
 import * as async from 'async';
 import { browser } from 'webextension-polyfill-ts';
-import { Gitlab } from 'gitlab'; // All Resources
+import { Gitlab } from '@gitbeaker/browser';
 import { getSettings } from './utils/getSettings';
 import { fetchMRExtraInfo } from './utils/fetchMRExtraInfo';
-import { MergeRequests, GetSettingsResponse, MergeRequestsDetails } from './types';
+import { MergeRequests, GetSettingsResponse, MergeRequestsDetails, Todo, GitlabAPI } from './types';
+import { setTodoAsDone } from './setTodoAsDone';
 
 let ERROR_TRACKER: Error | null;
 
@@ -20,9 +21,10 @@ const pollMR = (cb: Callback<boolean>) => {
 
     interface AsyncResults {
         getSettings: GetSettingsResponse;
-        gitlabApi: Gitlab;
+        gitlabApi: GitlabAPI;
         reviewRequests: ReviewRequests;
         givenRequests: ReviewGiven;
+        todos: Todo[];
         saveLocalStorage: void;
     }
 
@@ -67,8 +69,8 @@ const pollMR = (cb: Callback<boolean>) => {
                         scope: 'assigned_to_me',
                         wip: 'no'
                     })
-                        .then((response) => {
-                            const mrAssignedList = response as MergeRequests[];
+                        .then((response: MergeRequests[]) => {
+                            const mrAssignedList = response;
                             return fetchMRExtraInfo(gitlabApi, mrAssignedList, (error, mrAssignedDetails) => {
                                 if (error) {
                                     return cb(error);
@@ -111,8 +113,8 @@ const pollMR = (cb: Callback<boolean>) => {
                         state: 'opened',
                         scope: 'created_by_me'
                     })
-                        .then((response) => {
-                            const mrGivenList = response as MergeRequests[];
+                        .then((response: MergeRequests[]) => {
+                            const mrGivenList = response;
                             return fetchMRExtraInfo(gitlabApi, mrGivenList, (error, mrGivenDetails) => {
                                 if (error) {
                                     return cb(error);
@@ -142,12 +144,32 @@ const pollMR = (cb: Callback<boolean>) => {
                         });
                 }
             ],
+            todos: [
+                'gitlabApi',
+                (results, cb) => {
+                    const { gitlabApi } = results;
+
+                    gitlabApi.Todos.all({
+                        state: 'pending'
+                    })
+                        .then((response: Todo[]) => {
+                            return cb(null, response);
+                        })
+                        .catch((error: Error) => {
+                            if (error) {
+                                return cb(error);
+                            }
+                        });
+                }
+            ],
             saveLocalStorage: [
                 'reviewRequests',
                 'givenRequests',
+                'todos',
                 (results, cb) => {
                     const { mrAssigned, mrToReview } = results.reviewRequests;
                     const { mrGiven, mrReviewed } = results.givenRequests;
+                    const { todos } = results;
                     const lastUpdateDateUnix = new Date().getTime();
 
                     browser.storage.local
@@ -156,6 +178,7 @@ const pollMR = (cb: Callback<boolean>) => {
                             mrToReview,
                             mrGiven,
                             mrReviewed,
+                            todos,
                             lastUpdateDateUnix
                         })
                         .then(() => cb())
@@ -189,11 +212,22 @@ browser.runtime.onMessage.addListener((message) => {
         }
 
         return Promise.resolve(
-            browser.storage.local.get(['mrAssigned', 'mrGiven', 'mrToReview', 'mrReviewed', 'lastUpdateDateUnix'])
+            browser.storage.local.get([
+                'mrAssigned',
+                'mrGiven',
+                'mrToReview',
+                'mrReviewed',
+                'todos',
+                'lastUpdateDateUnix'
+            ])
         );
     }
 
     if (message.type === 'pollMR') {
         return new Promise((resolve) => pollMR((_error, result) => resolve(result)));
+    }
+
+    if (message.type === 'setTodoAsDone') {
+        return new Promise((resolve) => setTodoAsDone(message.todoId, (error) => resolve(error)));
     }
 });
