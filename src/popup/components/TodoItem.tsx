@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { browser } from 'webextension-polyfill-ts';
-import { Avatar, Button, Box, FilterList, Flex, Label, Link, Text } from '@primer/components';
-import Octicon, { Clock } from '@primer/octicons-react';
+import { Avatar, Button, Box, FilterList, Flex, Label, Link, Text, Tooltip } from '@primer/components';
+import Octicon, { Clock, Check } from '@primer/octicons-react';
 import { calculateTimeElapsed } from '../helpers';
 import { Todo } from '../../background/types';
 
@@ -64,7 +64,11 @@ export const TodoItem = ({ todo }: Props) => {
                     </div>
                 </Box>
                 <Box mr={2}>
-                    <Button onClick={setTodoAsDone}>Done</Button>
+                    <Tooltip aria-label={'Mark as done'} direction="w">
+                        <Button onClick={setTodoAsDone}>
+                            <Octicon icon={Check} />
+                        </Button>
+                    </Tooltip>
                 </Box>
             </Flex>
         </FilterList.Item>
