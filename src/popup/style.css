@@ -36,6 +36,7 @@ body {
     max-width: 320px;
     text-overflow: ellipsis;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .mrLabel {

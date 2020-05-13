@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BranchName, FilterList, Flex, Box, Link, Label, Tooltip } from '@primer/components';
 import Octicon, { GitMerge, IssueClosed, IssueOpened, Clock, CommentDiscussion, Plus } from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
@@ -16,6 +16,12 @@ export const MergeRequest = ({ mr }: Props) => {
     }
 
     const timeElapsed = calculateTimeElapsed(mr.created_at);
+
+    const [copyBranchStatus, setCopyBranchStatus] = useState(false);
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text);
+        setCopyBranchStatus(true);
+    };
 
     const avatars = mr.assignees
         .slice(0, 3)
@@ -35,9 +41,17 @@ export const MergeRequest = ({ mr }: Props) => {
                         {mr.title} - {mr.author.name}
                     </Link>
                     <div>
-                        <BranchName as="span" mr={2} className={'mrBranchName'} title={mr.source_branch}>
-                            <Octicon icon={GitMerge} /> {mr.source_branch}
-                        </BranchName>
+                        <Tooltip aria-label={copyBranchStatus ? '✔️ Copied' : '📋 Copy to clipboard'} direction="n">
+                            <BranchName
+                                as="span"
+                                mr={2}
+                                className={'mrBranchName'}
+                                title={mr.source_branch}
+                                onClick={() => copyToClipboard(mr.source_branch)}
+                            >
+                                <Octicon icon={GitMerge} /> {mr.source_branch}
+                            </BranchName>
+                        </Tooltip>
                         {mr.merge_status === 'can_be_merged' ? (
                             <Label variant="medium" bg="#28a745" className={'mrLabel'} title="Can be merged">
                                 <Octicon icon={IssueClosed} />
