@@ -33,7 +33,7 @@ const App = () => {
             setGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : '');
             setIsGitlabAddressInLocalStorage(settings.gitlabAddress);
             setRefreshRate(settings.refreshRate ? settings.refreshRate : 40);
-            setDefaultTab(settings.defaultTab ? settings.defaultTab : '');
+            setDefaultTab(settings.defaultTab ? settings.defaultTab : 0);
         });
     }, []);
 
@@ -83,23 +83,23 @@ const App = () => {
     return (
         <ThemeProvider theme={primer}>
             <Text as="strong" mt={2}>
-                Using Gitlab Community Edition? (approvals are a premium feature)
+                Using GitLab Community Edition? (approvals are a premium feature)
             </Text>
             <br />
             <label>
                 <input
                     type="checkbox"
                     name="gitlabCE"
-                    value="Gitlab CE Mode"
+                    value="GitLab CE Mode"
                     onChange={updateGitlabCE}
                     checked={gitlabCE ? true : false}
                 />{' '}
-                Gitlab CE Mode
+                GitLab CE Mode
             </label>
             <br />
             <br />
             <Text as="strong" mt={2}>
-                Personal Gitlab Tuken (api + read_user)
+                Personal GitLab Token (api + read_user)
             </Text>
             <br />
             <TextInput
@@ -107,7 +107,7 @@ const App = () => {
                 variant={'small'}
                 name="gitlab-token"
                 value={gitlabToken}
-                placeholder="Personal Gitlab Token"
+                placeholder="Personal GitLab Token"
                 onChange={updateGitlabToken}
                 aria-label="gitlab-token"
             />{' '}
@@ -115,7 +115,7 @@ const App = () => {
             <br />
             <br />
             <Text as="strong" mt={2}>
-                Gitlab host address
+                GitLab host address
             </Text>
             <br />
             <TextInput

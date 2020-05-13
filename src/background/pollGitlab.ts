@@ -39,10 +39,10 @@ export const pollGitlab = (cb: Callback<boolean>) => {
                     }
 
                     if (!results.getSettings.token) {
-                        return cb(new Error('No Gitlab token set, visit options.'));
+                        return cb(new Error('No GitLab token set, visit options.'));
                     }
                     if (!results.getSettings.address) {
-                        return cb(new Error('No Gitlab host address set, visit options.'));
+                        return cb(new Error('No GitLab host address set, visit options.'));
                     }
 
                     const api = new Gitlab({
