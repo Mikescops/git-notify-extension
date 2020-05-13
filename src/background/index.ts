@@ -36,7 +36,12 @@ browser.runtime.onMessage.addListener((message) => {
     }
 
     if (message.type === 'pollMR') {
-        return new Promise((resolve) => pollGitlab((_error, result) => resolve(result)));
+        return new Promise((resolve) =>
+            pollGitlab((error, result) => {
+                ERROR_TRACKER = error;
+                return resolve(result);
+            })
+        );
     }
 
     if (message.type === 'setTodoAsDone') {
