@@ -19,7 +19,7 @@ import { MergeRequest } from './components/MergeRequest';
 import { TodoItem } from './components/TodoItem';
 import { MergeRequestsDetails, Todo } from '../background/types';
 import { getHumanReadableDate } from './helpers';
-import { getMergeRequestList, MergeRequestSendMessageReply } from '../libs/mergeRequestDownloader';
+import { getMergeRequestList, MergeRequestSendMessageReply } from './utils/mergeRequestDownloader';
 
 import './style.css';
 import emptyInbox from './assets/empty_inbox.svg';

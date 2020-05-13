@@ -1,5 +1,5 @@
 import { browser } from 'webextension-polyfill-ts';
-import { MergeRequestsDetails, Todo } from '../background/types';
+import { MergeRequestsDetails, Todo } from '../../background/types';
 
 const REQUEST_TYPE_GET_MERGE_REQUESTS = 'getMRs';
 
