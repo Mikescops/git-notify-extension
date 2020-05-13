@@ -6,16 +6,24 @@ import { ThemeProvider } from 'styled-components';
 import Octicon, { Key, Server, CloudUpload, Check } from '@primer/octicons-react';
 import './style.css';
 
-const getSettings = browser.storage.local.get(['gitlabCE', 'gitlabToken', 'gitlabAddress', 'defaultTab']);
+const getSettings = browser.storage.local.get([
+    'gitlabCE',
+    'gitlabToken',
+    'gitlabAddress',
+    'refreshRate',
+    'defaultTab'
+]);
 
 const App = () => {
     const [gitlabCE, setGitlabCE] = useState(false);
     const [gitlabToken, setGitlabToken] = useState('');
     const [gitlabAddress, setGitlabAddress] = useState('');
+    const [refreshRate, setRefreshRate] = useState(40);
     const [defaultTab, setDefaultTab] = useState(0);
     const [testSuccess, setTestSuccess] = useState(null);
     const [isGitlabTokenInLocalStorage, setIsGitlabTokenInLocalStorage] = useState(false);
     const [isGitlabAddressInLocalStorage, setIsGitlabAddressInLocalStorage] = useState(false);
+    const [isRefreshRateInLocalStorage, setIsRefreshRateInLocalStorage] = useState(false);
 
     useEffect(() => {
         getSettings.then((settings) => {
@@ -24,6 +32,7 @@ const App = () => {
             setIsGitlabTokenInLocalStorage(settings.gitlabToken);
             setGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : '');
             setIsGitlabAddressInLocalStorage(settings.gitlabAddress);
+            setRefreshRate(settings.refreshRate ? settings.refreshRate : 40);
             setDefaultTab(settings.defaultTab ? settings.defaultTab : '');
         });
     }, []);
@@ -49,6 +58,15 @@ const App = () => {
             console.log('Configuration Updated');
             setIsGitlabAddressInLocalStorage(true);
         });
+    };
+
+    const updateRefreshRate = (event: any) => {
+        setRefreshRate(event.target.value);
+        browser.storage.local.set({ refreshRate: parseInt(event.target.value) }).then(() => {
+            console.log('Configuration Updated');
+            setIsRefreshRateInLocalStorage(true);
+        });
+        browser.runtime.sendMessage({ type: 'updateRefreshRate', interval: event.target.value }).then();
     };
 
     const updateDefaultTab = (event: any) => {
@@ -110,6 +128,14 @@ const App = () => {
                 aria-label="gitlab-address"
             />{' '}
             {isGitlabAddressInLocalStorage ? <Octicon icon={Check} /> : ''}
+            <br />
+            <br />
+            <Text as="strong" mt={2}>
+                Refresh rate in seconds (it is recommended not to go below 30)
+            </Text>
+            <br />
+            <input type="number" name="refreshRate" min="20" value={refreshRate} onChange={updateRefreshRate} />{' '}
+            {isRefreshRateInLocalStorage ? <Octicon icon={Check} /> : ''}
             <br />
             <br />
             <Text as="strong" mt={2}>
