@@ -2,11 +2,20 @@
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/mikescops/gitlab-notify-extension) ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/mikescops/gitlab-notify-extension/Lint%20&%20Build%20CI/master) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ekfpkkhpemajcbniegjicehdphdabhop) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ekfpkkhpemajcbniegjicehdphdabhop) ![Mozilla Add-on](https://img.shields.io/amo/v/gitlab-notify) ![Mozilla Add-on](https://img.shields.io/amo/users/gitlab-notify)
 
-This browser extension aims to poll merge requests you are assigned to and the ones you created.
+_Don't miss any GitLab merge requests or issues and rocket up your productivity._
 
 [Chrome Web Store](https://chrome.google.com/webstore/detail/ekfpkkhpemajcbniegjicehdphdabhop) | [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/gitlab-notify/)
 
 ![Preview of the browser extension: 30/03/2020](./preview.png)
+
+**Gitlab Notify is able to:**
+
+-   List Merge Requests you are assigned to
+-   List Merge Requests you created
+-   List Issues you are assigned to
+-   Display your To-Do List
+
+It comes with a bunch of features to let you access easily the information you're looking for and is customizable so it fits your needs.
 
 ## Setup
 
