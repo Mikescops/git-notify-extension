@@ -68,6 +68,10 @@ body {
     display: inline-block;
 }
 
+.inline-avatar {
+    vertical-align: top !important;
+}
+
 .statusMark {
     position: absolute;
     right: 2px;

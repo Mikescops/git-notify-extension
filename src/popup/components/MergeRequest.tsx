@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BranchName, FilterList, Flex, Box, Link, Label, Tooltip } from '@primer/components';
+import { Avatar, BranchName, FilterList, Flex, Box, Link, Label, Tooltip } from '@primer/components';
 import Octicon, { GitMerge, IssueClosed, IssueOpened, Clock, CommentDiscussion, Plus } from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
 import { calculateTimeElapsed } from '../helpers';
@@ -38,9 +38,12 @@ export const MergeRequest = ({ mr }: Props) => {
                         target="_blank"
                         title={`${mr.title} - ${mr.author.name}\n${mr.description}`}
                     >
-                        {mr.title} - {mr.author.name}
+                        {mr.title}
                     </Link>
                     <div>
+                        <Tooltip mr={2} aria-label={mr.author.name} direction="e" className={'inline-avatar'}>
+                            <Avatar src={mr.author.avatar_url} size={20} className={'avatar-small'} />
+                        </Tooltip>
                         <Tooltip
                             aria-label={copyBranchStatus ? '✔️ Copied' : '📋 Copy branch name to clipboard'}
                             direction="n"

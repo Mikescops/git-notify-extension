@@ -1,5 +1,5 @@
 import React from 'react';
-import { BranchName, FilterList, Flex, Box, Link, Label, Tooltip } from '@primer/components';
+import { Avatar, BranchName, FilterList, Flex, Box, Link, Label, Tooltip } from '@primer/components';
 import Octicon, { Clock, CommentDiscussion, Plus, Repo } from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
 import { calculateTimeElapsed } from '../helpers';
@@ -27,9 +27,12 @@ export const IssueItem = ({ issue }: Props) => {
                         target="_blank"
                         title={`${issue.title} - ${issue.author.name}\n${issue.description}`}
                     >
-                        {issue.title} - {issue.author.name}
+                        {issue.title}
                     </Link>
                     <div>
+                        <Tooltip mr={2} aria-label={issue.author.name} direction="e" className={'inline-avatar'}>
+                            <Avatar src={issue.author.avatar_url} size={20} className={'avatar-small'} />
+                        </Tooltip>
                         <BranchName as="span" mr={2} className={'mrBranchName'}>
                             <Octicon icon={Repo} /> {issue.references.full}
                         </BranchName>
