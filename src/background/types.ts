@@ -18,8 +18,6 @@ export interface MergeRequests {
 
 export interface MergeRequestsDetails extends MergeRequests {
     approvals: Approvals;
-    comments: Comment[];
-    // missing types here
 }
 
 export interface Approvals {
