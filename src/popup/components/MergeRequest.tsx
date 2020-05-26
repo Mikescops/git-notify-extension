@@ -41,7 +41,10 @@ export const MergeRequest = ({ mr }: Props) => {
                         {mr.title} - {mr.author.name}
                     </Link>
                     <div>
-                        <Tooltip aria-label={copyBranchStatus ? '✔️ Copied' : '📋 Copy to clipboard'} direction="n">
+                        <Tooltip
+                            aria-label={copyBranchStatus ? '✔️ Copied' : '📋 Copy branch name to clipboard'}
+                            direction="n"
+                        >
                             <BranchName
                                 as="span"
                                 mr={2}
@@ -49,7 +52,7 @@ export const MergeRequest = ({ mr }: Props) => {
                                 title={mr.source_branch}
                                 onClick={() => copyToClipboard(mr.source_branch)}
                             >
-                                <Octicon icon={GitMerge} /> {mr.source_branch}
+                                <Octicon icon={GitMerge} /> {mr.references.full}
                             </BranchName>
                         </Tooltip>
                         {mr.merge_status === 'can_be_merged' ? (
