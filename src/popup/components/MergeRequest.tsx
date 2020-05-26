@@ -25,7 +25,7 @@ export const MergeRequest = ({ mr }: Props) => {
 
     const avatars = mr.assignees
         .slice(0, 3)
-        .map((assignee) => <AvatarWithTooltip mr={mr} assignee={assignee} key={assignee.id} />);
+        .map((assignee) => <AvatarWithTooltip approvals={mr.approvals} assignee={assignee} key={assignee.id} />);
 
     return (
         <FilterList.Item as="div" className={mrApproved ? 'mrApproved mrItem' : 'mrItem'}>

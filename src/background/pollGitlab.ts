@@ -3,7 +3,7 @@ import { browser } from 'webextension-polyfill-ts';
 import { Gitlab } from '@gitbeaker/browser';
 import { getSettings } from './utils/getSettings';
 import { fetchMRExtraInfo } from './utils/fetchMRExtraInfo';
-import { MergeRequests, GetSettingsResponse, MergeRequestsDetails, Todo, GitlabAPI } from './types';
+import { MergeRequests, GetSettingsResponse, MergeRequestsDetails, Todo, GitlabAPI, Issue } from './types';
 import { setBadge } from './utils/setBadge';
 
 export const pollGitlab = (cb: Callback<boolean>) => {
@@ -22,6 +22,7 @@ export const pollGitlab = (cb: Callback<boolean>) => {
         gitlabApi: GitlabAPI;
         reviewRequests: ReviewRequests;
         givenRequests: ReviewGiven;
+        issuesAssigned: Issue[];
         todos: Todo[];
         saveLocalStorage: void;
     }
@@ -150,6 +151,25 @@ export const pollGitlab = (cb: Callback<boolean>) => {
                         });
                 }
             ],
+            issuesAssigned: [
+                'gitlabApi',
+                (results, cb) => {
+                    const { gitlabApi } = results;
+
+                    gitlabApi.Issues.all({
+                        state: 'opened',
+                        scope: 'assigned_to_me'
+                    })
+                        .then((response: Issue[]) => {
+                            return cb(null, response);
+                        })
+                        .catch((error: Error) => {
+                            if (error) {
+                                return cb(error);
+                            }
+                        });
+                }
+            ],
             todos: [
                 'gitlabApi',
                 (results, cb) => {
@@ -175,7 +195,7 @@ export const pollGitlab = (cb: Callback<boolean>) => {
                 (results, cb) => {
                     const { mrAssigned, mrToReview } = results.reviewRequests;
                     const { mrGiven, mrReviewed } = results.givenRequests;
-                    const { todos } = results;
+                    const { todos, issuesAssigned } = results;
                     const lastUpdateDateUnix = new Date().getTime();
 
                     browser.storage.local
@@ -184,6 +204,7 @@ export const pollGitlab = (cb: Callback<boolean>) => {
                             mrToReview,
                             mrGiven,
                             mrReviewed,
+                            issuesAssigned,
                             todos,
                             lastUpdateDateUnix
                         })

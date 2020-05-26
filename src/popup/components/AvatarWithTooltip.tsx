@@ -1,19 +1,20 @@
 import React from 'react';
 import { Avatar, Tooltip } from '@primer/components';
 import Octicon, { Check } from '@primer/octicons-react';
-import { MergeRequestsDetails, User } from '../../background/types';
+import { User, Approvals } from '../../background/types';
 
 interface Props {
-    mr: MergeRequestsDetails;
+    approvals: Approvals | null;
     assignee: User;
 }
 
 export const AvatarWithTooltip = (props: Props) => {
-    const { mr, assignee } = props;
+    const { approvals, assignee } = props;
 
     let approved = null;
     if (
-        mr.approvals.approved_by.filter(function (e) {
+        approvals &&
+        approvals.approved_by.filter(function (e) {
             return e.user.id === assignee.id;
         }).length > 0
     ) {
