@@ -13,6 +13,7 @@ export interface MergeRequests {
     author: User;
     assignees: User[];
     user_notes_count: number;
+    references: References;
     // missing types here
 }
 
@@ -39,6 +40,27 @@ export interface User {
 
 export interface Comment {
     system: boolean;
+    // missing types here
+}
+
+export interface References {
+    short: string;
+    relative: string;
+    full: string;
+}
+
+export interface Issue {
+    id: number;
+    iid: number;
+    title: string;
+    description: string;
+    web_url: string;
+    created_at: string;
+    updated_at: string;
+    author: User;
+    user_notes_count: number;
+    assignees: User[];
+    references: References;
     // missing types here
 }
 

@@ -29,6 +29,7 @@ browser.runtime.onMessage.addListener((message) => {
                 'mrGiven',
                 'mrToReview',
                 'mrReviewed',
+                'issuesAssigned',
                 'todos',
                 'lastUpdateDateUnix'
             ])

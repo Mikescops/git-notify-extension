@@ -16,8 +16,9 @@ import {
 import { ThemeProvider } from 'styled-components';
 import Octicon, { Sync, Gear } from '@primer/octicons-react';
 import { MergeRequest } from './components/MergeRequest';
+import { IssueItem } from './components/IssueItem';
 import { TodoItem } from './components/TodoItem';
-import { MergeRequestsDetails, Todo } from '../background/types';
+import { MergeRequestsDetails, Todo, Issue } from '../background/types';
 import { getHumanReadableDate } from './helpers';
 import { getMergeRequestList, MergeRequestSendMessageReply } from './utils/mergeRequestDownloader';
 
@@ -34,6 +35,7 @@ const App = () => {
         mrToReview: 0,
         mrGiven: [],
         mrReviewed: 0,
+        issuesAssigned: [],
         todos: [],
         lastUpdateDateUnix: Date.now()
     });
@@ -98,6 +100,19 @@ const App = () => {
         }
 
         if (currentTab === 2) {
+            if (!mrData.issuesAssigned || mrData.issuesAssigned.length === 0) {
+                return <img src={emptyInbox} className={'emptyInbox'} />;
+            }
+            return (
+                <FilterList className={'mrList'}>
+                    {mrData.issuesAssigned.map((issue: Issue) => (
+                        <IssueItem issue={issue} key={issue.id} />
+                    ))}
+                </FilterList>
+            );
+        }
+
+        if (currentTab === 3) {
             if (!mrData.todos || mrData.todos.length === 0) {
                 return <img src={emptyInbox} className={'emptyInbox'} />;
             }
@@ -176,9 +191,21 @@ const App = () => {
                         </Tooltip>
                     </TabNav.Link>
                     <TabNav.Link
-                        href="#ToDoList"
+                        href="#Issues"
                         onClick={() => setCurrentTab(2)}
                         className={currentTab === 2 ? 'selected' : ''}
+                    >
+                        Issues{' '}
+                        <Tooltip aria-label={`${mrData.issuesAssigned.length}  are assigned to you`} direction="s">
+                            <Label variant="small" bg="#fd7e14">
+                                {mrData ? mrData.issuesAssigned.length : 0}
+                            </Label>
+                        </Tooltip>
+                    </TabNav.Link>
+                    <TabNav.Link
+                        href="#ToDoList"
+                        onClick={() => setCurrentTab(3)}
+                        className={currentTab === 3 ? 'selected' : ''}
                     >
                         To-Do List{' '}
                         <Label variant="small" bg="#1f78d1">
