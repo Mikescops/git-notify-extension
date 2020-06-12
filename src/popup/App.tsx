@@ -101,7 +101,11 @@ const App = () => {
 
         if (currentTab === 2) {
             if (!mrData.issuesAssigned || mrData.issuesAssigned.length === 0) {
-                return <img src={emptyInbox} className={'emptyInbox'} />;
+                return (
+                    <div className={'emptyContainer'}>
+                        <img src={emptyInbox} className={'emptyInbox'} />
+                    </div>
+                );
             }
             return (
                 <FilterList className={'mrList'}>
@@ -114,7 +118,11 @@ const App = () => {
 
         if (currentTab === 3) {
             if (!mrData.todos || mrData.todos.length === 0) {
-                return <img src={emptyInbox} className={'emptyInbox'} />;
+                return (
+                    <div className={'emptyContainer'}>
+                        <img src={emptyInbox} className={'emptyInbox'} />
+                    </div>
+                );
             }
             return (
                 <FilterList className={'mrList'}>
@@ -167,7 +175,7 @@ const App = () => {
     return (
         <ThemeProvider theme={primer}>
             <div className={'container'}>
-                <TabNav aria-label="Main" mb={2}>
+                <TabNav aria-label="Main" mb={2} marginBottom="0">
                     <TabNav.Link
                         href="#ToReview"
                         onClick={() => setCurrentTab(0)}
