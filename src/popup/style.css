@@ -1,9 +1,10 @@
 body {
+    background: #fafbfc;
     font-family: Arial;
 }
 
 .container {
-    min-width: 500px;
+    width: 700px;
 }
 
 .hidden {
@@ -11,8 +12,16 @@ body {
 }
 
 .mrList {
+    background: white;
+    /* border-color matches TabNav lib */
+    border-right: 1px solid rgb(225, 228, 232);
+    border-bottom: 1px solid rgb(225, 228, 232);
+    border-left: 1px solid rgb(225, 228, 232);
     overflow: auto;
-    overflow: overlay; /* This is a fix for Chrome */
+    /* This is a fix for Chrome */
+    overflow: overlay;
+    /* Override default styles */
+    padding: 6px !important;
     max-height: 434px;
 }
 
@@ -26,8 +35,7 @@ body {
     display: block;
     text-decoration: none;
     color: black !important;
-
-    max-width: 530px;
+    max-width: 500px;
     text-overflow: ellipsis;
     overflow: hidden;
 }
@@ -37,6 +45,7 @@ body {
     text-overflow: ellipsis;
     overflow: hidden;
     cursor: pointer;
+    max-width: 250px;
 }
 
 .mrLabel {
@@ -86,7 +95,7 @@ body {
 
 .moreAssigneesIcon {
     display: inline-block;
-    background: #eee;
+    background: #ddd;
     max-height: 40px;
     vertical-align: middle;
     text-align: center;
@@ -96,7 +105,12 @@ body {
 }
 
 .moreAssigneesIcon:hover {
-    background: #ddd;
+    background: #ccc;
+}
+
+.emptyContainer {
+    background: white;
+    display: flex;
 }
 
 .emptyInbox {
