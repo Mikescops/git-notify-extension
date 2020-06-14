@@ -63,7 +63,7 @@ export const TodoItem = ({ todo }: Props) => {
                         </Label>
                     </div>
                 </Box>
-                <Box mr={2}>
+                <Box>
                     <Tooltip aria-label={'Mark as done'} direction="w">
                         <Button onClick={setTodoAsDone}>
                             <Octicon icon={Check} />
