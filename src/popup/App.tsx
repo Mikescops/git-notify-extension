@@ -14,7 +14,7 @@ import {
     Flash
 } from '@primer/components';
 import { ThemeProvider } from 'styled-components';
-import Octicon, { Sync, Gear } from '@primer/octicons-react';
+import Octicon, { Sync, Gear, Check } from '@primer/octicons-react';
 import { MergeRequest } from './components/MergeRequest';
 import { IssueItem } from './components/IssueItem';
 import { TodoItem } from './components/TodoItem';
@@ -41,6 +41,7 @@ const App = () => {
     });
 
     const [currentTab, setCurrentTab] = useState(0);
+    const [todosVisibility, setTodosVisibility] = useState(true);
 
     const openSettings = useCallback(() => browser.runtime.openOptionsPage(), []);
 
@@ -48,6 +49,15 @@ const App = () => {
         const getSettings = browser.storage.local.get(['defaultTab']);
         getSettings.then((settings) => {
             setCurrentTab(settings.defaultTab ? settings.defaultTab : 0);
+        });
+    }, []);
+
+    const setAllTodosAsDone = useCallback(() => {
+        browser.runtime.sendMessage({ type: 'setTodoAsDone', todoId: null }).then((error) => {
+            if (error) {
+                return console.error(error);
+            }
+            setTodosVisibility(false);
         });
     }, []);
 
@@ -117,7 +127,7 @@ const App = () => {
         }
 
         if (currentTab === 3) {
-            if (!mrData.todos || mrData.todos.length === 0) {
+            if (!mrData.todos || mrData.todos.length === 0 || !todosVisibility) {
                 return (
                     <div className={'emptyContainer'}>
                         <img src={emptyInbox} className={'emptyInbox'} />
@@ -125,11 +135,20 @@ const App = () => {
                 );
             }
             return (
-                <FilterList className={'mrList'}>
-                    {mrData.todos.map((todo: Todo) => (
-                        <TodoItem todo={todo} key={todo.id} />
-                    ))}
-                </FilterList>
+                <>
+                    {mrData.todos.length > 1 && todosVisibility ? (
+                        <div className={'subNav'}>
+                            <Button onClick={setAllTodosAsDone} variant={'small'}>
+                                <Octicon icon={Check} /> Mark all as done
+                            </Button>
+                        </div>
+                    ) : null}
+                    <FilterList className={'mrList'}>
+                        {mrData.todos.map((todo: Todo) => (
+                            <TodoItem todo={todo} key={todo.id} />
+                        ))}
+                    </FilterList>
+                </>
             );
         }
 
@@ -151,7 +170,7 @@ const App = () => {
                 ))}
             </FilterList>
         );
-    }, [appStatus, mrData, currentTab, errorMessage]);
+    }, [appStatus, mrData, currentTab, errorMessage, setAllTodosAsDone, todosVisibility]);
 
     const getMrRatio = useCallback(() => {
         if (appStatus !== 'success' || mrData === null) {
