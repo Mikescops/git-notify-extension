@@ -18,12 +18,12 @@ import Octicon, { Sync, Gear, Check } from '@primer/octicons-react';
 import { MergeRequest } from './components/MergeRequest';
 import { IssueItem } from './components/IssueItem';
 import { TodoItem } from './components/TodoItem';
+import { EmptyItems } from './components/EmptyItems';
 import { MergeRequestsDetails, Todo, Issue } from '../background/types';
 import { getHumanReadableDate } from './helpers';
 import { getMergeRequestList, MergeRequestSendMessageReply } from './utils/mergeRequestDownloader';
 
 import './style.css';
-import emptyInbox from './assets/empty_inbox.svg';
 
 type AppStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -111,11 +111,7 @@ const App = () => {
 
         if (currentTab === 2) {
             if (!mrData.issuesAssigned || mrData.issuesAssigned.length === 0) {
-                return (
-                    <div className={'emptyContainer'}>
-                        <img src={emptyInbox} className={'emptyInbox'} />
-                    </div>
-                );
+                return <EmptyItems />;
             }
             return (
                 <FilterList className={'mrList'}>
@@ -128,11 +124,7 @@ const App = () => {
 
         if (currentTab === 3) {
             if (!mrData.todos || mrData.todos.length === 0 || !todosVisibility) {
-                return (
-                    <div className={'emptyContainer'}>
-                        <img src={emptyInbox} className={'emptyInbox'} />
-                    </div>
-                );
+                return <EmptyItems />;
             }
             return (
                 <>
@@ -161,7 +153,7 @@ const App = () => {
         }
 
         if (!mrList || mrList.length === 0) {
-            return <img src={emptyInbox} className={'emptyInbox'} />;
+            return <EmptyItems />;
         }
         return (
             <FilterList className={'mrList'}>
