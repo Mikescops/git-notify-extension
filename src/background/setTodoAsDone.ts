@@ -1,13 +1,15 @@
 import * as async from 'async';
 import { Gitlab } from '@gitbeaker/browser';
 import { getSettings } from './utils/getSettings';
-import { GetSettingsResponse, GitlabAPI } from './types';
+import { GetSettingsResponse, GitlabAPI, Todo } from './types';
+import { browser } from 'webextension-polyfill-ts';
 
-export const setTodoAsDone = (id: number, cb: CallbackErrorOnly) => {
+export const setTodoAsDone = (id: number | null, cb: CallbackErrorOnly) => {
     interface AsyncResults {
         getSettings: GetSettingsResponse;
         gitlabApi: GitlabAPI;
         markAsDone: void;
+        removeFromCache: void;
     }
 
     async.auto<AsyncResults>(
@@ -38,6 +40,18 @@ export const setTodoAsDone = (id: number, cb: CallbackErrorOnly) => {
                     gitlabApi.Todos.done({ todoId: id })
                         .then(() => cb())
                         .catch((error: Error) => cb(error));
+                }
+            ],
+            removeFromCache: [
+                'markAsDone',
+                (_results, cb) => {
+                    browser.storage.local.get(['todos']).then((storage) => {
+                        const currentTodos: Todo[] = storage.todos;
+
+                        const newTodos = id ? currentTodos.filter((todo) => todo.id !== id) : [];
+
+                        browser.storage.local.set({ todos: newTodos }).then(() => cb());
+                    });
                 }
             ]
         },
