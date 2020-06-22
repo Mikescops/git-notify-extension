@@ -130,6 +130,7 @@ const App = () => {
                 <>
                     {mrData.todos.length > 1 && todosVisibility ? (
                         <div className={'subNav'}>
+                            <p className={'subNavText'}>{mrData.todos.length} tasks to complete</p>
                             <Button onClick={setAllTodosAsDone} variant={'small'}>
                                 <Octicon icon={Check} /> Mark all as done
                             </Button>
