@@ -1,6 +1,6 @@
 {
   "name": "gitlab-notify",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Don't miss any GitLab merge requests and rocket up your productivity.",
   "main": "index.js",
   "scripts": {
