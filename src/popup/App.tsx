@@ -206,7 +206,7 @@ const App = () => {
                         Under Review{' '}
                         <Tooltip aria-label={`${mrDataReviewRatio}  have been reviewed`} direction="s">
                             <Label variant="small" bg="#28a745">
-                                {mrData ? mrData.mrReviewed : 0}
+                                {mrData ? mrDataReviewRatio : 0}
                             </Label>
                         </Tooltip>
                     </TabNav.Link>
