@@ -40,8 +40,14 @@ To build prod:
 -   Octoicons https://octicons.github.com/
 -   Mozilla Documentation for WebExtensions https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions
 
-## Authors
+## Maintainer
 
-| [![twitter/mikescops](https://avatars0.githubusercontent.com/u/4266283?s=100&v=4)](https://pixelswap.fr 'Personal Website') | [![twitter/PolaDuco](https://avatars0.githubusercontent.com/u/45568537?s=100&v=4)](https://twitter.com/PolaDuco 'Twitter') |
-| --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| [Corentin Mors](https://pixelswap.fr/)                                                                                      | [Paola Ducolin](https://twitter.com/PolaDuco)                                                                              |
+| [![twitter/mikescops](https://avatars0.githubusercontent.com/u/4266283?s=100&v=4)](https://pixelswap.fr 'Personal Website') |
+| --------------------------------------------------------------------------------------------------------------------------- |
+| [Corentin Mors](https://pixelswap.fr/)                                                                                      |
+
+## Contributors (thanks for your help!)
+
+| [Paola Ducolin](https://github.com/pducolin) | [Bradley Cushing](https://github.com/bradcush) |
+| -------------------------------------------- | ---------------------------------------------- |
+
