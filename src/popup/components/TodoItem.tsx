@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { browser } from 'webextension-polyfill-ts';
-import { Avatar, Button, Box, FilterList, Flex, Label, Link, Text, Tooltip } from '@primer/components';
-import Octicon, { Clock, Check } from '@primer/octicons-react';
+import { Avatar, ButtonOutline, Box, FilterList, Flex, Label, Link, Text, Tooltip } from '@primer/components';
+import { ClockIcon, CheckIcon } from '@primer/octicons-react';
 import { calculateTimeElapsed } from '../helpers';
 import { Todo } from '../../background/types';
 
@@ -48,7 +48,7 @@ export const TodoItem = ({ todo }: Props) => {
         <FilterList.Item as="div" className={visibility ? 'mrItem' : 'hidden'}>
             <Flex flexWrap="nowrap">
                 <Box className={'avatarsList'}>
-                    <Avatar src={todo.author.avatar_url} alt={todo.author.name} size={40} mr={2} />
+                    <Avatar src={todo.author.avatar_url} alt={todo.author.name} square size={40} mr={2} />
                 </Box>
                 <Box mr={2} style={{ flex: 1 }}>
                     <Link as="a" href={todo.target_url} className={'mrTitle'} target="_blank">
@@ -59,15 +59,15 @@ export const TodoItem = ({ todo }: Props) => {
                             &#34;{todo.body}&#34;
                         </Text>
                         <Label variant="medium" bg="white" color="#8e8e8e" className={'mrLabel'}>
-                            <Octicon icon={Clock} /> {timeElapsed}
+                            <ClockIcon /> {timeElapsed}
                         </Label>
                     </div>
                 </Box>
                 <Box>
                     <Tooltip aria-label={'Mark as done'} direction="w">
-                        <Button onClick={setTodoAsDone}>
-                            <Octicon icon={Check} />
-                        </Button>
+                        <ButtonOutline variant="small" mt={1} onClick={setTodoAsDone}>
+                            <CheckIcon />
+                        </ButtonOutline>
                     </Tooltip>
                 </Box>
             </Flex>

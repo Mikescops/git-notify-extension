@@ -3,7 +3,7 @@ import { browser } from 'webextension-polyfill-ts';
 import React, { useState, useCallback, useEffect } from 'react';
 import { theme as primer, Button, TextInput, Text, Tooltip, StyledOcticon, Link } from '@primer/components';
 import { ThemeProvider } from 'styled-components';
-import Octicon, { Key, Server, CloudUpload, Check, Info } from '@primer/octicons-react';
+import { KeyIcon, ServerIcon, PackageDependenciesIcon, CheckIcon, InfoIcon } from '@primer/octicons-react';
 import './style.css';
 
 const getSettings = browser.storage.local.get([
@@ -106,13 +106,13 @@ const App = () => {
                         aria-label="Click to open GitLab documentation.
                     The extension requires 'api' + 'read_user' rights."
                     >
-                        <StyledOcticon icon={Info} size={15} color="blue.5" />
+                        <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
                     </Tooltip>
                 </Link>
             </Text>
             <br />
             <TextInput
-                icon={Key as any}
+                icon={KeyIcon as any}
                 variant={'small'}
                 name="gitlab-token"
                 value={gitlabToken}
@@ -120,18 +120,18 @@ const App = () => {
                 onChange={updateGitlabToken}
                 aria-label="gitlab-token"
             />{' '}
-            {isGitlabTokenInLocalStorage ? <Octicon icon={Check} /> : ''}
+            {isGitlabTokenInLocalStorage ? <CheckIcon /> : ''}
             <br />
             <br />
             <Text as="strong" mt={2}>
                 GitLab Host Address{' '}
                 <Tooltip aria-label="Example: https://gitlab.com">
-                    <StyledOcticon icon={Info} size={15} color="blue.5" />
+                    <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
                 </Tooltip>
             </Text>
             <br />
             <TextInput
-                icon={Server as any}
+                icon={ServerIcon as any}
                 variant={'small'}
                 name="gitlab-address"
                 value={gitlabAddress}
@@ -139,7 +139,7 @@ const App = () => {
                 onChange={updateGitlabAddress}
                 aria-label="gitlab-address"
             />{' '}
-            {isGitlabAddressInLocalStorage ? <Octicon icon={Check} /> : ''}
+            {isGitlabAddressInLocalStorage ? <CheckIcon /> : ''}
             <br />
             <br />
             <Text as="strong" mt={2}>
@@ -147,7 +147,7 @@ const App = () => {
             </Text>
             <br />
             <input type="number" name="refreshRate" min="20" value={refreshRate} onChange={updateRefreshRate} />{' '}
-            {isRefreshRateInLocalStorage ? <Octicon icon={Check} /> : ''}
+            {isRefreshRateInLocalStorage ? <CheckIcon /> : ''}
             <br />
             <br />
             <Text as="strong" mt={2}>
@@ -171,7 +171,7 @@ const App = () => {
             <hr />
             <div>
                 <Button onClick={testConnection} variant={'small'}>
-                    <Octicon icon={CloudUpload} /> Test my settings
+                    <PackageDependenciesIcon /> Test my settings
                 </Button>
                 <Text
                     as="span"

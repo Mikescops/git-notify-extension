@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar, BranchName, FilterList, Flex, Box, Link, Label, Tooltip } from '@primer/components';
-import Octicon, { Clock, CommentDiscussion, Plus, Repo } from '@primer/octicons-react';
+import { ClockIcon, CommentDiscussionIcon, PlusIcon, RepoIcon } from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
 import { calculateTimeElapsed } from '../helpers';
 import { Issue } from '../../background/types';
@@ -35,13 +35,13 @@ export const IssueItem = ({ issue }: Props) => {
                             <Avatar src={issue.author.avatar_url} size={20} className={'avatar-small'} />
                         </Tooltip>
                         <BranchName as="span" mr={2} className={'mrBranchName'}>
-                            <Octicon icon={Repo} /> {issue.references.full}
+                            <RepoIcon /> {issue.references.full}
                         </BranchName>
                         <Label variant="medium" bg="white" color="black" className={'mrLabel'}>
-                            <Octicon icon={CommentDiscussion} /> {issue.user_notes_count}
+                            <CommentDiscussionIcon /> {issue.user_notes_count}
                         </Label>
                         <Label variant="medium" bg="white" color="#8e8e8e" className={'mrLabel'}>
-                            <Octicon icon={Clock} /> {timeElapsed}
+                            <ClockIcon /> {timeElapsed}
                         </Label>
                     </div>
                 </Box>
@@ -53,7 +53,7 @@ export const IssueItem = ({ issue }: Props) => {
                             aria-label={`and ${issue.assignees.length - 3} more`}
                             direction="w"
                         >
-                            <Octicon icon={Plus} />
+                            <PlusIcon />
                         </Tooltip>
                     ) : (
                         ''

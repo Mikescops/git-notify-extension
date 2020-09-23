@@ -16,10 +16,8 @@ export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<Me
         (mr, cb) => {
             if (gitlabCE === true) {
                 const alternateResponse = {
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     user_has_approved: false,
                     approved: false,
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     approved_by: []
                 };
 
@@ -32,7 +30,7 @@ export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<Me
             }
 
             gitlabApi.MergeRequests.approvals(mr.project_id, {
-                mergerequestIId: mr.iid
+                mergerequestIid: mr.iid
             })
                 .then((response: Approvals) => {
                     const details = response;

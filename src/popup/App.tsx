@@ -14,7 +14,7 @@ import {
     Flash
 } from '@primer/components';
 import { ThemeProvider } from 'styled-components';
-import Octicon, { Sync, Gear, Check } from '@primer/octicons-react';
+import { SyncIcon, GearIcon, CheckIcon } from '@primer/octicons-react';
 import { MergeRequest } from './components/MergeRequest';
 import { IssueItem } from './components/IssueItem';
 import { TodoItem } from './components/TodoItem';
@@ -103,7 +103,7 @@ const App = () => {
 
         if (appStatus === 'error') {
             return (
-                <Flash m={2} scheme="red">
+                <Flash m={2} variant="danger">
                     {errorMessage}
                 </Flash>
             );
@@ -132,7 +132,7 @@ const App = () => {
                         <div className={'subNav'}>
                             <p className={'subNavText'}>{mrData.todos.length} tasks to complete</p>
                             <Button onClick={setAllTodosAsDone} variant={'small'}>
-                                <Octicon icon={Check} /> Mark all as done
+                                <CheckIcon /> Mark all as done
                             </Button>
                         </div>
                     ) : null}
@@ -250,12 +250,12 @@ const App = () => {
                             direction="n"
                         >
                             <Button onClick={fetchData} variant={'small'} mr={2}>
-                                <Octicon icon={Sync} /> Refresh
+                                <SyncIcon /> Refresh
                             </Button>
                         </Tooltip>
 
                         <Button onClick={openSettings} variant={'small'}>
-                            <Octicon icon={Gear} /> Options
+                            <GearIcon /> Options
                         </Button>
                     </div>
                 </Flex>

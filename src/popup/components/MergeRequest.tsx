@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { Avatar, BranchName, FilterList, Flex, Box, Link, Label, Tooltip } from '@primer/components';
-import Octicon, { GitMerge, IssueClosed, IssueOpened, Clock, CommentDiscussion, Plus } from '@primer/octicons-react';
+import {
+    GitMergeIcon,
+    IssueClosedIcon,
+    IssueOpenedIcon,
+    ClockIcon,
+    CommentDiscussionIcon,
+    PlusIcon
+} from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
 import { calculateTimeElapsed } from '../helpers';
 import { MergeRequestsDetails } from '../../background/types';
@@ -68,7 +75,7 @@ export const MergeRequest = ({ mr }: Props) => {
                                 title={mr.source_branch}
                                 onClick={() => copyToClipboard(mr.source_branch)}
                             >
-                                <Octicon icon={GitMerge} /> {mr.references.full}
+                                <GitMergeIcon /> {mr.references.full}
                             </BranchName>
                         </Tooltip>
                         {mr.merge_status === 'can_be_merged' && mr.approvals.approved ? (
@@ -78,7 +85,7 @@ export const MergeRequest = ({ mr }: Props) => {
                                 className={'mrLabel'}
                                 title="Approved and can be merged!"
                             >
-                                <Octicon icon={IssueClosed} />
+                                <IssueClosedIcon />
                             </Label>
                         ) : null}
                         {mr.merge_status !== 'can_be_merged' && mr.approvals.approved ? (
@@ -88,7 +95,7 @@ export const MergeRequest = ({ mr }: Props) => {
                                 className={'mrLabel'}
                                 title="Approved but you may need to rebase before merging."
                             >
-                                <Octicon icon={IssueOpened} />
+                                <IssueOpenedIcon />
                             </Label>
                         ) : null}
                         {mr.merge_status !== 'can_be_merged' && !mr.approvals.approved ? (
@@ -98,14 +105,14 @@ export const MergeRequest = ({ mr }: Props) => {
                                 className={'mrLabel'}
                                 title="Cannot be merged, you may need to rebase first."
                             >
-                                <Octicon icon={IssueOpened} />
+                                <IssueOpenedIcon />
                             </Label>
                         ) : null}
                         <Label variant="medium" bg="white" color="black" className={'mrLabel'}>
-                            <Octicon icon={CommentDiscussion} /> {mr.user_notes_count}
+                            <CommentDiscussionIcon /> {mr.user_notes_count}
                         </Label>
                         <Label variant="medium" bg="white" color="#8e8e8e" className={'mrLabel'}>
-                            <Octicon icon={Clock} /> {timeElapsed}
+                            <ClockIcon /> {timeElapsed}
                         </Label>
                     </div>
                 </Box>
@@ -117,7 +124,7 @@ export const MergeRequest = ({ mr }: Props) => {
                             aria-label={`and ${mr.assignees.length - 3} more`}
                             direction="w"
                         >
-                            <Octicon icon={Plus} />
+                            <PlusIcon />
                         </Tooltip>
                     ) : (
                         ''
