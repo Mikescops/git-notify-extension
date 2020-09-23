@@ -14,7 +14,7 @@ export const IssueItem = ({ issue }: Props) => {
 
     const avatars = issue.assignees
         .slice(0, 3)
-        .map((assignee) => <AvatarWithTooltip approvals={null} assignee={assignee} key={assignee.id} />);
+        .map((assignee) => <AvatarWithTooltip assignee={assignee} key={assignee.id} />);
 
     return (
         <FilterList.Item as="div" className={'mrItem'}>

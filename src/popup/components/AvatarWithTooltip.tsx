@@ -1,33 +1,28 @@
 import React from 'react';
 import { Avatar, Tooltip } from '@primer/components';
 import Octicon, { Check } from '@primer/octicons-react';
-import { User, Approvals } from '../../background/types';
+import { User } from '../../background/types';
+
+interface UserWithApproval extends User {
+    approved?: boolean;
+}
 
 interface Props {
-    approvals: Approvals | null;
-    assignee: User;
+    assignee: UserWithApproval;
 }
 
 export const AvatarWithTooltip = (props: Props) => {
-    const { approvals, assignee } = props;
+    const { assignee } = props;
 
-    let approved = null;
-    if (
-        approvals &&
-        approvals.approved_by.filter(function (e) {
-            return e.user.id === assignee.id;
-        }).length > 0
-    ) {
-        approved = (
-            <div className={'statusMark'}>
-                <Octicon icon={Check} />
-            </div>
-        );
-    }
+    const approvedMark = (
+        <div className={'statusMark'}>
+            <Octicon icon={Check} />
+        </div>
+    );
 
     return (
         <Tooltip className={'userAvatar'} aria-label={assignee.name} direction="w">
-            {approved}
+            {assignee.approved ? approvedMark : null}
             <Avatar src={assignee.avatar_url} alt={assignee.name} size={40} mr={2} />
         </Tooltip>
     );

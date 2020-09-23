@@ -57,10 +57,9 @@ export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<Me
             if (error) {
                 return cb(error);
             }
-            const mrAssignedSorted = mrAssignedWithDetails.sort((a, b) => {
-                return Number(a.approvals.user_has_approved) - Number(b.approvals.user_has_approved);
-            });
-
+            const mrAssignedSorted = mrAssignedWithDetails
+                .sort((a, b) => (a.created_at < b.created_at ? 1 : 0))
+                .sort((a, b) => Number(a.approvals.user_has_approved) - Number(b.approvals.user_has_approved));
             return cb(null, mrAssignedSorted);
         }
     );

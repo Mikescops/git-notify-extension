@@ -24,8 +24,20 @@ export const MergeRequest = ({ mr }: Props) => {
     };
 
     const avatars = mr.assignees
-        .slice(0, 3)
-        .map((assignee) => <AvatarWithTooltip approvals={mr.approvals} assignee={assignee} key={assignee.id} />);
+        .map((assignee) => {
+            return {
+                ...assignee,
+                approved:
+                    mr.approvals &&
+                    mr.approvals.approved_by.filter((approval) => {
+                        return approval.user.id === assignee.id;
+                    }).length > 0
+            };
+        })
+        .sort((a, b) => Number(b.approved) - Number(a.approved))
+        .slice(0, 3);
+
+    const avatarsUI = avatars.map((assignee) => <AvatarWithTooltip assignee={assignee} key={assignee.id} />);
 
     return (
         <FilterList.Item as="div" className={mrApproved ? 'mrApproved mrItem' : 'mrItem'}>
@@ -76,7 +88,7 @@ export const MergeRequest = ({ mr }: Props) => {
                     </div>
                 </Box>
                 <Box className={'avatarsList'}>
-                    {avatars}{' '}
+                    {avatarsUI}{' '}
                     {mr.assignees.length > 3 ? (
                         <Tooltip
                             className={'moreAssigneesIcon'}
