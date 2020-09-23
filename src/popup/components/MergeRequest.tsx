@@ -48,6 +48,7 @@ export const MergeRequest = ({ mr }: Props) => {
                         href={mr.web_url}
                         className={'mrTitle'}
                         target="_blank"
+                        color={mr.approvals.approved ? '#0b7f26' : '#000'}
                         title={`${mr.title} - ${mr.author.name}\n${mr.description}`}
                     >
                         {mr.title}
@@ -70,15 +71,36 @@ export const MergeRequest = ({ mr }: Props) => {
                                 <Octicon icon={GitMerge} /> {mr.references.full}
                             </BranchName>
                         </Tooltip>
-                        {mr.merge_status === 'can_be_merged' ? (
-                            <Label variant="medium" bg="#28a745" className={'mrLabel'} title="Can be merged">
+                        {mr.merge_status === 'can_be_merged' && mr.approvals.approved ? (
+                            <Label
+                                variant="medium"
+                                bg="#28a745"
+                                className={'mrLabel'}
+                                title="Approved and can be merged!"
+                            >
                                 <Octicon icon={IssueClosed} />
                             </Label>
-                        ) : (
-                            <Label variant="medium" bg="#dc3545" className={'mrLabel'} title="Cannot be merged">
+                        ) : null}
+                        {mr.merge_status !== 'can_be_merged' && mr.approvals.approved ? (
+                            <Label
+                                variant="medium"
+                                bg="#fd7e14"
+                                className={'mrLabel'}
+                                title="Approved but you may need to rebase before merging."
+                            >
                                 <Octicon icon={IssueOpened} />
                             </Label>
-                        )}
+                        ) : null}
+                        {mr.merge_status !== 'can_be_merged' && !mr.approvals.approved ? (
+                            <Label
+                                variant="medium"
+                                bg="#dc3545"
+                                className={'mrLabel'}
+                                title="Cannot be merged, you may need to rebase first."
+                            >
+                                <Octicon icon={IssueOpened} />
+                            </Label>
+                        ) : null}
                         <Label variant="medium" bg="white" color="black" className={'mrLabel'}>
                             <Octicon icon={CommentDiscussion} /> {mr.user_notes_count}
                         </Label>

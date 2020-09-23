@@ -50,7 +50,6 @@ body {
     margin-bottom: 5px;
     display: block;
     text-decoration: none;
-    color: black !important;
     max-width: 500px;
     text-overflow: ellipsis;
     overflow: hidden;

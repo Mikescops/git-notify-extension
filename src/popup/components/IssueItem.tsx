@@ -25,6 +25,7 @@ export const IssueItem = ({ issue }: Props) => {
                         href={issue.web_url}
                         className={'mrTitle'}
                         target="_blank"
+                        color="#000"
                         title={`${issue.title} - ${issue.author.name}\n${issue.description}`}
                     >
                         {issue.title}
