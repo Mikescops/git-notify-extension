@@ -6,7 +6,7 @@ _Don't miss any GitLab merge requests or issues and rocket up your productivity.
 
 [Chrome Web Store](https://chrome.google.com/webstore/detail/ekfpkkhpemajcbniegjicehdphdabhop) | [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/gitlab-notify/)
 
-![Preview of the browser extension: 30/03/2020](./preview.png)
+![Preview of the browser extension: 23/09/2020](./previews/preview-reviews.png)
 
 **Gitlab Notify is able to:**
 
@@ -16,6 +16,14 @@ _Don't miss any GitLab merge requests or issues and rocket up your productivity.
 -   Display your To-Do List
 
 It comes with a bunch of features to let you access easily the information you're looking for and is customizable so it fits your needs.
+
+## Screenshots
+
+List of issues:
+![Preview of the issues: 23/09/2020](./previews/preview-issues.png)
+
+To-Do list:
+![Preview of the todo: 23/09/2020](./previews/preview-todo.png)
 
 ## Setup
 
