@@ -2,7 +2,7 @@
 const react = require('@neutrinojs/react');
 const copy = require('@neutrinojs/copy');
 const webext = require('neutrino-webextension');
-const typescript = require('neutrino-typescript');
+const typescript = require('neutrinojs-typescript');
 
 module.exports = {
     options: {
