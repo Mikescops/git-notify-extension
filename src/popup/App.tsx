@@ -183,6 +183,7 @@ const App = () => {
     }, [appStatus, mrData, currentTab]);
 
     const mrDataReviewRatio = mrData ? `${mrData.mrReviewed} / ${mrData.mrGiven.length}` : 'Unknown';
+    const issuesAssignedNumber = mrData?.issuesAssigned ? mrData.issuesAssigned.length : 0;
 
     return (
         <ThemeProvider theme={primer}>
@@ -216,9 +217,9 @@ const App = () => {
                         className={currentTab === 2 ? 'selected' : ''}
                     >
                         Issues{' '}
-                        <Tooltip aria-label={`${mrData.issuesAssigned.length}  are assigned to you`} direction="s">
+                        <Tooltip aria-label={`${issuesAssignedNumber}  are assigned to you`} direction="s">
                             <Label variant="small" bg="#fd7e14">
-                                {mrData ? mrData.issuesAssigned.length : 0}
+                                {issuesAssignedNumber}
                             </Label>
                         </Tooltip>
                     </TabNav.Link>
@@ -229,7 +230,7 @@ const App = () => {
                     >
                         To-Do List{' '}
                         <Label variant="small" bg="#1f78d1">
-                            {mrData ? mrData.todos.length : 0}
+                            {mrData?.todos ? mrData.todos.length : 0}
                         </Label>
                     </TabNav.Link>
                 </TabNav>
