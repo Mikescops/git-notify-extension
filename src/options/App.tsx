@@ -1,9 +1,9 @@
 import { hot } from 'react-hot-loader';
 import { browser } from 'webextension-polyfill-ts';
 import React, { useState, useCallback, useEffect } from 'react';
-import { theme as primer, Button, TextInput, Text } from '@primer/components';
+import { theme as primer, Button, TextInput, Text, Tooltip, StyledOcticon, Link } from '@primer/components';
 import { ThemeProvider } from 'styled-components';
-import Octicon, { Key, Server, CloudUpload, Check } from '@primer/octicons-react';
+import Octicon, { Key, Server, CloudUpload, Check, Info } from '@primer/octicons-react';
 import './style.css';
 
 const getSettings = browser.storage.local.get([
@@ -99,7 +99,16 @@ const App = () => {
             <br />
             <br />
             <Text as="strong" mt={2}>
-                Personal GitLab Token (api + read_user)
+                Personal GitLab Token{' '}
+                <Link href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html">
+                    <Tooltip
+                        wrap={true}
+                        aria-label="Click to open GitLab documentation.
+                    The extension requires 'api' + 'read_user' rights."
+                    >
+                        <StyledOcticon icon={Info} size={15} color="blue.5" />
+                    </Tooltip>
+                </Link>
             </Text>
             <br />
             <TextInput
@@ -107,7 +116,7 @@ const App = () => {
                 variant={'small'}
                 name="gitlab-token"
                 value={gitlabToken}
-                placeholder="Personal GitLab Token"
+                placeholder="<your_token_here>"
                 onChange={updateGitlabToken}
                 aria-label="gitlab-token"
             />{' '}
@@ -115,7 +124,10 @@ const App = () => {
             <br />
             <br />
             <Text as="strong" mt={2}>
-                GitLab host address
+                GitLab Host Address{' '}
+                <Tooltip aria-label="Example: https://gitlab.com">
+                    <StyledOcticon icon={Info} size={15} color="blue.5" />
+                </Tooltip>
             </Text>
             <br />
             <TextInput
@@ -123,7 +135,7 @@ const App = () => {
                 variant={'small'}
                 name="gitlab-address"
                 value={gitlabAddress}
-                placeholder="https://gitlab.com"
+                placeholder="<host_address_here>"
                 onChange={updateGitlabAddress}
                 aria-label="gitlab-address"
             />{' '}
