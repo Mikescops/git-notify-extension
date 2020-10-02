@@ -20,9 +20,11 @@ It comes with a bunch of features to let you access easily the information you'r
 ## Screenshots
 
 List of issues:
+
 ![Preview of the issues: 23/09/2020](./previews/preview-issues.png)
 
 To-Do list:
+
 ![Preview of the todo: 23/09/2020](./previews/preview-todo.png)
 
 ## Setup
