@@ -1,4 +1,3 @@
-// const standard = require('@neutrinojs/standardjs');
 const react = require('@neutrinojs/react');
 const copy = require('@neutrinojs/copy');
 const webext = require('neutrino-webextension');
@@ -28,7 +27,6 @@ module.exports = {
         }
     },
     use: [
-        // standard(),
         typescript(),
         react({
             html: {

@@ -29,7 +29,7 @@ export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<Me
                 return cb();
             }
 
-            gitlabApi.MergeRequests.approvals(mr.project_id, {
+            gitlabApi.MergeRequestApprovals.approvals(mr.project_id, {
                 mergerequestIid: mr.iid
             })
                 .then((response: Approvals) => {
