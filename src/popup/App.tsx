@@ -167,13 +167,15 @@ const App = () => {
 
     const getMrRatio = useCallback(() => {
         if (appStatus !== 'success' || mrData === null) {
-            return 100;
+            return -1;
         }
         let mrList = [];
         if (currentTab === 0) {
             mrList = mrData.mrAssigned;
-        } else {
+        } else if (currentTab === 1) {
             mrList = mrData.mrGiven;
+        } else {
+            return -1;
         }
         let rate = 0;
         if (mrList && mrList.length > 0) {
@@ -238,7 +240,11 @@ const App = () => {
                 <Flex flexWrap="nowrap">
                     <Tooltip
                         className={'progressBar'}
-                        aria-label={`${getMrRatio()}% done, keep the good reviews!`}
+                        aria-label={
+                            getMrRatio() >= 0
+                                ? `${getMrRatio()}% reviewed, keep the good work!`
+                                : 'Nothing to measure here...'
+                        }
                         direction="n"
                     >
                         <ProgressBar progress={getMrRatio()} />
