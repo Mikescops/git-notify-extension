@@ -11,10 +11,11 @@ import {
     Label,
     theme as primer,
     Tooltip,
-    Flash
+    Flash,
+    Link
 } from '@primer/components';
 import { ThemeProvider } from 'styled-components';
-import { SyncIcon, GearIcon, CheckIcon } from '@primer/octicons-react';
+import { SyncIcon, GearIcon, CheckIcon, VersionsIcon, PeopleIcon } from '@primer/octicons-react';
 import { MergeRequest } from './components/MergeRequest';
 import { IssueItem } from './components/IssueItem';
 import { TodoItem } from './components/TodoItem';
@@ -41,14 +42,16 @@ const App = () => {
     });
 
     const [currentTab, setCurrentTab] = useState(0);
+    const [gitlabAddress, setGitlabAddress] = useState('');
     const [todosVisibility, setTodosVisibility] = useState(true);
 
     const openSettings = useCallback(() => browser.runtime.openOptionsPage(), []);
 
     const applySettings = useCallback(() => {
-        const getSettings = browser.storage.local.get(['defaultTab']);
+        const getSettings = browser.storage.local.get(['defaultTab', 'gitlabAddress']);
         getSettings.then((settings) => {
             setCurrentTab(settings.defaultTab ? settings.defaultTab : 0);
+            setGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : 'https://gitlab.com');
         });
     }, []);
 
@@ -258,6 +261,22 @@ const App = () => {
                             <Button onClick={fetchData} variant={'small'} mr={2}>
                                 <SyncIcon /> Refresh
                             </Button>
+                        </Tooltip>
+
+                        <Tooltip aria-label={'Open your projects'} direction="n">
+                            <Link href={gitlabAddress + '/dashboard/projects'} target="_blank">
+                                <Button variant={'small'} mr={2}>
+                                    <VersionsIcon />
+                                </Button>
+                            </Link>
+                        </Tooltip>
+
+                        <Tooltip aria-label={'Open your groups'} direction="n">
+                            <Link href={gitlabAddress + '/dashboard/groups'} target="_blank">
+                                <Button variant={'small'} mr={2}>
+                                    <PeopleIcon />
+                                </Button>
+                            </Link>
                         </Tooltip>
 
                         <Button onClick={openSettings} variant={'small'}>
