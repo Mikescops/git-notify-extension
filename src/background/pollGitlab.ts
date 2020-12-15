@@ -24,6 +24,7 @@ export const pollGitlab = (cb: Callback<boolean>) => {
         givenRequests: ReviewGiven;
         issuesAssigned: Issue[];
         todos: Todo[];
+        updateBadge: void;
         saveLocalStorage: void;
     }
 
@@ -87,8 +88,6 @@ export const pollGitlab = (cb: Callback<boolean>) => {
                                             mrToReview += 1;
                                         }
                                     });
-
-                                    setBadge(mrToReview === 0 ? '' : mrToReview.toString(), 'blue');
 
                                     return cb(null, {
                                         mrAssigned: mrAssignedDetails,
@@ -188,9 +187,53 @@ export const pollGitlab = (cb: Callback<boolean>) => {
                         });
                 }
             ],
+            updateBadge: [
+                'getSettings',
+                'reviewRequests',
+                'givenRequests',
+                'issuesAssigned',
+                'todos',
+                (results, cb) => {
+                    const {
+                        getSettings: { alertBadgeCounters },
+                        reviewRequests: { mrToReview },
+                        givenRequests: { mrReviewed },
+                        issuesAssigned,
+                        todos
+                    } = results;
+
+                    const badgeText = [];
+                    let badgeColor = 'black';
+
+                    if (alertBadgeCounters.includes(0) && (mrToReview > 0 || alertBadgeCounters.length > 1)) {
+                        badgeText.push(mrToReview);
+                        badgeColor = '#dc3545'; // red
+                    }
+                    if (alertBadgeCounters.includes(1) && (mrReviewed > 0 || alertBadgeCounters.length > 1)) {
+                        badgeText.push(mrReviewed);
+                        badgeColor = '#28a745'; // green
+                    }
+                    if (
+                        alertBadgeCounters.includes(2) &&
+                        (issuesAssigned.length > 0 || alertBadgeCounters.length > 1)
+                    ) {
+                        badgeText.push(issuesAssigned.length);
+                        badgeColor = '#fd7e14'; // orange
+                    }
+                    if (alertBadgeCounters.includes(3) && (todos.length > 0 || alertBadgeCounters.length > 1)) {
+                        badgeText.push(todos.length);
+                        badgeColor = '#1f78d1'; // blue
+                    }
+
+                    setBadge(badgeText.length > 0 ? badgeText.join('⋅') : '', badgeColor);
+
+                    return cb();
+                }
+            ],
             saveLocalStorage: [
                 'reviewRequests',
                 'givenRequests',
+                'issuesAssigned',
                 'todos',
                 (results, cb) => {
                     const { mrAssigned, mrToReview } = results.reviewRequests;

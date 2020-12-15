@@ -89,4 +89,5 @@ export interface GetSettingsResponse {
     gitlabCE: boolean;
     token: string;
     address: string;
+    alertBadgeCounters: number[];
 }

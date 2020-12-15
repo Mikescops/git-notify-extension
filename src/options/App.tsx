@@ -11,7 +11,8 @@ const getSettings = browser.storage.local.get([
     'gitlabToken',
     'gitlabAddress',
     'refreshRate',
-    'defaultTab'
+    'defaultTab',
+    'alertBadgeCounters'
 ]);
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
     const [gitlabAddress, setGitlabAddress] = useState('');
     const [refreshRate, setRefreshRate] = useState(40);
     const [defaultTab, setDefaultTab] = useState(0);
+    const [alertBadgeCounters, setAlertBadgeCounters] = useState([0]);
     const [testSuccess, setTestSuccess] = useState(null);
     const [isGitlabTokenInLocalStorage, setIsGitlabTokenInLocalStorage] = useState(false);
     const [isGitlabAddressInLocalStorage, setIsGitlabAddressInLocalStorage] = useState(false);
@@ -39,6 +41,8 @@ const App = () => {
             setIsRefreshRateInLocalStorage(settings.refreshRate);
 
             setDefaultTab(settings.defaultTab ? settings.defaultTab : 0);
+
+            setAlertBadgeCounters(settings.alertBadgeCounters ? Array.from(settings.alertBadgeCounters) : []);
         });
     }, []);
 
@@ -77,6 +81,15 @@ const App = () => {
     const updateDefaultTab = (event: any) => {
         setDefaultTab(event.target.value);
         browser.storage.local.set({ defaultTab: parseInt(event.target.value) }).then(() => {
+            console.log('Configuration Updated');
+        });
+    };
+
+    const updateAlertBadgeCounters = (event: any) => {
+        const options = [...event.target.selectedOptions].map((option) => parseInt(option.value));
+        setAlertBadgeCounters(options);
+        console.log(options);
+        browser.storage.local.set({ alertBadgeCounters: options }).then(() => {
             console.log('Configuration Updated');
         });
     };
@@ -145,7 +158,7 @@ const App = () => {
             <FormGroup>
                 <FormGroup.Label>
                     Refresh rate in seconds{' '}
-                    <Tooltip aria-label="It is not recommended to go below 30 seconds">
+                    <Tooltip aria-label="It is not recommended to go below 30 seconds.">
                         <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
                     </Tooltip>
                 </FormGroup.Label>
@@ -172,6 +185,28 @@ const App = () => {
                         Issues
                     </option>
                     <option selected={defaultTab === 3} value="3">
+                        To-Do List
+                    </option>
+                </select>
+            </FormGroup>
+            <FormGroup>
+                <FormGroup.Label>
+                    Alert badge counters{' '}
+                    <Tooltip aria-label="You can select multiple counters but display might be too small.">
+                        <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
+                    </Tooltip>
+                </FormGroup.Label>
+                <select name="alert-badge-counters" multiple onChange={updateAlertBadgeCounters}>
+                    <option selected={alertBadgeCounters.includes(0)} value="0">
+                        To Review
+                    </option>
+                    <option selected={alertBadgeCounters.includes(1)} value="1">
+                        Reviewed by others
+                    </option>
+                    <option selected={alertBadgeCounters.includes(2)} value="2">
+                        Issues
+                    </option>
+                    <option selected={alertBadgeCounters.includes(3)} value="3">
                         To-Do List
                     </option>
                 </select>
