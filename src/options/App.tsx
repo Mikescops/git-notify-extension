@@ -1,7 +1,7 @@
 import { hot } from 'react-hot-loader';
 import { browser } from 'webextension-polyfill-ts';
 import React, { useState, useCallback, useEffect } from 'react';
-import { theme as primer, Button, TextInput, Text, Tooltip, StyledOcticon, Link } from '@primer/components';
+import { theme as primer, Button, TextInput, Text, Tooltip, StyledOcticon, Link, FormGroup } from '@primer/components';
 import { ThemeProvider } from 'styled-components';
 import { KeyIcon, ServerIcon, PackageDependenciesIcon, CheckIcon, InfoIcon } from '@primer/octicons-react';
 import './style.css';
@@ -28,11 +28,16 @@ const App = () => {
     useEffect(() => {
         getSettings.then((settings) => {
             setGitlabCE(settings.gitlabCE ? settings.gitlabCE : false);
+
             setGitlabToken(settings.gitlabToken ? settings.gitlabToken : '');
             setIsGitlabTokenInLocalStorage(settings.gitlabToken);
+
             setGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : '');
             setIsGitlabAddressInLocalStorage(settings.gitlabAddress);
+
             setRefreshRate(settings.refreshRate ? settings.refreshRate : 40);
+            setIsRefreshRateInLocalStorage(settings.refreshRate);
+
             setDefaultTab(settings.defaultTab ? settings.defaultTab : 0);
         });
     }, []);
@@ -82,92 +87,89 @@ const App = () => {
 
     return (
         <ThemeProvider theme={primer}>
-            <Text as="strong" mt={2}>
-                Using GitLab Community Edition? (approvals are a premium feature)
-            </Text>
-            <br />
-            <label>
-                <input
-                    type="checkbox"
-                    name="gitlabCE"
-                    value="GitLab CE Mode"
-                    onChange={updateGitlabCE}
-                    checked={gitlabCE ? true : false}
-                />{' '}
-                GitLab CE Mode
-            </label>
-            <br />
-            <br />
-            <Text as="strong" mt={2}>
-                Personal GitLab Token{' '}
-                <Link href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html">
-                    <Tooltip
-                        wrap={true}
-                        aria-label="Click to open GitLab documentation.
+            <FormGroup>
+                <FormGroup.Label>Using GitLab Community Edition? (approvals are a premium feature)</FormGroup.Label>
+                <label>
+                    <input
+                        type="checkbox"
+                        name="gitlabCE"
+                        value="GitLab CE Mode"
+                        onChange={updateGitlabCE}
+                        checked={gitlabCE ? true : false}
+                    />{' '}
+                    GitLab CE Mode
+                </label>
+            </FormGroup>
+            <FormGroup>
+                <FormGroup.Label>
+                    Personal GitLab Token{' '}
+                    <Link href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html" target="_blank">
+                        <Tooltip
+                            wrap={true}
+                            aria-label="Click to open GitLab documentation.
                     The extension requires 'api' + 'read_user' rights."
-                    >
+                        >
+                            <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
+                        </Tooltip>
+                    </Link>
+                </FormGroup.Label>
+                <TextInput
+                    icon={KeyIcon as any}
+                    variant={'small'}
+                    name="gitlab-token"
+                    value={gitlabToken}
+                    placeholder="<your_token_here>"
+                    onChange={updateGitlabToken}
+                    aria-label="gitlab-token"
+                />{' '}
+                {isGitlabTokenInLocalStorage ? <CheckIcon /> : ''}
+            </FormGroup>
+            <FormGroup>
+                <FormGroup.Label>
+                    GitLab Host Address{' '}
+                    <Tooltip aria-label="Example: https://gitlab.com">
                         <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
                     </Tooltip>
-                </Link>
-            </Text>
-            <br />
-            <TextInput
-                icon={KeyIcon as any}
-                variant={'small'}
-                name="gitlab-token"
-                value={gitlabToken}
-                placeholder="<your_token_here>"
-                onChange={updateGitlabToken}
-                aria-label="gitlab-token"
-            />{' '}
-            {isGitlabTokenInLocalStorage ? <CheckIcon /> : ''}
-            <br />
-            <br />
-            <Text as="strong" mt={2}>
-                GitLab Host Address{' '}
-                <Tooltip aria-label="Example: https://gitlab.com">
-                    <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
-                </Tooltip>
-            </Text>
-            <br />
-            <TextInput
-                icon={ServerIcon as any}
-                variant={'small'}
-                name="gitlab-address"
-                value={gitlabAddress}
-                placeholder="<host_address_here>"
-                onChange={updateGitlabAddress}
-                aria-label="gitlab-address"
-            />{' '}
-            {isGitlabAddressInLocalStorage ? <CheckIcon /> : ''}
-            <br />
-            <br />
-            <Text as="strong" mt={2}>
-                Refresh rate in seconds (it is recommended not to go below 30)
-            </Text>
-            <br />
-            <input type="number" name="refreshRate" min="20" value={refreshRate} onChange={updateRefreshRate} />{' '}
-            {isRefreshRateInLocalStorage ? <CheckIcon /> : ''}
-            <br />
-            <br />
-            <Text as="strong" mt={2}>
-                Default tab
-            </Text>
-            <br />
-            <select name="default-tab" onChange={updateDefaultTab}>
-                <option selected={defaultTab === 0} value="0">
-                    To Review
-                </option>
-                <option selected={defaultTab === 1} value="1">
-                    Under Review
-                </option>
-                <option selected={defaultTab === 2} value="2">
-                    Issues
-                </option>
-                <option selected={defaultTab === 3} value="3">
-                    To-Do List
-                </option>
-            </select>
+                </FormGroup.Label>
+                <TextInput
+                    icon={ServerIcon as any}
+                    variant={'small'}
+                    name="gitlab-address"
+                    value={gitlabAddress}
+                    placeholder="<host_address_here>"
+                    onChange={updateGitlabAddress}
+                    aria-label="gitlab-address"
+                />{' '}
+                {isGitlabAddressInLocalStorage ? <CheckIcon /> : ''}
+            </FormGroup>
+            <FormGroup>
+                <FormGroup.Label>Refresh rate in seconds (it is recommended not to go below 30)</FormGroup.Label>
+                <input
+                    type="number"
+                    name="refreshRate"
+                    min="20"
+                    value={refreshRate}
+                    onChange={updateRefreshRate}
+                />{' '}
+                {isRefreshRateInLocalStorage ? <CheckIcon /> : ''}
+            </FormGroup>
+            <FormGroup>
+                <FormGroup.Label>Default tab</FormGroup.Label>
+                <select name="default-tab" onChange={updateDefaultTab}>
+                    <option selected={defaultTab === 0} value="0">
+                        To Review
+                    </option>
+                    <option selected={defaultTab === 1} value="1">
+                        Under Review
+                    </option>
+                    <option selected={defaultTab === 2} value="2">
+                        Issues
+                    </option>
+                    <option selected={defaultTab === 3} value="3">
+                        To-Do List
+                    </option>
+                </select>
+            </FormGroup>
             <hr />
             <div>
                 <Button onClick={testConnection} variant={'small'}>
