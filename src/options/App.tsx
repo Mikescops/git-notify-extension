@@ -143,12 +143,18 @@ const App = () => {
                 {isGitlabAddressInLocalStorage ? <CheckIcon /> : ''}
             </FormGroup>
             <FormGroup>
-                <FormGroup.Label>Refresh rate in seconds (it is recommended not to go below 30)</FormGroup.Label>
+                <FormGroup.Label>
+                    Refresh rate in seconds{' '}
+                    <Tooltip aria-label="It is not recommended to go below 30 seconds">
+                        <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
+                    </Tooltip>
+                </FormGroup.Label>
                 <input
                     type="number"
                     name="refreshRate"
                     min="20"
                     value={refreshRate}
+                    placeholder="0"
                     onChange={updateRefreshRate}
                 />{' '}
                 {isRefreshRateInLocalStorage ? <CheckIcon /> : ''}
