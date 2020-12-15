@@ -3,5 +3,6 @@ module.exports = {
     gitlabCE: false,
     token: '',
     address: 'https://gitlab.com',
-    defaultTab: 0
+    defaultTab: 0,
+    alertBadgeCounters: [0]
 };
