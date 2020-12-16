@@ -3,6 +3,7 @@ import { Gitlab } from '@gitbeaker/browser';
 import { getSettings } from '../utils/getSettings';
 import { GetSettingsResponse, GitlabAPI, Todo } from '../types';
 import { browser } from 'webextension-polyfill-ts';
+import { FailFetchSettings, GitLabTokenNotSet, GitLabAddressNotSet } from '../errors';
 
 export const setTodoAsDone = (id: number | null, cb: CallbackErrorOnly) => {
     interface AsyncResults {
@@ -18,11 +19,16 @@ export const setTodoAsDone = (id: number | null, cb: CallbackErrorOnly) => {
             gitlabApi: [
                 'getSettings',
                 (results, cb) => {
-                    if (!results.getSettings.token) {
-                        return cb(new Error('No Gitlab token set, visit options.'));
+                    if (!results.getSettings) {
+                        return cb(new FailFetchSettings());
                     }
+
+                    if (!results.getSettings.token) {
+                        return cb(new GitLabTokenNotSet());
+                    }
+
                     if (!results.getSettings.address) {
-                        return cb(new Error('No Gitlab host address set, visit options.'));
+                        return cb(new GitLabAddressNotSet());
                     }
 
                     const api = new Gitlab({
