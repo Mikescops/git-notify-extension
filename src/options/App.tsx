@@ -95,7 +95,7 @@ const App = () => {
     };
 
     const testConnection = useCallback(() => {
-        browser.runtime.sendMessage({ type: 'pollMR' }).then((success) => setTestSuccess(success));
+        browser.runtime.sendMessage({ type: 'getLatestDataFromGitLab' }).then((success) => setTestSuccess(success));
     }, []);
 
     return (

@@ -1,12 +1,12 @@
 import * as async from 'async';
 import { browser } from 'webextension-polyfill-ts';
 import { Gitlab } from '@gitbeaker/browser';
-import { getSettings } from './utils/getSettings';
-import { fetchMRExtraInfo } from './utils/fetchMRExtraInfo';
-import { MergeRequests, GetSettingsResponse, MergeRequestsDetails, Todo, GitlabAPI, Issue } from './types';
-import { setBadge } from './utils/setBadge';
+import { getSettings } from '../utils/getSettings';
+import { fetchMRExtraInfo } from '../utils/fetchMRExtraInfo';
+import { MergeRequests, GetSettingsResponse, MergeRequestsDetails, Todo, GitlabAPI, Issue } from '../types';
+import { setBadge } from '../utils/setBadge';
 
-export const pollGitlab = (cb: Callback<boolean>) => {
+export const getLatestDataFromGitLab = (cb: Callback<boolean>) => {
     interface ReviewRequests {
         mrAssigned: MergeRequestsDetails[];
         mrToReview: number;
