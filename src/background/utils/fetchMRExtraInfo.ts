@@ -56,8 +56,19 @@ export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<Me
                 return cb(error);
             }
             const mrAssignedSorted = mrAssignedWithDetails
-                .sort((a, b) => (a.created_at < b.created_at ? 1 : 0))
-                .sort((a, b) => Number(a.approvals.user_has_approved) - Number(b.approvals.user_has_approved));
+                .sort((a, b) => (a.created_at < b.created_at ? 1 : -1))
+                .sort((a, b) => {
+                    if (a.approvals.user_has_approved === b.approvals.user_has_approved) {
+                        return 0;
+                    }
+                    if (a.approvals.user_has_approved) {
+                        return 1;
+                    }
+                    if (b.approvals.user_has_approved) {
+                        return -1;
+                    }
+                    return 0;
+                });
             return cb(null, mrAssignedSorted);
         }
     );
