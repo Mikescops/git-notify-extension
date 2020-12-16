@@ -5,8 +5,17 @@ import { getSettings } from '../utils/getSettings';
 import { fetchMRExtraInfo } from '../utils/fetchMRExtraInfo';
 import { MergeRequests, GetSettingsResponse, MergeRequestsDetails, Todo, GitlabAPI, Issue } from '../types';
 import { setBadge } from '../utils/setBadge';
+import {
+    FailFetchIssues,
+    FailFetchMergeRequestsAssigned,
+    FailFetchMergeRequestsGiven,
+    FailFetchSettings,
+    FailFetchTodos,
+    GitLabAddressNotSet,
+    GitLabTokenNotSet
+} from '../errors';
 
-export const getLatestDataFromGitLab = (cb: Callback<boolean>) => {
+export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
     interface ReviewRequests {
         mrAssigned: MergeRequestsDetails[];
         mrToReview: number;
@@ -37,14 +46,15 @@ export const getLatestDataFromGitLab = (cb: Callback<boolean>) => {
                     console.log('>> POLLING GITLAB API');
 
                     if (!results.getSettings) {
-                        return cb(new Error('Fail fetching settings.'));
+                        return cb(new FailFetchSettings());
                     }
 
                     if (!results.getSettings.token) {
-                        return cb(new Error('No GitLab token set, visit options.'));
+                        return cb(new GitLabTokenNotSet());
                     }
+
                     if (!results.getSettings.address) {
-                        return cb(new Error('No GitLab host address set, visit options.'));
+                        return cb(new GitLabAddressNotSet());
                     }
 
                     const api = new Gitlab({
@@ -66,11 +76,11 @@ export const getLatestDataFromGitLab = (cb: Callback<boolean>) => {
                         scope: 'assigned_to_me',
                         wip: 'no'
                     })
-                        .then((response: MergeRequests[]) => {
+                        .then((mrAssigned: MergeRequests[]) => {
                             return fetchMRExtraInfo(
                                 {
                                     gitlabApi,
-                                    mrList: response,
+                                    mrList: mrAssigned,
                                     gitlabCE: getSettings.gitlabCE
                                 },
                                 (error, mrAssignedDetails) => {
@@ -79,7 +89,7 @@ export const getLatestDataFromGitLab = (cb: Callback<boolean>) => {
                                     }
 
                                     if (!mrAssignedDetails) {
-                                        return cb(new Error('Could not fetch merge requests assigned.'));
+                                        return cb(new FailFetchMergeRequestsAssigned());
                                     }
 
                                     let mrToReview = 0;
@@ -113,11 +123,11 @@ export const getLatestDataFromGitLab = (cb: Callback<boolean>) => {
                         state: 'opened',
                         scope: 'created_by_me'
                     })
-                        .then((response: MergeRequests[]) => {
+                        .then((mrGiven: MergeRequests[]) => {
                             return fetchMRExtraInfo(
                                 {
                                     gitlabApi,
-                                    mrList: response,
+                                    mrList: mrGiven,
                                     gitlabCE: getSettings.gitlabCE
                                 },
                                 (error, mrGivenDetails) => {
@@ -126,7 +136,7 @@ export const getLatestDataFromGitLab = (cb: Callback<boolean>) => {
                                     }
 
                                     if (!mrGivenDetails) {
-                                        return cb(new Error('Could not fetch merge requests given.'));
+                                        return cb(new FailFetchMergeRequestsGiven());
                                     }
 
                                     let mrReviewed = 0;
@@ -159,8 +169,12 @@ export const getLatestDataFromGitLab = (cb: Callback<boolean>) => {
                         state: 'opened',
                         scope: 'assigned_to_me'
                     })
-                        .then((response: Issue[]) => {
-                            return cb(null, response);
+                        .then((issues: Issue[]) => {
+                            if (!issues) {
+                                return cb(new FailFetchIssues());
+                            }
+
+                            return cb(null, issues);
                         })
                         .catch((error: Error) => {
                             if (error) {
@@ -177,8 +191,12 @@ export const getLatestDataFromGitLab = (cb: Callback<boolean>) => {
                     gitlabApi.Todos.all({
                         state: 'pending'
                     })
-                        .then((response: Todo[]) => {
-                            return cb(null, response);
+                        .then((todos: Todo[]) => {
+                            if (!todos) {
+                                return cb(new FailFetchTodos());
+                            }
+
+                            return cb(null, todos);
                         })
                         .catch((error: Error) => {
                             if (error) {
@@ -258,11 +276,11 @@ export const getLatestDataFromGitLab = (cb: Callback<boolean>) => {
         },
         (error) => {
             if (error) {
-                console.error('POLL API', error);
+                console.error('Error in GetLastestDataFromGitLab #', error);
                 setBadge('Error', 'red');
-                return cb(error, false);
+                return cb(error);
             }
-            return cb(null, true);
+            return cb();
         }
     );
 };

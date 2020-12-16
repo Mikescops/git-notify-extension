@@ -10,7 +10,7 @@ browser.storage.local.get(['refreshRate']).then((settings) => {
     time = settings.refreshRate ? settings.refreshRate : 40;
 
     (function repeat() {
-        getLatestDataFromGitLab((error) => (ERROR_TRACKER = error));
+        getLatestDataFromGitLab((error) => (ERROR_TRACKER = error || null));
         console.log('Next refresh in', time);
         setTimeout(repeat, time * 1000);
     })();
@@ -23,9 +23,12 @@ browser.runtime.onMessage.addListener((message) => {
 
     if (message.type === 'getLatestDataFromGitLab') {
         return new Promise((resolve) =>
-            getLatestDataFromGitLab((error, result) => {
-                ERROR_TRACKER = error;
-                return resolve(result);
+            getLatestDataFromGitLab((error) => {
+                if (error) {
+                    ERROR_TRACKER = error;
+                    return resolve(false);
+                }
+                return resolve(true);
             })
         );
     }
