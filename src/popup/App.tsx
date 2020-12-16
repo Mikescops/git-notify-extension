@@ -96,11 +96,7 @@ const App = () => {
     useEffect(() => applySettings(), [applySettings]);
 
     const getContent = useCallback(() => {
-        if (appStatus === 'idle') {
-            return <Text>Fetching content...</Text>;
-        }
-
-        if (appStatus === 'loading') {
+        if (appStatus === 'loading' || appStatus === 'idle') {
             return <Text>Fetching content...</Text>;
         }
 
@@ -172,17 +168,20 @@ const App = () => {
         if (appStatus !== 'success' || mrData === null) {
             return -1;
         }
-        let mrList = [];
+        let mrNumber = 0;
+        let mrTotal = 0;
         if (currentTab === 0) {
-            mrList = mrData.mrAssigned;
+            mrTotal = mrData.mrAssigned.length;
+            mrNumber = mrTotal - mrData.mrToReview;
         } else if (currentTab === 1) {
-            mrList = mrData.mrGiven;
+            mrTotal = mrData.mrGiven.length;
+            mrNumber = mrData.mrReviewed;
         } else {
             return -1;
         }
         let rate = 0;
-        if (mrList && mrList.length > 0) {
-            rate = (mrList.length - mrData.mrToReview) / mrList.length;
+        if (mrNumber && mrTotal) {
+            rate = mrNumber / mrTotal;
         }
         return Math.floor(rate * 100);
     }, [appStatus, mrData, currentTab]);
