@@ -1,7 +1,7 @@
 import * as async from 'async';
 import { Gitlab } from '@gitbeaker/browser';
-import { getSettings } from './utils/getSettings';
-import { GetSettingsResponse, GitlabAPI, Todo } from './types';
+import { getSettings } from '../utils/getSettings';
+import { GetSettingsResponse, GitlabAPI, Todo } from '../types';
 import { browser } from 'webextension-polyfill-ts';
 
 export const setTodoAsDone = (id: number | null, cb: CallbackErrorOnly) => {

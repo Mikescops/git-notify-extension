@@ -1,7 +1,7 @@
 import { browser } from 'webextension-polyfill-ts';
 import { MergeRequestsDetails, Todo, Issue } from '../../background/types';
 
-const REQUEST_TYPE_GET_MERGE_REQUESTS = 'getMRs';
+const REQUEST_TYPE_GET_LOCAL_DATA = 'getLocalData';
 
 export interface MergeRequestSendMessageReply {
     mrAssigned: MergeRequestsDetails[];
@@ -16,7 +16,7 @@ export interface MergeRequestSendMessageReply {
 
 export const getMergeRequestList = (): Promise<MergeRequestSendMessageReply> => {
     return browser.runtime
-        .sendMessage({ type: REQUEST_TYPE_GET_MERGE_REQUESTS })
+        .sendMessage({ type: REQUEST_TYPE_GET_LOCAL_DATA })
         .then((response) => {
             if (!response) {
                 return {
