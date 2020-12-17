@@ -16,7 +16,7 @@ interface Props {
     mr: MergeRequestsDetails;
 }
 
-export const MergeRequest = ({ mr }: Props) => {
+export const MergeRequestItem = ({ mr }: Props) => {
     let mrApproved = false;
     if (mr.approvals.user_has_approved) {
         mrApproved = true;
