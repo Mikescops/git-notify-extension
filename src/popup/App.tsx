@@ -1,25 +1,14 @@
 import { hot } from 'react-hot-loader';
 import { browser } from 'webextension-polyfill-ts';
 import React, { useState, useCallback, useEffect } from 'react';
-import {
-    Button,
-    FilterList,
-    Flex,
-    Text,
-    ProgressBar,
-    TabNav,
-    Label,
-    theme as primer,
-    Tooltip,
-    Flash,
-    Link
-} from '@primer/components';
+import { Button, FilterList, Flex, Text, ProgressBar, theme as primer, Tooltip, Flash, Link } from '@primer/components';
 import { ThemeProvider } from 'styled-components';
 import { SyncIcon, GearIcon, CheckIcon, VersionsIcon, PeopleIcon } from '@primer/octicons-react';
-import { MergeRequest } from './components/MergeRequest';
+import { MergeRequestItem } from './components/MergeRequestItem';
 import { IssueItem } from './components/IssueItem';
 import { TodoItem } from './components/TodoItem';
 import { EmptyItems } from './components/EmptyItems';
+import { Nav } from './components/Nav';
 import { MergeRequestsDetails, Todo, Issue } from '../background/types';
 import { getHumanReadableDate } from './helpers';
 import { getMergeRequestList, MergeRequestSendMessageReply } from './utils/mergeRequestDownloader';
@@ -158,7 +147,7 @@ const App = () => {
         return (
             <FilterList className={'mrList'}>
                 {mrList.map((mr: MergeRequestsDetails) => (
-                    <MergeRequest mr={mr} key={mr.id} />
+                    <MergeRequestItem mr={mr} key={mr.id} />
                 ))}
             </FilterList>
         );
@@ -186,58 +175,10 @@ const App = () => {
         return Math.floor(rate * 100);
     }, [appStatus, mrData, currentTab]);
 
-    const mrDataReviewRatio = mrData ? `${mrData.mrReviewed} / ${mrData.mrGiven.length}` : 'Unknown';
-    const issuesAssignedNumber = mrData?.issuesAssigned ? mrData.issuesAssigned.length : 0;
-
     return (
         <ThemeProvider theme={primer}>
             <div className={'container'}>
-                <TabNav aria-label="Main" mb={2} marginBottom="0">
-                    <TabNav.Link
-                        href="#ToReview"
-                        onClick={() => setCurrentTab(0)}
-                        className={currentTab === 0 ? 'selected' : ''}
-                    >
-                        To Review{' '}
-                        <Label variant="small" bg="#dc3545">
-                            {mrData ? mrData.mrToReview : 0}
-                        </Label>
-                    </TabNav.Link>
-                    <TabNav.Link
-                        href="#UnderReview"
-                        onClick={() => setCurrentTab(1)}
-                        className={currentTab === 1 ? 'selected' : ''}
-                    >
-                        Under Review{' '}
-                        <Tooltip aria-label={`${mrDataReviewRatio}  have been reviewed`} direction="s">
-                            <Label variant="small" bg="#28a745">
-                                {mrData ? mrDataReviewRatio : 0}
-                            </Label>
-                        </Tooltip>
-                    </TabNav.Link>
-                    <TabNav.Link
-                        href="#Issues"
-                        onClick={() => setCurrentTab(2)}
-                        className={currentTab === 2 ? 'selected' : ''}
-                    >
-                        Issues{' '}
-                        <Tooltip aria-label={`${issuesAssignedNumber}  are assigned to you`} direction="s">
-                            <Label variant="small" bg="#fd7e14">
-                                {issuesAssignedNumber}
-                            </Label>
-                        </Tooltip>
-                    </TabNav.Link>
-                    <TabNav.Link
-                        href="#ToDoList"
-                        onClick={() => setCurrentTab(3)}
-                        className={currentTab === 3 ? 'selected' : ''}
-                    >
-                        To-Do List{' '}
-                        <Label variant="small" bg="#1f78d1">
-                            {mrData?.todos ? mrData.todos.length : 0}
-                        </Label>
-                    </TabNav.Link>
-                </TabNav>
+                <Nav currentTab={currentTab} setCurrentTab={setCurrentTab} mrData={mrData} />
                 {getContent()}
                 <Flex flexWrap="nowrap">
                     <Tooltip
