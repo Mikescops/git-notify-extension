@@ -9,7 +9,7 @@ import {
     PlusIcon
 } from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
-import { calculateTimeElapsed } from '../helpers';
+import { calculateTimeElapsed, removeDuplicateObjectFromArray } from '../helpers';
 import { MergeRequestsDetails } from '../../background/types';
 
 interface Props {
@@ -30,7 +30,9 @@ export const MergeRequestItem = ({ mr }: Props) => {
         setCopyBranchStatus(true);
     };
 
-    const avatars = mr.assignees
+    const reviewers = removeDuplicateObjectFromArray([...mr.assignees, ...mr.reviewers], 'id');
+
+    const avatars = reviewers
         .map((assignee) => {
             return {
                 ...assignee,
@@ -118,10 +120,10 @@ export const MergeRequestItem = ({ mr }: Props) => {
                 </Box>
                 <Box className={'avatarsList'}>
                     {avatarsUI}{' '}
-                    {mr.assignees.length > 3 ? (
+                    {reviewers.length > 3 ? (
                         <Tooltip
                             className={'moreAssigneesIcon'}
-                            aria-label={`and ${mr.assignees.length - 3} more`}
+                            aria-label={`and ${reviewers.length - 3} more`}
                             direction="w"
                         >
                             <PlusIcon />
