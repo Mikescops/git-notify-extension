@@ -22,3 +22,7 @@ export const calculateTimeElapsed = (timestamp: number | string) => {
 export const getHumanReadableDate = (timestamp: number) => {
     return new Date(timestamp).toUTCString();
 };
+
+export const removeDuplicateObjectFromArray = (array: any[], key: string) => {
+    return array.filter((obj, index, self) => index === self.findIndex((element) => element[key] === obj[key]));
+};
