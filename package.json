@@ -35,6 +35,7 @@
     "@neutrinojs/standardjs": "^9.5.0",
     "@neutrinojs/style-loader": "^9.5.0",
     "@types/async": "^3.2.5",
+    "@types/react-dom": "^17.0.0",
     "@types/styled-components": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
