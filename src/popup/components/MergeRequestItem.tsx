@@ -30,7 +30,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
         setCopyBranchStatus(true);
     };
 
-    const reviewers = removeDuplicateObjectFromArray([...mr.assignees, ...mr.reviewers], 'id');
+    const reviewers = removeDuplicateObjectFromArray([...mr.assignees, ...(mr.reviewers ?? [])], 'id');
 
     const avatars = reviewers
         .map((assignee) => {
