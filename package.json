@@ -1,6 +1,6 @@
 {
   "name": "gitlab-notify",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Don't miss any GitLab merge requests and rocket up your productivity.",
   "main": "index.js",
   "repository": "https://github.com/Mikescops/gitlab-notify-extension",
@@ -22,11 +22,11 @@
     "last 2 Firefox versions"
   ],
   "dependencies": {
-    "6d": "^1.0.63",
     "@gitbeaker/browser": "^28.2.0",
     "@primer/components": "^25.0.0",
-    "@primer/css": "^16.0.2",
+    "@primer/css": "^16.1.1",
     "@primer/octicons-react": "^12.1.0",
+    "6d": "^1.0.63",
     "async": "^3.2.0"
   },
   "devDependencies": {
@@ -35,7 +35,7 @@
     "@neutrinojs/standardjs": "^9.5.0",
     "@neutrinojs/style-loader": "^9.5.0",
     "@types/async": "^3.2.5",
-    "@types/react-dom": "^17.0.0",
+    "@types/react-dom": "^17.0.3",
     "@types/styled-components": "^5.1.9",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
@@ -50,8 +50,8 @@
     "neutrino-webextension": "^1.2.1",
     "neutrinojs-typescript": "^1.1.6",
     "prettier": "^2.2.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-hot-loader": "^4.13.0",
     "sinon-chrome": "^3.0.1",
     "styled-components": "^5.2.1",

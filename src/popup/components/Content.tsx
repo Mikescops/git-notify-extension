@@ -83,7 +83,7 @@ export const Content = (props: Props) => {
     // show data
     let mrList: MergeRequestsDetails[] = [];
     if (currentTab === 0) {
-        mrList = mrData.mrAssigned;
+        mrList = mrData.mrReceived;
     } else {
         mrList = mrData.mrGiven;
     }

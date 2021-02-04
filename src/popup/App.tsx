@@ -14,7 +14,7 @@ const App = () => {
     const [appStatus, setAppStatus] = useState<AppStatus>('idle');
     const [errorMessage, setErrorMessage] = useState('');
     const [mrData, setMrData] = useState<MergeRequestSendMessageReply>({
-        mrAssigned: [],
+        mrReceived: [],
         mrToReview: 0,
         mrGiven: [],
         mrReviewed: 0,

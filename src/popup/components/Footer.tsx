@@ -26,7 +26,7 @@ export const Footer = (props: Props) => {
         let mrNumber = 0;
         let mrTotal = 0;
         if (currentTab === 0) {
-            mrTotal = mrData.mrAssigned.length;
+            mrTotal = mrData.mrReceived.length;
             mrNumber = mrTotal - mrData.mrToReview;
         } else if (currentTab === 1) {
             mrTotal = mrData.mrGiven.length;

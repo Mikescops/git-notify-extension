@@ -4,7 +4,7 @@ import { MergeRequestsDetails, Todo, Issue } from '../../background/types';
 const REQUEST_TYPE_GET_LOCAL_DATA = 'getLocalData';
 
 export interface MergeRequestSendMessageReply {
-    mrAssigned: MergeRequestsDetails[];
+    mrReceived: MergeRequestsDetails[];
     mrToReview: number;
     mrGiven: MergeRequestsDetails[];
     mrReviewed: number;
@@ -21,7 +21,7 @@ export const getMergeRequestList = (): Promise<MergeRequestSendMessageReply> => 
             if (!response) {
                 return {
                     error: 'No reponse received',
-                    mrAssigned: [],
+                    mrReceived: [],
                     mrToReview: 0,
                     mrGiven: [],
                     mrReviewed: 0,
@@ -35,7 +35,7 @@ export const getMergeRequestList = (): Promise<MergeRequestSendMessageReply> => 
         .catch((error) => {
             return {
                 error: error,
-                mrAssigned: [],
+                mrReceived: [],
                 mrToReview: 0,
                 mrGiven: [],
                 mrReviewed: 0,

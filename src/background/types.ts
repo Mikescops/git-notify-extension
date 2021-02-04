@@ -39,6 +39,18 @@ export interface User {
     avatar_url: string;
 }
 
+export interface CurrentUser {
+    id: number;
+    username: string;
+    email: string;
+    name: string;
+    state: string;
+    avatar_url: string;
+    web_url: string;
+    created_at: string;
+    // missing types here
+}
+
 export interface Comment {
     system: boolean;
     // missing types here
