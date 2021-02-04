@@ -9,7 +9,7 @@ interface FetchMRExtraInfoParams {
 
 export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<MergeRequestsDetails[]>) => {
     const { gitlabApi, mrList, gitlabCE } = params;
-    const mrAssignedWithDetails: MergeRequestsDetails[] = [];
+    const mrWithDetails: MergeRequestsDetails[] = [];
 
     async.forEach(
         mrList,
@@ -21,7 +21,7 @@ export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<Me
                     approved_by: []
                 };
 
-                mrAssignedWithDetails.push({
+                mrWithDetails.push({
                     ...mr,
                     approvals: alternateResponse
                 });
@@ -34,7 +34,7 @@ export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<Me
             })
                 .then((response: Approvals) => {
                     const details = response;
-                    mrAssignedWithDetails.push({
+                    mrWithDetails.push({
                         ...mr,
                         approvals: details
                     });
@@ -55,7 +55,7 @@ export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<Me
             if (error) {
                 return cb(error);
             }
-            const mrAssignedSorted = mrAssignedWithDetails
+            const mrSorted = mrWithDetails
                 .sort((a, b) => (a.created_at < b.created_at ? 1 : -1))
                 .sort((a, b) => {
                     if (a.approvals.user_has_approved === b.approvals.user_has_approved) {
@@ -69,7 +69,7 @@ export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<Me
                     }
                     return 0;
                 });
-            return cb(null, mrAssignedSorted);
+            return cb(null, mrSorted);
         }
     );
 };

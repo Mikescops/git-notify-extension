@@ -3,7 +3,15 @@ import { browser } from 'webextension-polyfill-ts';
 import { Gitlab } from '@gitbeaker/browser';
 import { getSettings } from '../utils/getSettings';
 import { fetchMRExtraInfo } from '../utils/fetchMRExtraInfo';
-import { MergeRequests, GetSettingsResponse, MergeRequestsDetails, Todo, GitlabAPI, Issue } from '../types';
+import {
+    MergeRequests,
+    GetSettingsResponse,
+    MergeRequestsDetails,
+    Todo,
+    GitlabAPI,
+    Issue,
+    CurrentUser
+} from '../types';
 import { setBadge } from '../utils/setBadge';
 import {
     FailFetchIssues,
@@ -14,10 +22,11 @@ import {
     GitLabAddressNotSet,
     GitLabTokenNotSet
 } from '../errors';
+import { removeDuplicateObjectFromArray } from '../../popup/helpers';
 
 export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
-    interface ReviewRequests {
-        mrAssigned: MergeRequestsDetails[];
+    interface ReviewReceived {
+        mrReceived: MergeRequestsDetails[];
         mrToReview: number;
     }
 
@@ -29,7 +38,10 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
     interface AsyncResults {
         getSettings: GetSettingsResponse;
         gitlabApi: GitlabAPI;
-        reviewRequests: ReviewRequests;
+        currentUser: CurrentUser;
+        assignedRequests: MergeRequests[];
+        reviewerRequests: MergeRequests[];
+        receivedRequests: ReviewReceived;
         givenRequests: ReviewGiven;
         issuesAssigned: Issue[];
         todos: Todo[];
@@ -65,52 +77,99 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
                     return cb(null, api);
                 }
             ],
-            reviewRequests: [
-                'getSettings',
+            currentUser: [
                 'gitlabApi',
                 (results, cb) => {
-                    const { gitlabApi, getSettings } = results;
-
-                    gitlabApi.MergeRequests.all({
-                        state: 'opened',
-                        scope: 'assigned_to_me',
-                        wip: 'no'
-                    })
-                        .then((mrAssigned: MergeRequests[]) => {
-                            return fetchMRExtraInfo(
-                                {
-                                    gitlabApi,
-                                    mrList: mrAssigned,
-                                    gitlabCE: getSettings.gitlabCE
-                                },
-                                (error, mrAssignedDetails) => {
-                                    if (error) {
-                                        return cb(error);
-                                    }
-
-                                    if (!mrAssignedDetails) {
-                                        return cb(new FailFetchMergeRequestsAssigned());
-                                    }
-
-                                    let mrToReview = 0;
-                                    mrAssignedDetails.forEach((mr) => {
-                                        if (!mr.approvals.user_has_approved) {
-                                            mrToReview += 1;
-                                        }
-                                    });
-
-                                    return cb(null, {
-                                        mrAssigned: mrAssignedDetails,
-                                        mrToReview
-                                    });
-                                }
-                            );
+                    const { gitlabApi } = results;
+                    gitlabApi.Users.current()
+                        .then((currentUser: CurrentUser) => {
+                            return cb(null, currentUser);
                         })
                         .catch((error: Error) => {
                             if (error) {
                                 return cb(error);
                             }
                         });
+                }
+            ],
+            assignedRequests: [
+                'gitlabApi',
+                (results, cb) => {
+                    const { gitlabApi } = results;
+
+                    gitlabApi.MergeRequests.all({
+                        state: 'opened',
+                        scope: 'assigned_to_me'
+                    })
+                        .then((mrReceived: MergeRequests[]) => {
+                            return cb(null, mrReceived);
+                        })
+                        .catch((error: Error) => {
+                            if (error) {
+                                return cb(error);
+                            }
+                        });
+                }
+            ],
+            reviewerRequests: [
+                'gitlabApi',
+                'currentUser',
+                (results, cb) => {
+                    const { gitlabApi, currentUser } = results;
+
+                    gitlabApi.MergeRequests.all({
+                        state: 'opened',
+                        scope: 'all',
+                        reviewer_id: currentUser.id
+                    })
+                        .then((mrReceived: MergeRequests[]) => {
+                            return cb(null, mrReceived);
+                        })
+                        .catch((error: Error) => {
+                            if (error) {
+                                return cb(error);
+                            }
+                        });
+                }
+            ],
+            receivedRequests: [
+                'getSettings',
+                'gitlabApi',
+                'assignedRequests',
+                'reviewerRequests',
+                (results, cb) => {
+                    const { gitlabApi, getSettings, assignedRequests, reviewerRequests } = results;
+
+                    const requests = removeDuplicateObjectFromArray([...assignedRequests, ...reviewerRequests], 'iid');
+
+                    return fetchMRExtraInfo(
+                        {
+                            gitlabApi,
+                            mrList: requests,
+                            gitlabCE: getSettings.gitlabCE
+                        },
+                        (error, mrReceivedDetails) => {
+                            if (error) {
+                                return cb(error);
+                            }
+
+                            if (!mrReceivedDetails) {
+                                return cb(new FailFetchMergeRequestsAssigned());
+                            }
+
+                            let mrToReview = 0;
+                            mrReceivedDetails.forEach((mr) => {
+                                if (!mr.approvals.user_has_approved) {
+                                    mrToReview += 1;
+                                }
+                            });
+
+                            return cb(null, {
+                                mrReceived: mrReceivedDetails,
+                                mrToReview
+                            });
+                        }
+                    );
                 }
             ],
             givenRequests: [
@@ -189,7 +248,8 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
                     const { gitlabApi } = results;
 
                     gitlabApi.Todos.all({
-                        state: 'pending'
+                        state: 'pending',
+                        per_page: 100
                     })
                         .then((todos: Todo[]) => {
                             if (!todos) {
@@ -207,14 +267,14 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
             ],
             updateBadge: [
                 'getSettings',
-                'reviewRequests',
+                'receivedRequests',
                 'givenRequests',
                 'issuesAssigned',
                 'todos',
                 (results, cb) => {
                     const {
                         getSettings: { alertBadgeCounters },
-                        reviewRequests: { mrToReview },
+                        receivedRequests: { mrToReview },
                         givenRequests: { mrReviewed },
                         issuesAssigned,
                         todos
@@ -249,19 +309,19 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
                 }
             ],
             saveLocalStorage: [
-                'reviewRequests',
+                'receivedRequests',
                 'givenRequests',
                 'issuesAssigned',
                 'todos',
                 (results, cb) => {
-                    const { mrAssigned, mrToReview } = results.reviewRequests;
+                    const { mrReceived, mrToReview } = results.receivedRequests;
                     const { mrGiven, mrReviewed } = results.givenRequests;
                     const { todos, issuesAssigned } = results;
                     const lastUpdateDateUnix = new Date().getTime();
 
                     browser.storage.local
                         .set({
-                            mrAssigned,
+                            mrReceived,
                             mrToReview,
                             mrGiven,
                             mrReviewed,

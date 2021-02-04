@@ -7,7 +7,7 @@ export const getLocalData = (global_error: Error | null) => {
 
     return Promise.resolve(
         browser.storage.local.get([
-            'mrAssigned',
+            'mrReceived',
             'mrGiven',
             'mrToReview',
             'mrReviewed',
