@@ -29,7 +29,7 @@ jobs:
                   draft: false
                   prerelease: false
             - name: Upload Source build
-              id: upload-release-asset
+              id: upload-source-build
               uses: actions/upload-release-asset@v1
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -39,7 +39,7 @@ jobs:
                   asset_name: source.zip
                   asset_content_type: application/zip
             - name: Upload Firefox release
-              id: upload-release-asset
+              id: upload-firefox-release
               uses: actions/upload-release-asset@v1
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,7 +49,7 @@ jobs:
                   asset_name: firefox.zip
                   asset_content_type: application/zip
             - name: Upload Chrome release
-              id: upload-release-asset
+              id: upload-chrom-release
               uses: actions/upload-release-asset@v1
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
