@@ -1,8 +1,7 @@
 import { hot } from 'react-hot-loader';
 import { browser } from 'webextension-polyfill-ts';
 import React, { useState, useCallback, useEffect } from 'react';
-import { theme as primer } from '@primer/components';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from '@primer/components';
 import { Nav } from './components/Nav';
 import { Content } from './components/Content';
 import { Footer } from './components/Footer';
@@ -67,7 +66,7 @@ const App = () => {
     useEffect(() => applySettings(), [applySettings]);
 
     return (
-        <ThemeProvider theme={primer}>
+        <ThemeProvider>
             <div className={'container'}>
                 <Nav currentTab={currentTab} setCurrentTab={setCurrentTab} mrData={mrData} />
                 <Content appStatus={appStatus} mrData={mrData} currentTab={currentTab} errorMessage={errorMessage} />

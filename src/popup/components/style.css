@@ -1,3 +1,7 @@
+.navbarCategories nav {
+    overflow: inherit;
+}
+
 .emptyContainer {
     /* border-color matches TabNav lib */
     border-right: 1px solid rgb(225, 228, 232);

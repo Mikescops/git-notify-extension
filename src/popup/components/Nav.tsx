@@ -15,7 +15,7 @@ export const Nav = (props: Props) => {
     const issuesAssignedNumber = mrData?.issuesAssigned ? mrData.issuesAssigned.length : 0;
 
     return (
-        <TabNav aria-label="Main" mb={2} marginBottom="0">
+        <TabNav aria-label="Main" className={'navbarCategories'}>
             <TabNav.Link
                 href="#ToReview"
                 onClick={() => setCurrentTab(0)}

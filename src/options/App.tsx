@@ -1,8 +1,8 @@
 import { hot } from 'react-hot-loader';
 import { browser } from 'webextension-polyfill-ts';
 import React, { useState, useCallback, useEffect } from 'react';
-import { theme as primer, Button, TextInput, Text, Tooltip, StyledOcticon, Link, FormGroup } from '@primer/components';
-import { ThemeProvider } from 'styled-components';
+import { Button, TextInput, Text, Tooltip, StyledOcticon, Link, FormGroup } from '@primer/components';
+import { ThemeProvider } from '@primer/components';
 import { KeyIcon, ServerIcon, PackageDependenciesIcon, CheckIcon, InfoIcon } from '@primer/octicons-react';
 import './style.css';
 
@@ -99,7 +99,7 @@ const App = () => {
     }, []);
 
     return (
-        <ThemeProvider theme={primer}>
+        <ThemeProvider>
             <FormGroup>
                 <FormGroup.Label>Using GitLab Community Edition? (approvals are a premium feature)</FormGroup.Label>
                 <label>
