@@ -11,9 +11,11 @@ export const getLocalData = (global_error: Error | null) => {
             'mrGiven',
             'mrToReview',
             'mrReviewed',
+            'mrVips',
             'issuesAssigned',
             'todos',
-            'lastUpdateDateUnix'
+            'lastUpdateDateUnix',
+            'vipUsers'
         ])
     );
 };

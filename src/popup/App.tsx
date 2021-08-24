@@ -17,6 +17,7 @@ const App = () => {
         mrReceived: [],
         mrToReview: 0,
         mrGiven: [],
+        mrVips: [],
         mrReviewed: 0,
         issuesAssigned: [],
         todos: [],

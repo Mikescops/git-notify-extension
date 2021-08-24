@@ -7,6 +7,7 @@ export interface MergeRequestSendMessageReply {
     mrReceived: MergeRequestsDetails[];
     mrToReview: number;
     mrGiven: MergeRequestsDetails[];
+    mrVips: MergeRequestsDetails[];
     mrReviewed: number;
     issuesAssigned: Issue[];
     todos: Todo[];
@@ -38,6 +39,7 @@ export const getMergeRequestList = (): Promise<MergeRequestSendMessageReply> => 
                 mrReceived: [],
                 mrToReview: 0,
                 mrGiven: [],
+                mrVips: [],
                 mrReviewed: 0,
                 issuesAssigned: [],
                 todos: [],

@@ -27,6 +27,7 @@ import { removeDuplicateObjectFromArray } from '../../popup/helpers';
 export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
     interface ReviewReceived {
         mrReceived: MergeRequestsDetails[];
+        mrVips: MergeRequestsDetails[];
         mrToReview: number;
     }
 
@@ -47,11 +48,14 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
         todos: Todo[];
         updateBadge: void;
         saveLocalStorage: void;
+        listOfVipUsers: string[];
     }
 
     async.auto<AsyncResults>(
         {
             getSettings: (cb) => getSettings(cb),
+            // list of user names we want to follow
+            listOfVipUsers: (cb) => browser.storage.local.get(['vipUsers']).then((res) => cb(null, res.vipUsers)),
             gitlabApi: [
                 'getSettings',
                 (results, cb) => {
@@ -137,15 +141,18 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
                 'gitlabApi',
                 'assignedRequests',
                 'reviewerRequests',
+                'listOfVipUsers',
                 (results, cb) => {
-                    const { gitlabApi, getSettings, assignedRequests, reviewerRequests } = results;
-
-                    const requests = removeDuplicateObjectFromArray([...assignedRequests, ...reviewerRequests], 'iid');
+                    const { gitlabApi, getSettings, assignedRequests, reviewerRequests, listOfVipUsers } = results;
+                    const allReceivedRequests = removeDuplicateObjectFromArray(
+                        [...assignedRequests, ...reviewerRequests],
+                        'iid'
+                    );
 
                     return fetchMRExtraInfo(
                         {
                             gitlabApi,
-                            mrList: requests,
+                            mrList: allReceivedRequests,
                             gitlabCE: getSettings.gitlabCE
                         },
                         (error, mrReceivedDetails) => {
@@ -164,8 +171,22 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
                                 }
                             });
 
+                            // Splitting all MRs in 2 categories
+                            // Vips MR (people you want / need to follow) and whos MRs need attention
+                            // and all other MRs
+                            const mrReceived: MergeRequestsDetails[] = [];
+                            const mrVips: MergeRequestsDetails[] = [];
+                            mrReceivedDetails.forEach((mr: MergeRequestsDetails) => {
+                                if (listOfVipUsers?.includes(mr.author.name) && !mr.approvals.user_has_approved) {
+                                    mrVips.push(mr);
+                                } else {
+                                    mrReceived.push(mr);
+                                }
+                            });
+
                             return cb(null, {
-                                mrReceived: mrReceivedDetails,
+                                mrReceived,
+                                mrVips,
                                 mrToReview
                             });
                         }
@@ -314,7 +335,7 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
                 'issuesAssigned',
                 'todos',
                 (results, cb) => {
-                    const { mrReceived, mrToReview } = results.receivedRequests;
+                    const { mrReceived, mrToReview, mrVips } = results.receivedRequests;
                     const { mrGiven, mrReviewed } = results.givenRequests;
                     const { todos, issuesAssigned } = results;
                     const lastUpdateDateUnix = new Date().getTime();
@@ -324,6 +345,7 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
                             mrReceived,
                             mrToReview,
                             mrGiven,
+                            mrVips,
                             mrReviewed,
                             issuesAssigned,
                             todos,
