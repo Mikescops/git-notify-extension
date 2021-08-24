@@ -98,15 +98,17 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
             ],
             assignedRequests: [
                 'gitlabApi',
+                'currentUser',
                 (results, cb) => {
-                    const { gitlabApi } = results;
+                    const { gitlabApi, currentUser } = results;
 
                     gitlabApi.MergeRequests.all({
                         state: 'opened',
                         scope: 'assigned_to_me'
                     })
                         .then((mrReceived: MergeRequests[]) => {
-                            return cb(null, mrReceived);
+                            const filteredOutAutoAssigned = mrReceived.filter((mr) => mr.author.id !== currentUser.id);
+                            return cb(null, filteredOutAutoAssigned);
                         })
                         .catch((error: Error) => {
                             if (error) {
