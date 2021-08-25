@@ -186,6 +186,8 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
                                 }
                             });
 
+                            console.log(mrReceivedDetails);
+
                             return cb(null, {
                                 mrReceived,
                                 mrVips,
