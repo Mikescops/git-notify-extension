@@ -9,11 +9,14 @@ let time: number; // dynamic interval
 browser.storage.local.get(['refreshRate']).then((settings) => {
     time = settings.refreshRate ? settings.refreshRate : 40;
 
-    (function repeat() {
+    browser.alarms.create('fetchGitLab', { when: Date.now() });
+
+    browser.alarms.onAlarm.addListener(() => {
         getLatestDataFromGitLab((error) => (ERROR_TRACKER = error || null));
         console.log('Next refresh in', time);
-        setTimeout(repeat, time * 1000);
-    })();
+        browser.alarms.clear('fetchGitLab');
+        browser.alarms.create('fetchGitLab', { when: Date.now() + time * 1000 });
+    });
 });
 
 browser.runtime.onMessage.addListener((message) => {

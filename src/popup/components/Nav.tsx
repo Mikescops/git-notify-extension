@@ -11,7 +11,8 @@ interface Props {
 export const Nav = (props: Props) => {
     const { currentTab, setCurrentTab, mrData } = props;
 
-    const mrDataReviewRatio = mrData ? `${mrData.mrReviewed} / ${mrData.mrGiven.length}` : 'Unknown';
+    const mrDataReviewRatio =
+        mrData?.mrReviewed || mrData?.mrGiven ? `${mrData.mrReviewed} / ${mrData.mrGiven.length}` : 'Unknown';
     const issuesAssignedNumber = mrData?.issuesAssigned ? mrData.issuesAssigned.length : 0;
 
     return (

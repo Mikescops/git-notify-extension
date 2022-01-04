@@ -56,7 +56,10 @@ export const setTodoAsDone = (id: number | null, cb: CallbackErrorOnly) => {
 
                         const newTodos = id ? currentTodos.filter((todo) => todo.id !== id) : [];
 
-                        browser.storage.local.set({ todos: newTodos }).then(() => cb());
+                        browser.storage.local
+                            .set({ todos: newTodos })
+                            .then(() => cb())
+                            .catch((error) => cb(error));
                     });
                 }
             ]

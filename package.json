@@ -13,7 +13,7 @@
     "copy-config:prod": "cp src/config/config.prod.js src/config/config.js",
     "lint": "tsc --noEmit --rootDir src/ && eslint webpack*.js \"src/**/*.ts{,x}\"",
     "lint:fix": "npm run lint -- --quiet --fix",
-    "zip": "yarn neutrino-webextension-zip"
+    "zip": "mv build/v2/* build/; mv build/v3/* build/; rm -r build/v2/ build/v3/; yarn neutrino-webextension-zip '!.github/' '!previews/' '!src/config/'"
   },
   "author": "Corentin Mors (corentin@pixelswap.fr)",
   "license": "ISC",
@@ -22,7 +22,7 @@
     "last 2 Firefox versions"
   ],
   "dependencies": {
-    "@gitbeaker/browser": "^28.2.0",
+    "@gitbeaker/browser": "^35.1.0",
     "@primer/components": "^25.0.0",
     "@primer/css": "^16.1.1",
     "@primer/octicons-react": "^12.1.0",

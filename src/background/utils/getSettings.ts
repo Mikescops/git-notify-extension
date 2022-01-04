@@ -16,16 +16,20 @@ export const getSettings = (cb: Callback<GetSettingsResponse>) => {
                     gitlabCE: settings.gitlabCE || false,
                     alertBadgeCounters: settings.alertBadgeCounters || [0]
                 });
-            });
+            })
+            .catch((error) => cb(error));
     } else {
         const { token, address } = config;
-        browser.storage.local.get(['gitlabCE', 'alertBadgeCounters']).then((settings) => {
-            return cb(null, {
-                token,
-                address,
-                gitlabCE: settings.gitlabCE || false,
-                alertBadgeCounters: settings.alertBadgeCounters || [0]
-            });
-        });
+        browser.storage.local
+            .get(['gitlabCE', 'alertBadgeCounters'])
+            .then((settings) => {
+                return cb(null, {
+                    token,
+                    address,
+                    gitlabCE: settings.gitlabCE || false,
+                    alertBadgeCounters: settings.alertBadgeCounters || [0]
+                });
+            })
+            .catch((error) => cb(error));
     }
 };

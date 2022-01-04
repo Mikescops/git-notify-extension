@@ -82,14 +82,8 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
                 (results, cb) => {
                     const { gitlabApi } = results;
                     gitlabApi.Users.current()
-                        .then((currentUser: CurrentUser) => {
-                            return cb(null, currentUser);
-                        })
-                        .catch((error: Error) => {
-                            if (error) {
-                                return cb(error);
-                            }
-                        });
+                        .then((currentUser: CurrentUser) => cb(null, currentUser))
+                        .catch((error: Error) => cb(error));
                 }
             ],
             assignedRequests: [
@@ -101,14 +95,8 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
                         state: 'opened',
                         scope: 'assigned_to_me'
                     })
-                        .then((mrReceived: MergeRequests[]) => {
-                            return cb(null, mrReceived);
-                        })
-                        .catch((error: Error) => {
-                            if (error) {
-                                return cb(error);
-                            }
-                        });
+                        .then((mrReceived: MergeRequests[]) => cb(null, mrReceived))
+                        .catch((error: Error) => cb(error));
                 }
             ],
             reviewerRequests: [
@@ -122,14 +110,8 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
                         scope: 'all',
                         reviewer_id: currentUser.id
                     })
-                        .then((mrReceived: MergeRequests[]) => {
-                            return cb(null, mrReceived);
-                        })
-                        .catch((error: Error) => {
-                            if (error) {
-                                return cb(error);
-                            }
-                        });
+                        .then((mrReceived: MergeRequests[]) => cb(null, mrReceived))
+                        .catch((error: Error) => cb(error));
                 }
             ],
             receivedRequests: [
@@ -212,11 +194,7 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
                                 }
                             );
                         })
-                        .catch((error: Error) => {
-                            if (error) {
-                                return cb(error);
-                            }
-                        });
+                        .catch((error: Error) => cb(error));
                 }
             ],
             issuesAssigned: [
@@ -235,11 +213,7 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
 
                             return cb(null, issues);
                         })
-                        .catch((error: Error) => {
-                            if (error) {
-                                return cb(error);
-                            }
-                        });
+                        .catch((error: Error) => cb(error));
                 }
             ],
             todos: [
@@ -258,11 +232,7 @@ export const getLatestDataFromGitLab = (cb: CallbackErrorOnly) => {
 
                             return cb(null, todos);
                         })
-                        .catch((error: Error) => {
-                            if (error) {
-                                return cb(error);
-                            }
-                        });
+                        .catch((error: Error) => cb(error));
                 }
             ],
             updateBadge: [

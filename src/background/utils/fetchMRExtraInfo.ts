@@ -1,4 +1,5 @@
 import * as async from 'async';
+import { GitLabIsCE } from '../errors';
 import { MergeRequestsDetails, MergeRequests, Approvals, GitlabAPI } from '../types';
 
 interface FetchMRExtraInfoParams {
@@ -10,6 +11,10 @@ interface FetchMRExtraInfoParams {
 export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<MergeRequestsDetails[]>) => {
     const { gitlabApi, mrList, gitlabCE } = params;
     const mrWithDetails: MergeRequestsDetails[] = [];
+
+    if (mrList.length < 1) {
+        return cb(null, []);
+    }
 
     async.forEach(
         mrList,
@@ -29,7 +34,7 @@ export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<Me
                 return cb();
             }
 
-            gitlabApi.MergeRequestApprovals.approvals(mr.project_id, {
+            gitlabApi.MergeRequestApprovals.configuration(mr.project_id, {
                 mergerequestIid: mr.iid
             })
                 .then((response: Approvals) => {
@@ -40,16 +45,7 @@ export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<Me
                     });
                     return cb();
                 })
-                .catch((error: Error) => {
-                    if (error) {
-                        return cb(
-                            new Error(
-                                `You are likely using GitLab CE.
-                                            Please check the box in the options.`
-                            )
-                        );
-                    }
-                });
+                .catch(() => cb(new GitLabIsCE()));
         },
         (error) => {
             if (error) {
