@@ -1,14 +1,19 @@
 import { browser } from 'webextension-polyfill-ts';
 
 export const setBadge = (text: string, color: string) => {
-    browser.browserAction.setBadgeText({
+    let action = browser.browserAction;
+    if (browser.action) {
+        action = browser.action;
+    }
+
+    action.setBadgeText({
         text
     });
-    browser.browserAction.setBadgeBackgroundColor({
+    action.setBadgeBackgroundColor({
         color
     });
-    if (typeof browser.browserAction.setBadgeTextColor === 'function') {
-        browser.browserAction.setBadgeTextColor({
+    if (typeof action.setBadgeTextColor === 'function') {
+        action.setBadgeTextColor({
             color: '#fff'
         });
     }

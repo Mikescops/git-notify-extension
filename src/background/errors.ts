@@ -16,6 +16,12 @@ export class GitLabAddressNotSet extends Error {
     }
 }
 
+export class GitLabIsCE extends Error {
+    constructor() {
+        super('You are likely using GitLab CE.\nPlease check the box in the options.');
+    }
+}
+
 export class FailFetchMergeRequestsAssigned extends Error {
     constructor() {
         super('Could not fetch merge requests assigned.');

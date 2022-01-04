@@ -93,3 +93,4 @@ typings/
 
 # Neutrino build directory
 build
+build/**/*
