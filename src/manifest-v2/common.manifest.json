@@ -1,6 +1,6 @@
 {
-    "manifest_version": 3,
-    "version": "1.5.0",
+    "manifest_version": 2,
+    "version": "1.4.3",
     "name": "GitLab Notify",
     "short_name": "GitLab Notify",
     "description": "Don't miss any GitLab merge requests or issues and rocket up your productivity.",
@@ -10,13 +10,7 @@
         "128": "assets/icons/icon128.png"
     },
     "web_accessible_resources": [
-        {
-            "resources": [
-                "assets/*"
-            ],
-            "matches": [],
-            "extension_ids": []
-        }
+        "assets/*"
     ],
     "permissions": [
         "storage"

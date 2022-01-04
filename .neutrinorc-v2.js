@@ -5,7 +5,7 @@ const typescript = require('neutrinojs-typescript');
 
 module.exports = {
     options: {
-        output: 'build/v3',
+        output: 'build/v2',
         mains: {
             background: {
                 entry: 'background',
@@ -16,7 +16,7 @@ module.exports = {
             popup: {
                 entry: 'popup',
                 webext: {
-                    type: 'action'
+                    type: 'browser_action'
                 }
             },
             options: {
@@ -38,7 +38,8 @@ module.exports = {
             patterns: [{ context: 'assets', from: '**/*', to: 'assets', toType: 'dir' }]
         }),
         webext({
-            manifest: 'src/manifest',
+            polyfill: true,
+            manifest: 'src/manifest-v2',
             minify: {
                 // Javascript minification occurs only in production by default.
                 // To change uglify-es options or switch to another minifier, see below.
