@@ -31,6 +31,7 @@ browser.runtime.onMessage.addListener((message) => {
                     ERROR_TRACKER = error;
                     return resolve(false);
                 }
+                ERROR_TRACKER = null;
                 return resolve(true);
             })
         );
