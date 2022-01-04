@@ -1,6 +1,6 @@
 {
   "name": "gitlab-notify",
-  "version": "1.4.3",
+  "version": "1.5.0",
   "description": "Don't miss any GitLab merge requests and rocket up your productivity.",
   "main": "index.js",
   "repository": "https://github.com/Mikescops/gitlab-notify-extension",
@@ -47,7 +47,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "json-schema": "^0.3.0",
     "neutrino": "^9.5.0",
-    "neutrino-webextension": "^1.2.1",
+    "neutrino-webextension": "^1.2.2",
     "neutrinojs-typescript": "^1.1.6",
     "prettier": "^2.2.1",
     "react": "^17.0.2",
@@ -56,8 +56,8 @@
     "sinon-chrome": "^3.0.1",
     "styled-components": "^5.2.1",
     "typescript": "^4.2.3",
-    "webextension-polyfill": "^0.7.0",
-    "webextension-polyfill-ts": "^0.25.0",
+    "webextension-polyfill": "^0.8.0",
+    "webextension-polyfill-ts": "^0.26.0",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
