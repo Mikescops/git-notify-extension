@@ -7,13 +7,13 @@
   "scripts": {
     "start": "npm run copy-config:dev && webpack-dev-server --mode development --open --port 5003",
     "build:dev": "npm run copy-config:dev && webpack --mode production",
-    "build:prod": "npm run copy-config:prod && webpack --mode production",
+    "build:prod": "rm -rf build/; npm run copy-config:prod && webpack --mode production",
     "copy-config:setup": "cp src/config/config.prod.js src/config/config.dev.js",
     "copy-config:dev": "cp src/config/config.dev.js src/config/config.js",
     "copy-config:prod": "cp src/config/config.prod.js src/config/config.js",
     "lint": "tsc --noEmit --rootDir src/ && eslint webpack*.js \"src/**/*.ts{,x}\"",
     "lint:fix": "npm run lint -- --quiet --fix",
-    "zip": "mv build/v2/* build/; mv build/v3/* build/; rm -r build/v2/ build/v3/; yarn neutrino-webextension-zip '!.github/' '!previews/' '!src/config/'"
+    "zip": "mv build/v2/* build/; mv build/v3/* build/; rm -r build/v2/ build/v3/; npx neutrino-webextension-zip '!.github/' '!previews/' '!src/config/config.dev.js', '!src/config/config.js'"
   },
   "author": "Corentin Mors (corentin@pixelswap.fr)",
   "license": "ISC",
