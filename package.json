@@ -27,7 +27,7 @@
     "@primer/css": "^16.1.1",
     "@primer/octicons-react": "^12.1.0",
     "6d": "^1.0.63",
-    "async": "^3.2.0"
+    "async": "^3.2.2"
   },
   "devDependencies": {
     "@neutrinojs/copy": "^9.5.0",
