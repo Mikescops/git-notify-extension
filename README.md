@@ -4,7 +4,7 @@
 
 _Don't miss any GitLab merge requests or issues and rocket up your productivity._
 
-[Chrome Web Store](https://chrome.google.com/webstore/detail/ekfpkkhpemajcbniegjicehdphdabhop) | [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/gitlab-notify/) | [Microsoft Edge Add-on](	https://microsoftedge.microsoft.com/addons/detail/jjnpgaeopmlbaacjkedohiehmeopjoed)
+[Chrome Web Store](https://chrome.google.com/webstore/detail/ekfpkkhpemajcbniegjicehdphdabhop) | [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/gitlab-notify/) | [Microsoft Edge Add-on](https://microsoftedge.microsoft.com/addons/detail/jjnpgaeopmlbaacjkedohiehmeopjoed)
 
 ![Preview of the browser extension: 23/09/2020](./previews/preview-reviews.png)
 
@@ -37,9 +37,11 @@ Copy dev config file and set your personal GitLab token in it:
 
 `npm run copy-config:setup`
 
-To build prod:
+To build **prod**:
 
 `npm run build:prod && npm run zip`
+
+Then, you get zipped packages for each browser that are supported.
 
 ## Assets and Documentation
 
@@ -60,4 +62,3 @@ To build prod:
 
 | [Paola Ducolin](https://github.com/pducolin) | [Bradley Cushing](https://github.com/bradcush) |
 | -------------------------------------------- | ---------------------------------------------- |
-

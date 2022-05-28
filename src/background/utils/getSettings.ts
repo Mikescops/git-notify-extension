@@ -5,31 +5,35 @@ import { GetSettingsResponse } from '../types';
 /**
  * During dev address and token are pulled from the config files in order to save time
  */
-export const getSettings = (cb: Callback<GetSettingsResponse>) => {
+export const getSettings = async (): Promise<GetSettingsResponse> => {
     if (config.mode === 'production') {
-        browser.storage.local
+        return browser.storage.local
             .get(['gitlabCE', 'gitlabToken', 'gitlabAddress', 'alertBadgeCounters'])
             .then((settings) => {
-                return cb(null, {
+                return {
                     token: settings.gitlabToken,
                     address: settings.gitlabAddress,
                     gitlabCE: settings.gitlabCE || false,
                     alertBadgeCounters: settings.alertBadgeCounters || [0]
-                });
+                };
             })
-            .catch((error) => cb(error));
+            .catch((error) => {
+                throw error;
+            });
     } else {
         const { token, address } = config;
-        browser.storage.local
+        return browser.storage.local
             .get(['gitlabCE', 'alertBadgeCounters'])
             .then((settings) => {
-                return cb(null, {
+                return {
                     token,
                     address,
                     gitlabCE: settings.gitlabCE || false,
                     alertBadgeCounters: settings.alertBadgeCounters || [0]
-                });
+                };
             })
-            .catch((error) => cb(error));
+            .catch((error) => {
+                throw error;
+            });
     }
 };

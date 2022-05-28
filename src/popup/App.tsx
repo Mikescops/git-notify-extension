@@ -1,7 +1,7 @@
 import { hot } from 'react-hot-loader';
 import { browser } from 'webextension-polyfill-ts';
 import React, { useState, useCallback, useEffect } from 'react';
-import { ThemeProvider } from '@primer/components';
+import { ThemeProvider } from '@primer/react';
 import { Nav } from './components/Nav';
 import { Content } from './components/Content';
 import { Footer } from './components/Footer';

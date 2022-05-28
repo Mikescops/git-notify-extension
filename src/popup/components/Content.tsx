@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import { browser } from 'webextension-polyfill-ts';
-import { Flash, FilterList, Button } from '@primer/components';
+import { Flash, FilterList, Button } from '@primer/react';
 import { CheckIcon } from '@primer/octicons-react';
 
-import { Issue, Todo, MergeRequestsDetails } from '../../background/types';
+import { GitlabTypes, MergeRequestsDetails } from '../../background/types';
 import { AppStatus } from '../types';
 import { MergeRequestSendMessageReply } from '../utils/mergeRequestDownloader';
 
@@ -11,6 +11,7 @@ import { EmptyItems } from './EmptyItems';
 import { IssueItem } from './IssueItem';
 import { MergeRequestItem } from './MergeRequestItem';
 import { TodoItem } from './TodoItem';
+import { PickReviewer } from './PickReviewer';
 
 interface Props {
     appStatus: AppStatus;
@@ -38,7 +39,7 @@ export const Content = (props: Props) => {
 
     if (appStatus === 'error') {
         return (
-            <Flash m={2} variant="danger">
+            <Flash sx={{ margin: 2 }} variant="danger">
                 {errorMessage}
             </Flash>
         );
@@ -50,7 +51,7 @@ export const Content = (props: Props) => {
         }
         return (
             <FilterList className={'mrList'}>
-                {mrData.issuesAssigned.map((issue: Issue) => (
+                {mrData.issuesAssigned.map((issue: GitlabTypes.IssueSchema) => (
                     <IssueItem issue={issue} key={issue.id} />
                 ))}
             </FilterList>
@@ -66,18 +67,22 @@ export const Content = (props: Props) => {
                 {mrData.todos.length > 1 && todosVisibility ? (
                     <div className={'subNav'}>
                         <p className={'subNavText'}>{mrData.todos.length} tasks to complete</p>
-                        <Button onClick={setAllTodosAsDone} variant={'small'}>
+                        <Button onClick={setAllTodosAsDone} variant="default">
                             <CheckIcon /> Mark all as done
                         </Button>
                     </div>
                 ) : null}
                 <FilterList className={'mrList'}>
-                    {mrData.todos.map((todo: Todo) => (
+                    {mrData.todos.map((todo: GitlabTypes.TodoSchema) => (
                         <TodoItem todo={todo} key={todo.id} />
                     ))}
                 </FilterList>
             </>
         );
+    }
+
+    if (currentTab === 4) {
+        return <PickReviewer />;
     }
 
     // show data

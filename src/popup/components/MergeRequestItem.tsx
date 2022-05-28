@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, BranchName, FilterList, Flex, Box, Link, Label, Tooltip } from '@primer/components';
+import { Avatar, BranchName, FilterList, Box, Link, Label, Tooltip } from '@primer/react';
 import {
     GitMergeIcon,
     IssueClosedIcon,
@@ -10,7 +10,7 @@ import {
 } from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
 import { calculateTimeElapsed, removeDuplicateObjectFromArray } from '../helpers';
-import { MergeRequestsDetails } from '../../background/types';
+import { GitlabTypes, MergeRequestsDetails } from '../../background/types';
 
 interface Props {
     mr: MergeRequestsDetails;
@@ -30,7 +30,8 @@ export const MergeRequestItem = ({ mr }: Props) => {
         setCopyBranchStatus(true);
     };
 
-    const reviewers = removeDuplicateObjectFromArray([...mr.assignees, ...(mr.reviewers ?? [])], 'id');
+    const author = mr.author as GitlabTypes.UserSchema;
+    const reviewers = removeDuplicateObjectFromArray([...(mr.assignees ?? []), ...(mr.reviewers ?? [])], 'id');
 
     const avatars = reviewers
         .map((assignee) => {
@@ -38,6 +39,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                 ...assignee,
                 approved:
                     mr.approvals &&
+                    mr.approvals.approved_by &&
                     mr.approvals.approved_by.filter((approval) => {
                         return approval.user.id === assignee.id;
                     }).length > 0
@@ -49,30 +51,35 @@ export const MergeRequestItem = ({ mr }: Props) => {
     const avatarsUI = avatars.map((assignee) => <AvatarWithTooltip assignee={assignee} key={assignee.id} />);
 
     return (
-        <FilterList.Item as="div" className={mrApproved ? 'mrApproved mrItem' : 'mrItem'}>
-            <Flex flexWrap="nowrap">
+        <FilterList.Item className={mrApproved ? 'mrApproved mrItem' : 'mrItem'}>
+            <Box display="flex" flexWrap="nowrap">
                 <Box mr={2} style={{ flex: 1 }}>
                     <Link
                         as="a"
                         href={mr.web_url}
                         className={'mrTitle'}
                         target="_blank"
-                        color={mr.approvals.approved ? '#0b7f26' : '#000'}
-                        title={`${mr.title} - ${mr.author.name}\n${mr.description}`}
+                        sx={{ color: mr.approvals.approved ? '#0b7f26' : '#000' }}
+                        title={`${mr.title} - ${author.name}\n${mr.description}`}
                     >
                         {mr.title}
                     </Link>
                     <div>
-                        <Tooltip mr={2} aria-label={mr.author.name} direction="e" className={'inline-avatar'}>
-                            <Avatar src={mr.author.avatar_url} size={20} className={'avatar-small'} />
+                        <Tooltip
+                            sx={{ mr: 2 }}
+                            aria-label={author.name || ''}
+                            direction="e"
+                            className={'inline-avatar'}
+                        >
+                            <Avatar src={author.avatar_url} size={20} className={'avatar-small'} />
                         </Tooltip>
                         <Tooltip
                             aria-label={copyBranchStatus ? '✔️ Copied' : '📋 Copy branch name to clipboard'}
                             direction="n"
                         >
                             <BranchName
-                                as="span"
-                                mr={2}
+                                as={'span'}
+                                sx={{ mr: 2 }}
                                 className={'mrBranchName'}
                                 title={mr.source_branch}
                                 onClick={() => copyToClipboard(mr.source_branch)}
@@ -82,8 +89,8 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         </Tooltip>
                         {mr.merge_status === 'can_be_merged' && mr.approvals.approved ? (
                             <Label
-                                variant="medium"
-                                bg="#28a745"
+                                size="small"
+                                sx={{ color: '#fff', bg: '#28a745' }}
                                 className={'mrLabel'}
                                 title="Approved and can be merged!"
                             >
@@ -92,8 +99,8 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         ) : null}
                         {mr.merge_status !== 'can_be_merged' && mr.approvals.approved ? (
                             <Label
-                                variant="medium"
-                                bg="#fd7e14"
+                                size="small"
+                                sx={{ color: '#fff', bg: '#fd7e14' }}
                                 className={'mrLabel'}
                                 title="Approved but you may need to rebase before merging."
                             >
@@ -102,19 +109,19 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         ) : null}
                         {mr.merge_status !== 'can_be_merged' && !mr.approvals.approved ? (
                             <Label
-                                variant="medium"
-                                bg="#dc3545"
+                                size="small"
+                                sx={{ color: '#fff', bg: '#dc3545' }}
                                 className={'mrLabel'}
                                 title="Cannot be merged, you may need to rebase first."
                             >
                                 <IssueOpenedIcon />
                             </Label>
                         ) : null}
-                        <Label variant="medium" bg="white" color="black" className={'mrLabel'}>
-                            <CommentDiscussionIcon /> {mr.user_notes_count}
+                        <Label size="small" sx={{ color: '#000', bg: '#fff' }} className={'mrLabel'}>
+                            <CommentDiscussionIcon /> &#160;{mr.user_notes_count}
                         </Label>
-                        <Label variant="medium" bg="white" color="#8e8e8e" className={'mrLabel'}>
-                            <ClockIcon /> {timeElapsed}
+                        <Label size="small" sx={{ color: '#8e8e8e', bg: '#fff' }} className={'mrLabel'}>
+                            <ClockIcon /> &#160;{timeElapsed}
                         </Label>
                     </div>
                 </Box>
@@ -132,7 +139,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         ''
                     )}
                 </Box>
-            </Flex>
+            </Box>
         </FilterList.Item>
     );
 };

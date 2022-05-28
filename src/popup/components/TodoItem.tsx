@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { browser } from 'webextension-polyfill-ts';
-import { Avatar, ButtonOutline, Box, FilterList, Flex, Label, Link, Text, Tooltip } from '@primer/components';
+import { Avatar, Box, Button, FilterList, Label, Link, Text, Tooltip } from '@primer/react';
 import { ClockIcon, CheckIcon } from '@primer/octicons-react';
 import { calculateTimeElapsed } from '../helpers';
-import { Todo } from '../../background/types';
+import { GitlabTypes } from '../../background/types';
 
 interface Props {
-    todo: Todo;
+    todo: GitlabTypes.TodoSchema;
 }
 
 const actionToText = (author: string, action: string) => {
@@ -36,19 +36,17 @@ export const TodoItem = ({ todo }: Props) => {
     const timeElapsed = calculateTimeElapsed(todo.created_at);
 
     const setTodoAsDone = useCallback(() => {
-        browser.runtime.sendMessage({ type: 'setTodoAsDone', todoId: todo.id }).then((error) => {
-            if (error) {
-                return console.error(error);
-            }
-            setVisibility(false);
-        });
+        browser.runtime
+            .sendMessage({ type: 'setTodoAsDone', todoId: todo.id })
+            .then(() => setVisibility(false))
+            .catch((error) => console.error(error));
     }, [todo.id]);
 
     return (
-        <FilterList.Item as="div" className={visibility ? 'mrItem' : 'hidden'}>
-            <Flex flexWrap="nowrap">
+        <FilterList.Item className={visibility ? 'mrItem' : 'hidden'}>
+            <Box display="flex" flexWrap="nowrap">
                 <Box className={'avatarsList'}>
-                    <Avatar src={todo.author.avatar_url} alt={todo.author.name} square size={40} mr={2} />
+                    <Avatar src={todo.author.avatar_url} alt={todo.author.name} square size={40} sx={{ mr: 2 }} />
                 </Box>
                 <Box mr={2} style={{ flex: 1 }}>
                     <Link as="a" href={todo.target_url} className={'mrTitle'} target="_blank">
@@ -58,19 +56,19 @@ export const TodoItem = ({ todo }: Props) => {
                         <Text className={'todoBody'} title={todo.body}>
                             &#34;{todo.body}&#34;
                         </Text>
-                        <Label variant="medium" bg="white" color="#8e8e8e" className={'mrLabel'}>
-                            <ClockIcon /> {timeElapsed}
+                        <Label size="small" color="#8e8e8e" className={'mrLabel'}>
+                            <ClockIcon /> &#160;{timeElapsed}
                         </Label>
                     </div>
                 </Box>
                 <Box>
                     <Tooltip aria-label={'Mark as done'} direction="w">
-                        <ButtonOutline variant="small" mt={1} onClick={setTodoAsDone}>
+                        <Button variant="outline" size="small" mt={1} onClick={setTodoAsDone}>
                             <CheckIcon />
-                        </ButtonOutline>
+                        </Button>
                     </Tooltip>
                 </Box>
-            </Flex>
+            </Box>
         </FilterList.Item>
     );
 };
