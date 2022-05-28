@@ -1,5 +1,5 @@
 import * as browser from 'webextension-polyfill';
-import { MergeRequestsDetails, GitlabTypes } from '../../background/types';
+import { MergeRequestsDetails, GitlabTypes, GlobalError } from '../../background/types';
 
 const REQUEST_TYPE_GET_LOCAL_DATA = 'getLocalData';
 
@@ -11,15 +11,15 @@ export interface MergeRequestSendMessageReply {
     issuesAssigned: GitlabTypes.IssueSchema[];
     todos: GitlabTypes.TodoSchema[];
     lastUpdateDateUnix: number;
-    error?: string;
+    error?: GlobalError;
 }
 
 export const getMergeRequestList = async (): Promise<MergeRequestSendMessageReply> => {
     const response = await browser.runtime.sendMessage({ type: REQUEST_TYPE_GET_LOCAL_DATA });
 
-    if (response instanceof Error || !response) {
+    if (response instanceof Error || !response || response.error) {
         return {
-            error: response,
+            error: response.error || null,
             mrReceived: [],
             mrToReview: 0,
             mrGiven: [],

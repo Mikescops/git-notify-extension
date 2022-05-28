@@ -12,6 +12,7 @@ import './style.css';
 const App = () => {
     const [appStatus, setAppStatus] = useState<AppStatus>('idle');
     const [errorMessage, setErrorMessage] = useState('');
+    const [errorStack, setErrorStack] = useState('');
     const [mrData, setMrData] = useState<MergeRequestSendMessageReply>({
         mrReceived: [],
         mrToReview: 0,
@@ -44,9 +45,10 @@ const App = () => {
                     setErrorMessage('Something went wrong');
                     return;
                 }
-                if (response.error && response.error !== '') {
+                if (response.error) {
                     setAppStatus('error');
-                    setErrorMessage(response.error ? response.error : '');
+                    setErrorMessage(`${response.error.name}: ${response.error.message}`);
+                    setErrorStack(response.error.stack ?? '');
                     return;
                 }
 
@@ -56,7 +58,7 @@ const App = () => {
             .catch((error) => {
                 setAppStatus('error');
                 setErrorMessage('Something went wrong');
-                console.error(error);
+                setErrorStack(error.stack ?? '');
             });
     }, []);
 
@@ -68,7 +70,13 @@ const App = () => {
         <ThemeProvider>
             <div className={'container'}>
                 <Nav currentTab={currentTab} setCurrentTab={setCurrentTab} mrData={mrData} />
-                <Content appStatus={appStatus} mrData={mrData} currentTab={currentTab} errorMessage={errorMessage} />
+                <Content
+                    appStatus={appStatus}
+                    mrData={mrData}
+                    currentTab={currentTab}
+                    errorMessage={errorMessage}
+                    errorStack={errorStack}
+                />
                 <Footer
                     currentTab={currentTab}
                     mrData={mrData}

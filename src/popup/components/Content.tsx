@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import * as browser from 'webextension-polyfill';
-import { Flash, FilterList, Button } from '@primer/react';
+import { Flash, FilterList, Button, Details } from '@primer/react';
 import { CheckIcon } from '@primer/octicons-react';
 
 import { GitlabTypes, MergeRequestsDetails } from '../../background/types';
@@ -18,19 +18,18 @@ interface Props {
     mrData: MergeRequestSendMessageReply;
     currentTab: number;
     errorMessage: string;
+    errorStack: string;
 }
 
 export const Content = (props: Props) => {
-    const { appStatus, mrData, currentTab, errorMessage } = props;
+    const { appStatus, mrData, currentTab, errorMessage, errorStack } = props;
 
     const [todosVisibility, setTodosVisibility] = useState(true);
     const setAllTodosAsDone = useCallback(() => {
-        browser.runtime.sendMessage({ type: 'setTodoAsDone', todoId: null }).then((error) => {
-            if (error) {
-                return console.error(error);
-            }
-            setTodosVisibility(false);
-        });
+        browser.runtime
+            .sendMessage({ type: 'setTodoAsDone', todoId: null })
+            .then(() => setTodosVisibility(false))
+            .catch((error) => console.error(error));
     }, []);
 
     if (appStatus === 'loading' || appStatus === 'idle') {
@@ -41,6 +40,7 @@ export const Content = (props: Props) => {
         return (
             <Flash sx={{ margin: 2 }} variant="danger">
                 {errorMessage}
+                <Details>{errorStack}</Details>
             </Flash>
         );
     }
