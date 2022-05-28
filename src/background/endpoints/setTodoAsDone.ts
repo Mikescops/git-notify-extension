@@ -1,6 +1,6 @@
 import { getSettings } from '../utils/getSettings';
 import { GitlabTypes } from '../types';
-import { browser } from 'webextension-polyfill-ts';
+import * as browser from 'webextension-polyfill';
 import { initGitlabApi } from '../utils/initGitlabApi';
 
 export const setTodoAsDone = async (id: number | undefined): Promise<void> => {

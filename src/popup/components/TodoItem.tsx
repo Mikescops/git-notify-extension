@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { browser } from 'webextension-polyfill-ts';
+import * as browser from 'webextension-polyfill';
 import { Avatar, Box, Button, FilterList, Label, Link, Text, Tooltip } from '@primer/react';
 import { ClockIcon, CheckIcon } from '@primer/octicons-react';
 import { calculateTimeElapsed } from '../helpers';

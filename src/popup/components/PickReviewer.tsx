@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Autocomplete, FormControl, Button, Box } from '@primer/react';
 import { SyncIcon } from '@primer/octicons-react';
-import { browser } from 'webextension-polyfill-ts';
+import * as browser from 'webextension-polyfill';
 import { GitlabTypes } from '../../background/types';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
 

@@ -1,5 +1,4 @@
-import { hot } from 'react-hot-loader';
-import { browser } from 'webextension-polyfill-ts';
+import * as browser from 'webextension-polyfill';
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button, TextInput, Text, Tooltip, StyledOcticon, Link, FormControl, ThemeProvider } from '@primer/react';
 import { KeyIcon, ServerIcon, PackageDependenciesIcon, CheckIcon, InfoIcon } from '@primer/octicons-react';
@@ -228,4 +227,4 @@ const App = () => {
     );
 };
 
-export default hot(module)(App);
+export default App;
