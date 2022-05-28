@@ -1,5 +1,7 @@
 import { browser } from 'webextension-polyfill-ts';
 import { getLatestDataFromGitLab, getLocalData, setTodoAsDone } from './endpoints';
+import { getProjectsList } from './endpoints/getProjectsList';
+import { pickRandomMemberOfGroup } from './endpoints/pickRandomMemberOfGroup';
 
 let ERROR_TRACKER: Error | null;
 
@@ -11,8 +13,14 @@ browser.storage.local.get(['refreshRate']).then((settings) => {
 
     browser.alarms.create('fetchGitLab', { when: Date.now() });
 
-    browser.alarms.onAlarm.addListener(() => {
-        getLatestDataFromGitLab((error) => (ERROR_TRACKER = error || null));
+    browser.alarms.onAlarm.addListener(async () => {
+        try {
+            await getLatestDataFromGitLab();
+        } catch (error) {
+            if (error instanceof Error) {
+                ERROR_TRACKER = error;
+            }
+        }
         console.log('Next refresh in', time);
         browser.alarms.clear('fetchGitLab');
         browser.alarms.create('fetchGitLab', { when: Date.now() + time * 1000 });
@@ -25,20 +33,29 @@ browser.runtime.onMessage.addListener((message) => {
     }
 
     if (message.type === 'getLatestDataFromGitLab') {
-        return new Promise((resolve) =>
-            getLatestDataFromGitLab((error) => {
-                if (error) {
+        return new Promise(async (resolve) => {
+            try {
+                await getLatestDataFromGitLab();
+                resolve(true);
+            } catch (error) {
+                if (error instanceof Error) {
                     ERROR_TRACKER = error;
-                    return resolve(false);
                 }
-                ERROR_TRACKER = null;
-                return resolve(true);
-            })
-        );
+                resolve(false);
+            }
+        });
     }
 
     if (message.type === 'setTodoAsDone') {
-        return new Promise((resolve) => setTodoAsDone(message.todoId, (error) => resolve(error)));
+        return setTodoAsDone(message.todoId);
+    }
+
+    if (message.type === 'getProjectsList') {
+        return getProjectsList();
+    }
+
+    if (message.type === 'pickRandomMemberOfGroup') {
+        return pickRandomMemberOfGroup(message.groupId);
     }
 
     if (message.type === 'updateRefreshRate') {

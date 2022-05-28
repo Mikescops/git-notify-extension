@@ -1,5 +1,6 @@
 import React from 'react';
-import { TabNav, Label, Tooltip } from '@primer/components';
+import { TabNav, Label, Tooltip } from '@primer/react';
+import { CodeOfConductIcon } from '@primer/octicons-react';
 import { MergeRequestSendMessageReply } from '../utils/mergeRequestDownloader';
 
 interface Props {
@@ -23,7 +24,7 @@ export const Nav = (props: Props) => {
                 className={currentTab === 0 ? 'selected' : ''}
             >
                 To Review{' '}
-                <Label variant="small" bg="#dc3545">
+                <Label size="small" sx={{ bg: '#dc3545', color: '#fff' }}>
                     {mrData ? mrData.mrToReview : 0}
                 </Label>
             </TabNav.Link>
@@ -34,7 +35,7 @@ export const Nav = (props: Props) => {
             >
                 Under Review{' '}
                 <Tooltip aria-label={`${mrDataReviewRatio}  have been reviewed`} direction="s">
-                    <Label variant="small" bg="#28a745">
+                    <Label size="small" sx={{ bg: '#28a745', color: '#fff' }}>
                         {mrData ? mrDataReviewRatio : 0}
                     </Label>
                 </Tooltip>
@@ -42,7 +43,7 @@ export const Nav = (props: Props) => {
             <TabNav.Link href="#Issues" onClick={() => setCurrentTab(2)} className={currentTab === 2 ? 'selected' : ''}>
                 Issues{' '}
                 <Tooltip aria-label={`${issuesAssignedNumber}  are assigned to you`} direction="s">
-                    <Label variant="small" bg="#fd7e14">
+                    <Label size="small" sx={{ bg: '#fd7e14', color: '#fff' }}>
                         {issuesAssignedNumber}
                     </Label>
                 </Tooltip>
@@ -53,9 +54,12 @@ export const Nav = (props: Props) => {
                 className={currentTab === 3 ? 'selected' : ''}
             >
                 To-Do List{' '}
-                <Label variant="small" bg="#1f78d1">
+                <Label size="small" sx={{ bg: '#1f78d1', color: '#fff' }}>
                     {mrData?.todos ? mrData.todos.length : 0}
                 </Label>
+            </TabNav.Link>
+            <TabNav.Link href="#Pick" onClick={() => setCurrentTab(4)} className={currentTab === 4 ? 'selected' : ''}>
+                <CodeOfConductIcon /> Pick
             </TabNav.Link>
         </TabNav>
     );

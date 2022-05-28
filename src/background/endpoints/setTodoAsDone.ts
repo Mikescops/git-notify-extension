@@ -1,74 +1,19 @@
-import * as async from 'async';
-import { Gitlab } from '@gitbeaker/browser';
 import { getSettings } from '../utils/getSettings';
-import { GetSettingsResponse, GitlabAPI, Todo } from '../types';
+import { GitlabTypes } from '../types';
 import { browser } from 'webextension-polyfill-ts';
-import { FailFetchSettings, GitLabTokenNotSet, GitLabAddressNotSet } from '../errors';
+import { initGitlabApi } from '../utils/initGitlabApi';
 
-export const setTodoAsDone = (id: number | null, cb: CallbackErrorOnly) => {
-    interface AsyncResults {
-        getSettings: GetSettingsResponse;
-        gitlabApi: GitlabAPI;
-        markAsDone: void;
-        removeFromCache: void;
-    }
+export const setTodoAsDone = async (id: number | undefined): Promise<void> => {
+    const settings = await getSettings();
+    const gitlabApi = await initGitlabApi(settings);
 
-    async.auto<AsyncResults>(
-        {
-            getSettings: (cb) => getSettings(cb),
-            gitlabApi: [
-                'getSettings',
-                (results, cb) => {
-                    if (!results.getSettings) {
-                        return cb(new FailFetchSettings());
-                    }
+    await gitlabApi.Todos.done({ todoId: id });
 
-                    if (!results.getSettings.token) {
-                        return cb(new GitLabTokenNotSet());
-                    }
+    const storage = await browser.storage.local.get(['todos']);
 
-                    if (!results.getSettings.address) {
-                        return cb(new GitLabAddressNotSet());
-                    }
+    const currentTodos: GitlabTypes.TodoSchema[] = storage.todos;
 
-                    const api = new Gitlab({
-                        host: results.getSettings.address,
-                        token: results.getSettings.token
-                    });
+    const newTodos = id ? currentTodos.filter((todo) => todo.id !== id) : [];
 
-                    return cb(null, api);
-                }
-            ],
-            markAsDone: [
-                'gitlabApi',
-                (results, cb) => {
-                    const { gitlabApi } = results;
-                    gitlabApi.Todos.done({ todoId: id })
-                        .then(() => cb())
-                        .catch((error: Error) => cb(error));
-                }
-            ],
-            removeFromCache: [
-                'markAsDone',
-                (_results, cb) => {
-                    browser.storage.local.get(['todos']).then((storage) => {
-                        const currentTodos: Todo[] = storage.todos;
-
-                        const newTodos = id ? currentTodos.filter((todo) => todo.id !== id) : [];
-
-                        browser.storage.local
-                            .set({ todos: newTodos })
-                            .then(() => cb())
-                            .catch((error) => cb(error));
-                    });
-                }
-            ]
-        },
-        (error) => {
-            if (error) {
-                return cb(error);
-            }
-            return cb();
-        }
-    );
+    return await browser.storage.local.set({ todos: newTodos });
 };

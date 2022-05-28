@@ -1,71 +1,60 @@
-import * as async from 'async';
 import { GitLabIsCE } from '../errors';
-import { MergeRequestsDetails, MergeRequests, Approvals, GitlabAPI } from '../types';
+import { MergeRequestsDetails, GitlabAPI, GitlabTypes } from '../types';
 
 interface FetchMRExtraInfoParams {
     gitlabCE: boolean;
     gitlabApi: GitlabAPI;
-    mrList: MergeRequests[];
+    mrList: GitlabTypes.MergeRequestSchema[];
 }
 
-export const fetchMRExtraInfo = (params: FetchMRExtraInfoParams, cb: Callback<MergeRequestsDetails[]>) => {
+export const fetchMRExtraInfo = async (params: FetchMRExtraInfoParams): Promise<MergeRequestsDetails[]> => {
     const { gitlabApi, mrList, gitlabCE } = params;
     const mrWithDetails: MergeRequestsDetails[] = [];
 
     if (mrList.length < 1) {
-        return cb(null, []);
+        return Promise.resolve(mrWithDetails);
     }
 
-    async.forEach(
-        mrList,
-        (mr, cb) => {
-            if (gitlabCE === true) {
-                const alternateResponse = {
-                    user_has_approved: false,
-                    approved: false,
-                    approved_by: []
-                };
+    for (const mr of mrList) {
+        if (gitlabCE === true) {
+            const alternateResponse = {
+                user_has_approved: false,
+                approved: false,
+                approved_by: []
+            };
 
-                mrWithDetails.push({
-                    ...mr,
-                    approvals: alternateResponse
-                });
+            mrWithDetails.push({
+                ...mr,
+                approvals: alternateResponse
+            });
 
-                return cb();
-            }
-
-            gitlabApi.MergeRequestApprovals.configuration(mr.project_id, {
-                mergerequestIid: mr.iid
-            })
-                .then((response: Approvals) => {
-                    const details = response;
-                    mrWithDetails.push({
-                        ...mr,
-                        approvals: details
-                    });
-                    return cb();
-                })
-                .catch(() => cb(new GitLabIsCE()));
-        },
-        (error) => {
-            if (error) {
-                return cb(error);
-            }
-            const mrSorted = mrWithDetails
-                .sort((a, b) => (a.created_at < b.created_at ? 1 : -1))
-                .sort((a, b) => {
-                    if (a.approvals.user_has_approved === b.approvals.user_has_approved) {
-                        return 0;
-                    }
-                    if (a.approvals.user_has_approved) {
-                        return 1;
-                    }
-                    if (b.approvals.user_has_approved) {
-                        return -1;
-                    }
-                    return 0;
-                });
-            return cb(null, mrSorted);
+            continue;
         }
-    );
+
+        const approvals = await gitlabApi.MergeRequestApprovals.configuration(mr.project_id, {
+            mergerequestIid: mr.iid
+        });
+        if (approvals instanceof Error) {
+            throw new GitLabIsCE();
+        }
+        mrWithDetails.push({
+            ...mr,
+            approvals
+        });
+    }
+
+    return mrWithDetails
+        .sort((a, b) => (a.created_at < b.created_at ? 1 : -1))
+        .sort((a, b) => {
+            if (a.approvals.user_has_approved === b.approvals.user_has_approved) {
+                return 0;
+            }
+            if (a.approvals.user_has_approved) {
+                return 1;
+            }
+            if (b.approvals.user_has_approved) {
+                return -1;
+            }
+            return 0;
+        });
 };

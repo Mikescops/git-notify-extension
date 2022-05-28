@@ -1,8 +1,7 @@
 import { hot } from 'react-hot-loader';
 import { browser } from 'webextension-polyfill-ts';
 import React, { useState, useCallback, useEffect } from 'react';
-import { Button, TextInput, Text, Tooltip, StyledOcticon, Link, FormGroup } from '@primer/components';
-import { ThemeProvider } from '@primer/components';
+import { Button, TextInput, Text, Tooltip, StyledOcticon, Link, FormControl, ThemeProvider } from '@primer/react';
 import { KeyIcon, ServerIcon, PackageDependenciesIcon, CheckIcon, InfoIcon } from '@primer/octicons-react';
 import './style.css';
 
@@ -100,8 +99,8 @@ const App = () => {
 
     return (
         <ThemeProvider>
-            <FormGroup>
-                <FormGroup.Label>Using GitLab Community Edition? (approvals are a premium feature)</FormGroup.Label>
+            <FormControl>
+                <FormControl.Label>Using GitLab Community Edition? (approvals are a premium feature)</FormControl.Label>
                 <label>
                     <input
                         type="checkbox"
@@ -112,9 +111,9 @@ const App = () => {
                     />{' '}
                     GitLab CE Mode
                 </label>
-            </FormGroup>
-            <FormGroup>
-                <FormGroup.Label>
+            </FormControl>
+            <FormControl>
+                <FormControl.Label>
                     Personal GitLab Token{' '}
                     <Link href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html" target="_blank">
                         <Tooltip
@@ -125,7 +124,7 @@ const App = () => {
                             <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
                         </Tooltip>
                     </Link>
-                </FormGroup.Label>
+                </FormControl.Label>
                 <TextInput
                     icon={KeyIcon as any}
                     variant={'small'}
@@ -136,14 +135,14 @@ const App = () => {
                     aria-label="gitlab-token"
                 />{' '}
                 {isGitlabTokenInLocalStorage ? <CheckIcon /> : ''}
-            </FormGroup>
-            <FormGroup>
-                <FormGroup.Label>
+            </FormControl>
+            <FormControl>
+                <FormControl.Label>
                     GitLab Host Address{' '}
                     <Tooltip aria-label="Example: https://gitlab.com">
                         <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
                     </Tooltip>
-                </FormGroup.Label>
+                </FormControl.Label>
                 <TextInput
                     icon={ServerIcon as any}
                     variant={'small'}
@@ -154,14 +153,14 @@ const App = () => {
                     aria-label="gitlab-address"
                 />{' '}
                 {isGitlabAddressInLocalStorage ? <CheckIcon /> : ''}
-            </FormGroup>
-            <FormGroup>
-                <FormGroup.Label>
+            </FormControl>
+            <FormControl>
+                <FormControl.Label>
                     Refresh rate in seconds{' '}
                     <Tooltip aria-label="It is not recommended to go below 30 seconds.">
                         <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
                     </Tooltip>
-                </FormGroup.Label>
+                </FormControl.Label>
                 <input
                     type="number"
                     name="refreshRate"
@@ -171,9 +170,9 @@ const App = () => {
                     onChange={updateRefreshRate}
                 />{' '}
                 {isRefreshRateInLocalStorage ? <CheckIcon /> : ''}
-            </FormGroup>
-            <FormGroup>
-                <FormGroup.Label>Default tab</FormGroup.Label>
+            </FormControl>
+            <FormControl>
+                <FormControl.Label>Default tab</FormControl.Label>
                 <select name="default-tab" onChange={updateDefaultTab}>
                     <option selected={defaultTab === 0} value="0">
                         To Review
@@ -188,14 +187,14 @@ const App = () => {
                         To-Do List
                     </option>
                 </select>
-            </FormGroup>
-            <FormGroup>
-                <FormGroup.Label>
+            </FormControl>
+            <FormControl>
+                <FormControl.Label>
                     Alert badge counters{' '}
                     <Tooltip aria-label="You can select multiple counters but display might be too small.">
                         <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
                     </Tooltip>
-                </FormGroup.Label>
+                </FormControl.Label>
                 <select name="alert-badge-counters" multiple onChange={updateAlertBadgeCounters}>
                     <option selected={alertBadgeCounters.includes(0)} value="0">
                         To Review
@@ -210,10 +209,10 @@ const App = () => {
                         To-Do List
                     </option>
                 </select>
-            </FormGroup>
+            </FormControl>
             <hr />
             <div>
-                <Button onClick={testConnection} variant={'small'}>
+                <Button onClick={testConnection} variant="default">
                     <PackageDependenciesIcon /> Test my settings
                 </Button>
                 <Text

@@ -1,14 +1,16 @@
 import React from 'react';
-import { Avatar, Tooltip } from '@primer/components';
+import { Avatar, Tooltip } from '@primer/react';
 import { CheckIcon } from '@primer/octicons-react';
-import { User } from '../../background/types';
+import { GitlabTypes } from '../../background/types';
 
-interface UserWithApproval extends User {
+interface UserWithApproval extends GitlabTypes.UserSchema {
     approved?: boolean;
 }
 
 interface Props {
     assignee: UserWithApproval;
+    direction?: 'n' | 'e' | 's' | 'w';
+    size?: number;
 }
 
 export const AvatarWithTooltip = (props: Props) => {
@@ -21,9 +23,9 @@ export const AvatarWithTooltip = (props: Props) => {
     );
 
     return (
-        <Tooltip className={'userAvatar'} aria-label={assignee.name} direction="w">
+        <Tooltip className={'userAvatar'} aria-label={assignee.name} direction={props.direction ?? 'w'}>
             {assignee.approved ? approvedMark : null}
-            <Avatar src={assignee.avatar_url} alt={assignee.name} square size={40} mr={1} />
+            <Avatar src={assignee.avatar_url} alt={assignee.name} square size={props.size ?? 40} sx={{ mr: 1 }} />
         </Tooltip>
     );
 };

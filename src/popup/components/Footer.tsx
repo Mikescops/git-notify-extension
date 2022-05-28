@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { browser } from 'webextension-polyfill-ts';
-import { Flex, Tooltip, ProgressBar, Button, Link } from '@primer/components';
+import { Box, Tooltip, ProgressBar, Button, Link } from '@primer/react';
 import { SyncIcon, VersionsIcon, PeopleIcon, GearIcon } from '@primer/octicons-react';
 import { getHumanReadableDate } from '../helpers';
 import { MergeRequestSendMessageReply } from '../utils/mergeRequestDownloader';
@@ -42,7 +42,7 @@ export const Footer = (props: Props) => {
     }, [appStatus, mrData, currentTab]);
 
     return (
-        <Flex flexWrap="nowrap">
+        <Box display="flex" flexWrap="nowrap">
             <Tooltip
                 className={'progressBar'}
                 aria-label={
@@ -53,16 +53,16 @@ export const Footer = (props: Props) => {
                 <ProgressBar progress={getMrRatio()} />
             </Tooltip>
 
-            <div style={{ marginTop: '6px' }}>
+            <Box display="flex" flexWrap="nowrap" style={{ marginTop: '6px' }}>
                 <Tooltip aria-label={'Last update: ' + getHumanReadableDate(mrData.lastUpdateDateUnix)} direction="n">
-                    <Button onClick={fetchData} variant={'small'} mr={2}>
+                    <Button onClick={fetchData} variant="default" size="small" sx={{ mr: 2 }}>
                         <SyncIcon /> Refresh
                     </Button>
                 </Tooltip>
 
                 <Tooltip aria-label={'Open your projects'} direction="n">
                     <Link href={gitlabAddress + '/dashboard/projects'} target="_blank">
-                        <Button variant={'small'} mr={2}>
+                        <Button variant="default" size="small" sx={{ mr: 2 }}>
                             <VersionsIcon />
                         </Button>
                     </Link>
@@ -70,16 +70,16 @@ export const Footer = (props: Props) => {
 
                 <Tooltip aria-label={'Open your groups'} direction="n">
                     <Link href={gitlabAddress + '/dashboard/groups'} target="_blank">
-                        <Button variant={'small'} mr={2}>
+                        <Button variant="default" size="small" sx={{ mr: 2 }}>
                             <PeopleIcon />
                         </Button>
                     </Link>
                 </Tooltip>
 
-                <Button onClick={openSettings} variant={'small'}>
+                <Button onClick={openSettings} variant="default" size="small">
                     <GearIcon /> Options
                 </Button>
-            </div>
-        </Flex>
+            </Box>
+        </Box>
     );
 };
