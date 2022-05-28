@@ -2,7 +2,7 @@ import { Gitlab } from '@gitbeaker/browser';
 import { FailFetchSettings, GitLabTokenNotSet, GitLabAddressNotSet } from '../errors';
 import { GetSettingsResponse, GitlabAPI } from '../types';
 
-export const initGitlabApi = async (settings: GetSettingsResponse): Promise<GitlabAPI> => {
+export const initGitlabApi = (settings: GetSettingsResponse): GitlabAPI => {
     if (!settings) {
         throw new FailFetchSettings();
     }
@@ -17,6 +17,7 @@ export const initGitlabApi = async (settings: GetSettingsResponse): Promise<Gitl
 
     return new Gitlab({
         host: settings.address,
-        token: settings.token
+        token: settings.token,
+        requestTimeout: 10000
     });
 };

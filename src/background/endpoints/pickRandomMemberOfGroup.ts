@@ -4,6 +4,6 @@ import { initGitlabApi } from '../utils/initGitlabApi';
 
 export const pickRandomMemberOfGroup = async (groupId: number): Promise<GitlabTypes.UserSchema[]> => {
     const settings = await getSettings();
-    const gitlabApi = await initGitlabApi(settings);
+    const gitlabApi = initGitlabApi(settings);
     return await gitlabApi.GroupMembers.all(groupId);
 };

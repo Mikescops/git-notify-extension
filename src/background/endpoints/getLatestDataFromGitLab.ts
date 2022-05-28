@@ -10,8 +10,9 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
     console.log('>> POLLING GITLAB API');
 
     const settings = await getSettings();
-    const gitlabApi = await initGitlabApi(settings);
+    const gitlabApi = initGitlabApi(settings);
     const currentUser = await gitlabApi.Users.current();
+
     const mrAssigned = await gitlabApi.MergeRequests.all({
         state: 'opened',
         scope: 'assigned_to_me'
@@ -88,8 +89,6 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         badgeColor = '#1f78d1'; // blue
     }
 
-    setBadge(badgeText.length > 0 ? badgeText.join('⋅') : '', badgeColor);
-
     // Save the fetched data
 
     const lastUpdateDateUnix = new Date().getTime();
@@ -103,6 +102,8 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         todos,
         lastUpdateDateUnix
     });
+
+    setBadge(badgeText.length > 0 ? badgeText.join('⋅') : '', badgeColor);
 
     return console.log('API Fetched successfully');
 };

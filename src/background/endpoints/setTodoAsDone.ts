@@ -5,7 +5,7 @@ import { initGitlabApi } from '../utils/initGitlabApi';
 
 export const setTodoAsDone = async (id: number | undefined): Promise<void> => {
     const settings = await getSettings();
-    const gitlabApi = await initGitlabApi(settings);
+    const gitlabApi = initGitlabApi(settings);
 
     await gitlabApi.Todos.done({ todoId: id });
 
