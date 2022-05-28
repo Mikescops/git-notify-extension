@@ -1,7 +1,19 @@
 import * as browser from 'webextension-polyfill';
 import React, { useState, useCallback, useEffect } from 'react';
-import { Button, TextInput, Text, Tooltip, StyledOcticon, Link, FormControl, ThemeProvider } from '@primer/react';
-import { KeyIcon, ServerIcon, PackageDependenciesIcon, CheckIcon, InfoIcon } from '@primer/octicons-react';
+import {
+    Button,
+    Box,
+    Checkbox,
+    TextInput,
+    Text,
+    Tooltip,
+    StyledOcticon,
+    Link,
+    FormControl,
+    Select,
+    ThemeProvider
+} from '@primer/react';
+import { KeyIcon, ServerIcon, PackageDependenciesIcon, CheckIcon, InfoIcon, ClockIcon } from '@primer/octicons-react';
 import './style.css';
 
 const getSettings = browser.storage.local.get([
@@ -98,131 +110,136 @@ const App = () => {
 
     return (
         <ThemeProvider>
-            <FormControl>
-                <FormControl.Label>Using GitLab Community Edition? (approvals are a premium feature)</FormControl.Label>
-                <label>
-                    <input
+            <Box display="grid" gridGap={3} sx={{ width: 500, p: 2, pl: 4, pr: 6 }}>
+                <FormControl>
+                    <FormControl.Label>Using GitLab Community Edition</FormControl.Label>
+                    <Checkbox
                         type="checkbox"
                         name="gitlabCE"
                         value="GitLab CE Mode"
                         onChange={updateGitlabCE}
                         checked={gitlabCE ? true : false}
-                    />{' '}
-                    GitLab CE Mode
-                </label>
-            </FormControl>
-            <FormControl>
-                <FormControl.Label>
-                    Personal GitLab Token{' '}
-                    <Link href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html" target="_blank">
-                        <Tooltip
-                            wrap={true}
-                            aria-label="Click to open GitLab documentation.
-                    The extension requires 'api' + 'read_user' rights."
+                    />
+                    <FormControl.Caption>(approvals are a premium feature)</FormControl.Caption>
+                </FormControl>
+                <FormControl>
+                    <FormControl.Label>
+                        Personal GitLab Token{' '}
+                        <Link
+                            href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html"
+                            target="_blank"
                         >
+                            <Tooltip
+                                wrap={true}
+                                aria-label="Click to open GitLab documentation.
+                    The extension requires 'api' + 'read_user' rights."
+                            >
+                                <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
+                            </Tooltip>
+                        </Link>
+                    </FormControl.Label>
+                    <TextInput
+                        leadingVisual={KeyIcon}
+                        block
+                        variant={'small'}
+                        name="gitlab-token"
+                        value={gitlabToken}
+                        placeholder="<your_token_here>"
+                        onChange={updateGitlabToken}
+                        aria-label="gitlab-token"
+                    />{' '}
+                    {isGitlabTokenInLocalStorage ? <CheckIcon /> : ''}
+                </FormControl>
+                <FormControl>
+                    <FormControl.Label>
+                        GitLab Host Address{' '}
+                        <Tooltip aria-label="Example: https://gitlab.com">
                             <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
                         </Tooltip>
-                    </Link>
-                </FormControl.Label>
-                <TextInput
-                    icon={KeyIcon as any}
-                    variant={'small'}
-                    name="gitlab-token"
-                    value={gitlabToken}
-                    placeholder="<your_token_here>"
-                    onChange={updateGitlabToken}
-                    aria-label="gitlab-token"
-                />{' '}
-                {isGitlabTokenInLocalStorage ? <CheckIcon /> : ''}
-            </FormControl>
-            <FormControl>
-                <FormControl.Label>
-                    GitLab Host Address{' '}
-                    <Tooltip aria-label="Example: https://gitlab.com">
-                        <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
-                    </Tooltip>
-                </FormControl.Label>
-                <TextInput
-                    icon={ServerIcon as any}
-                    variant={'small'}
-                    name="gitlab-address"
-                    value={gitlabAddress}
-                    placeholder="<host_address_here>"
-                    onChange={updateGitlabAddress}
-                    aria-label="gitlab-address"
-                />{' '}
-                {isGitlabAddressInLocalStorage ? <CheckIcon /> : ''}
-            </FormControl>
-            <FormControl>
-                <FormControl.Label>
-                    Refresh rate in seconds{' '}
-                    <Tooltip aria-label="It is not recommended to go below 30 seconds.">
-                        <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
-                    </Tooltip>
-                </FormControl.Label>
-                <input
-                    type="number"
-                    name="refreshRate"
-                    min="20"
-                    value={refreshRate}
-                    placeholder="0"
-                    onChange={updateRefreshRate}
-                />{' '}
-                {isRefreshRateInLocalStorage ? <CheckIcon /> : ''}
-            </FormControl>
-            <FormControl>
-                <FormControl.Label>Default tab</FormControl.Label>
-                <select name="default-tab" onChange={updateDefaultTab}>
-                    <option selected={defaultTab === 0} value="0">
-                        To Review
-                    </option>
-                    <option selected={defaultTab === 1} value="1">
-                        Under Review
-                    </option>
-                    <option selected={defaultTab === 2} value="2">
-                        Issues
-                    </option>
-                    <option selected={defaultTab === 3} value="3">
-                        To-Do List
-                    </option>
-                </select>
-            </FormControl>
-            <FormControl>
-                <FormControl.Label>
-                    Alert badge counters{' '}
-                    <Tooltip aria-label="You can select multiple counters but display might be too small.">
-                        <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
-                    </Tooltip>
-                </FormControl.Label>
-                <select name="alert-badge-counters" multiple onChange={updateAlertBadgeCounters}>
-                    <option selected={alertBadgeCounters.includes(0)} value="0">
-                        To Review
-                    </option>
-                    <option selected={alertBadgeCounters.includes(1)} value="1">
-                        Reviewed by others
-                    </option>
-                    <option selected={alertBadgeCounters.includes(2)} value="2">
-                        Issues
-                    </option>
-                    <option selected={alertBadgeCounters.includes(3)} value="3">
-                        To-Do List
-                    </option>
-                </select>
-            </FormControl>
-            <hr />
-            <div>
-                <Button onClick={testConnection} variant="default">
-                    <PackageDependenciesIcon /> Test my settings
-                </Button>
-                <Text
-                    as="span"
-                    opacity={testSuccess === null ? 0 : 100}
-                    color={testSuccess === true ? 'green.6' : 'red.6'}
-                >
-                    {' '}
-                    {testSuccess === true ? 'Success' : 'Could not connect'}
-                </Text>
-            </div>
+                    </FormControl.Label>
+                    <TextInput
+                        leadingVisual={ServerIcon}
+                        block
+                        variant={'small'}
+                        name="gitlab-address"
+                        value={gitlabAddress}
+                        placeholder="<host_address_here>"
+                        onChange={updateGitlabAddress}
+                        aria-label="gitlab-address"
+                    />{' '}
+                    {isGitlabAddressInLocalStorage ? <CheckIcon /> : ''}
+                </FormControl>
+                <FormControl>
+                    <FormControl.Label>
+                        Refresh rate in seconds{' '}
+                        <Tooltip aria-label="It is not recommended to go below 30 seconds.">
+                            <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
+                        </Tooltip>
+                    </FormControl.Label>
+                    <TextInput
+                        leadingVisual={ClockIcon}
+                        block
+                        type="number"
+                        name="refreshRate"
+                        min="20"
+                        value={refreshRate}
+                        placeholder="0"
+                        onChange={updateRefreshRate}
+                    />{' '}
+                    {isRefreshRateInLocalStorage ? <CheckIcon /> : ''}
+                </FormControl>
+                <FormControl>
+                    <FormControl.Label>Default tab</FormControl.Label>
+                    <Select name="default-tab" onChange={updateDefaultTab}>
+                        <Select.Option selected={defaultTab === 0} value="0">
+                            To Review
+                        </Select.Option>
+                        <Select.Option selected={defaultTab === 1} value="1">
+                            Under Review
+                        </Select.Option>
+                        <Select.Option selected={defaultTab === 2} value="2">
+                            Issues
+                        </Select.Option>
+                        <Select.Option selected={defaultTab === 3} value="3">
+                            To-Do List
+                        </Select.Option>
+                    </Select>
+                </FormControl>
+                <FormControl>
+                    <FormControl.Label>
+                        Alert badge counters{' '}
+                        <Tooltip aria-label="You can select multiple counters but display might be too small.">
+                            <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
+                        </Tooltip>
+                    </FormControl.Label>
+                    <select name="alert-badge-counters" multiple onChange={updateAlertBadgeCounters}>
+                        <option selected={alertBadgeCounters.includes(0)} value="0">
+                            To Review
+                        </option>
+                        <option selected={alertBadgeCounters.includes(1)} value="1">
+                            Reviewed by others
+                        </option>
+                        <option selected={alertBadgeCounters.includes(2)} value="2">
+                            Issues
+                        </option>
+                        <option selected={alertBadgeCounters.includes(3)} value="3">
+                            To-Do List
+                        </option>
+                    </select>
+                </FormControl>
+
+                <>
+                    <Button onClick={testConnection} block variant="default">
+                        <PackageDependenciesIcon /> Test my settings
+                    </Button>
+                    <Text
+                        opacity={testSuccess === null ? 0 : 100}
+                        sx={{ color: testSuccess === true ? '#28a745' : '#dc3545', fontSize: 18, textAlign: 'center' }}
+                    >
+                        {testSuccess === true ? 'Success' : 'Could not connect'}
+                    </Text>
+                </>
+            </Box>
         </ThemeProvider>
     );
 };
