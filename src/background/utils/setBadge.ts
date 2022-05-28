@@ -1,10 +1,7 @@
-import { browser } from 'webextension-polyfill-ts';
+import * as browser from 'webextension-polyfill';
 
 export const setBadge = (text: string, color: string) => {
-    let action = browser.browserAction;
-    if (browser.action) {
-        action = browser.action;
-    }
+    const action = browser.action || browser.browserAction;
 
     action.setBadgeText({
         text

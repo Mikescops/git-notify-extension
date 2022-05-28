@@ -1,4 +1,4 @@
-import { browser } from 'webextension-polyfill-ts';
+import * as browser from 'webextension-polyfill';
 import { getLatestDataFromGitLab, getLocalData, setTodoAsDone } from './endpoints';
 import { getProjectsList } from './endpoints/getProjectsList';
 import { pickRandomMemberOfGroup } from './endpoints/pickRandomMemberOfGroup';

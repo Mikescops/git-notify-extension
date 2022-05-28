@@ -1,4 +1,4 @@
-import { browser } from 'webextension-polyfill-ts';
+import * as browser from 'webextension-polyfill';
 import { MergeRequestsDetails, GitlabTypes } from '../../background/types';
 
 const REQUEST_TYPE_GET_LOCAL_DATA = 'getLocalData';

@@ -22,7 +22,6 @@
     "last 2 Firefox versions"
   ],
   "dependencies": {
-    "6d": "^1.0.63",
     "@gitbeaker/browser": "^35.6.0",
     "@primer/octicons-react": "^17.2.0",
     "@primer/react": "^35.2.2"
@@ -34,30 +33,25 @@
     "@neutrinojs/style-loader": "^9.5.0",
     "@types/react-dom": "^18.0.5",
     "@types/styled-components": "^5.1.25",
+    "@types/webextension-polyfill": "^0.8.3",
     "@typescript-eslint/eslint-plugin": "^5.26.0",
     "@typescript-eslint/parser": "^5.26.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-compat": "^4.0.2",
-    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.5.0",
-    "json-schema": "^0.4.0",
     "neutrino": "^9.5.0",
     "neutrino-webextension": "^1.2.2",
     "neutrinojs-typescript": "^1.1.6",
     "prettier": "^2.6.2",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "react-hot-loader": "^4.13.0",
-    "sinon-chrome": "^3.0.1",
     "styled-components": "^5.3.5",
     "typescript": "^4.7.2",
     "webextension-polyfill": "^0.9.0",
-    "webextension-polyfill-ts": "^0.26.0",
     "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-cli": "^3.3.12"
   },
   "engines": {
     "node": "14.x.x",

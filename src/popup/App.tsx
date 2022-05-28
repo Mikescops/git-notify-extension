@@ -1,5 +1,4 @@
-import { hot } from 'react-hot-loader';
-import { browser } from 'webextension-polyfill-ts';
+import * as browser from 'webextension-polyfill';
 import React, { useState, useCallback, useEffect } from 'react';
 import { ThemeProvider } from '@primer/react';
 import { Nav } from './components/Nav';
@@ -82,4 +81,4 @@ const App = () => {
     );
 };
 
-export default hot(module)(App);
+export default App;

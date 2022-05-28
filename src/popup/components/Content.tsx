@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { browser } from 'webextension-polyfill-ts';
+import * as browser from 'webextension-polyfill';
 import { Flash, FilterList, Button } from '@primer/react';
 import { CheckIcon } from '@primer/octicons-react';
 

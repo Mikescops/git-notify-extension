@@ -1,4 +1,4 @@
-import { browser } from 'webextension-polyfill-ts';
+import * as browser from 'webextension-polyfill';
 
 export const getLocalData = async (global_error: Error | null) => {
     if (global_error) {

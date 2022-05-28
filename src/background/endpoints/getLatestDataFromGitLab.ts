@@ -1,4 +1,4 @@
-import { browser } from 'webextension-polyfill-ts';
+import * as browser from 'webextension-polyfill';
 import { getSettings } from '../utils/getSettings';
 import { fetchMRExtraInfo } from '../utils/fetchMRExtraInfo';
 import { setBadge } from '../utils/setBadge';
