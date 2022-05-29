@@ -24,7 +24,7 @@ export const Nav = (props: Props) => {
                 className={currentTab === 0 ? 'selected' : ''}
             >
                 To Review{' '}
-                <Label size="small" sx={{ bg: '#dc3545', color: '#fff' }}>
+                <Label size="small" sx={{ bg: '#dc3545', color: 'canvas.default' }}>
                     {mrData ? mrData.mrToReview : 0}
                 </Label>
             </TabNav.Link>
@@ -35,7 +35,7 @@ export const Nav = (props: Props) => {
             >
                 Under Review{' '}
                 <Tooltip aria-label={`${mrDataReviewRatio}  have been reviewed`} direction="s">
-                    <Label size="small" sx={{ bg: '#28a745', color: '#fff' }}>
+                    <Label size="small" sx={{ bg: '#28a745', color: 'canvas.default' }}>
                         {mrData ? mrDataReviewRatio : 0}
                     </Label>
                 </Tooltip>
@@ -43,7 +43,7 @@ export const Nav = (props: Props) => {
             <TabNav.Link href="#Issues" onClick={() => setCurrentTab(2)} className={currentTab === 2 ? 'selected' : ''}>
                 Issues{' '}
                 <Tooltip aria-label={`${issuesAssignedNumber}  are assigned to you`} direction="s">
-                    <Label size="small" sx={{ bg: '#fd7e14', color: '#fff' }}>
+                    <Label size="small" sx={{ bg: '#fd7e14', color: 'canvas.default' }}>
                         {issuesAssignedNumber}
                     </Label>
                 </Tooltip>
@@ -54,7 +54,7 @@ export const Nav = (props: Props) => {
                 className={currentTab === 3 ? 'selected' : ''}
             >
                 To-Do List{' '}
-                <Label size="small" sx={{ bg: '#1f78d1', color: '#fff' }}>
+                <Label size="small" sx={{ bg: '#1f78d1', color: 'canvas.default' }}>
                     {mrData?.todos ? mrData.todos.length : 0}
                 </Label>
             </TabNav.Link>

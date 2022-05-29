@@ -15,6 +15,7 @@ import {
 } from '@primer/react';
 import { KeyIcon, ServerIcon, PackageDependenciesIcon, CheckIcon, InfoIcon, ClockIcon } from '@primer/octicons-react';
 import './style.css';
+import { updateConfiguration } from './utils/updateConfiguration';
 
 const getSettings = browser.storage.local.get([
     'gitlabCE',
@@ -39,69 +40,56 @@ const App = () => {
 
     useEffect(() => {
         getSettings.then((settings) => {
-            setGitlabCE(settings.gitlabCE ? settings.gitlabCE : false);
+            setGitlabCE(settings.gitlabCE ?? false);
 
-            setGitlabToken(settings.gitlabToken ? settings.gitlabToken : '');
+            setGitlabToken(settings.gitlabToken ?? '');
             setIsGitlabTokenInLocalStorage(settings.gitlabToken);
 
-            setGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : '');
+            setGitlabAddress(settings.gitlabAddress ?? '');
             setIsGitlabAddressInLocalStorage(settings.gitlabAddress);
 
-            setRefreshRate(settings.refreshRate ? settings.refreshRate : 40);
+            setRefreshRate(settings.refreshRate ?? 40);
             setIsRefreshRateInLocalStorage(settings.refreshRate);
 
-            setDefaultTab(settings.defaultTab ? settings.defaultTab : 0);
+            setDefaultTab(settings.defaultTab ?? 0);
 
             setAlertBadgeCounters(settings.alertBadgeCounters ? Array.from(settings.alertBadgeCounters) : []);
         });
     }, []);
 
-    const updateGitlabCE = (event: any) => {
+    const updateGitlabCE = async (event: any) => {
         setGitlabCE(event.target.checked);
-        browser.storage.local.set({ gitlabCE: event.target.checked }).then(() => {
-            console.log('Configuration Updated');
-        });
+        await updateConfiguration({ gitlabCE: event.target.checked });
     };
 
-    const updateGitlabToken = (event: any) => {
+    const updateGitlabToken = async (event: any) => {
         setGitlabToken(event.target.value);
-        browser.storage.local.set({ gitlabToken: event.target.value }).then(() => {
-            console.log('Configuration Updated');
-            setIsGitlabTokenInLocalStorage(true);
-        });
+        await updateConfiguration({ gitlabToken: event.target.value });
+        setIsGitlabTokenInLocalStorage(true);
     };
 
-    const updateGitlabAddress = (event: any) => {
+    const updateGitlabAddress = async (event: any) => {
         setGitlabAddress(event.target.value);
-        browser.storage.local.set({ gitlabAddress: event.target.value }).then(() => {
-            console.log('Configuration Updated');
-            setIsGitlabAddressInLocalStorage(true);
-        });
+        await updateConfiguration({ gitlabAddress: event.target.value });
+        setIsGitlabAddressInLocalStorage(true);
     };
 
-    const updateRefreshRate = (event: any) => {
+    const updateRefreshRate = async (event: any) => {
         setRefreshRate(event.target.value);
-        browser.storage.local.set({ refreshRate: parseInt(event.target.value) }).then(() => {
-            console.log('Configuration Updated');
-            setIsRefreshRateInLocalStorage(true);
-        });
-        browser.runtime.sendMessage({ type: 'updateRefreshRate', interval: event.target.value }).then();
+        await updateConfiguration({ refreshRate: parseInt(event.target.value) });
+        setIsRefreshRateInLocalStorage(true);
+        await browser.runtime.sendMessage({ type: 'updateRefreshRate', interval: event.target.value });
     };
 
-    const updateDefaultTab = (event: any) => {
+    const updateDefaultTab = async (event: any) => {
         setDefaultTab(event.target.value);
-        browser.storage.local.set({ defaultTab: parseInt(event.target.value) }).then(() => {
-            console.log('Configuration Updated');
-        });
+        await updateConfiguration({ defaultTab: parseInt(event.target.value) });
     };
 
-    const updateAlertBadgeCounters = (event: any) => {
+    const updateAlertBadgeCounters = async (event: any) => {
         const options = [...event.target.selectedOptions].map((option) => parseInt(option.value));
         setAlertBadgeCounters(options);
-        console.log(options);
-        browser.storage.local.set({ alertBadgeCounters: options }).then(() => {
-            console.log('Configuration Updated');
-        });
+        await updateConfiguration({ alertBadgeCounters: options });
     };
 
     const testConnection = useCallback(() => {
@@ -109,7 +97,7 @@ const App = () => {
     }, []);
 
     return (
-        <ThemeProvider>
+        <ThemeProvider colorMode="auto">
             <Box display="grid" gridGap={3} sx={{ width: 500, p: 2, pl: 4, pr: 6 }}>
                 <FormControl>
                     <FormControl.Label>Using GitLab Community Edition</FormControl.Label>
@@ -140,6 +128,7 @@ const App = () => {
                     </FormControl.Label>
                     <TextInput
                         leadingVisual={KeyIcon}
+                        trailingVisual={isGitlabTokenInLocalStorage ? CheckIcon : undefined}
                         block
                         variant={'small'}
                         name="gitlab-token"
@@ -147,8 +136,7 @@ const App = () => {
                         placeholder="<your_token_here>"
                         onChange={updateGitlabToken}
                         aria-label="gitlab-token"
-                    />{' '}
-                    {isGitlabTokenInLocalStorage ? <CheckIcon /> : ''}
+                    />
                 </FormControl>
                 <FormControl>
                     <FormControl.Label>
@@ -159,6 +147,7 @@ const App = () => {
                     </FormControl.Label>
                     <TextInput
                         leadingVisual={ServerIcon}
+                        trailingVisual={isGitlabAddressInLocalStorage ? CheckIcon : undefined}
                         block
                         variant={'small'}
                         name="gitlab-address"
@@ -166,8 +155,7 @@ const App = () => {
                         placeholder="<host_address_here>"
                         onChange={updateGitlabAddress}
                         aria-label="gitlab-address"
-                    />{' '}
-                    {isGitlabAddressInLocalStorage ? <CheckIcon /> : ''}
+                    />
                 </FormControl>
                 <FormControl>
                     <FormControl.Label>
@@ -178,6 +166,7 @@ const App = () => {
                     </FormControl.Label>
                     <TextInput
                         leadingVisual={ClockIcon}
+                        trailingVisual={isRefreshRateInLocalStorage ? CheckIcon : undefined}
                         block
                         type="number"
                         name="refreshRate"
@@ -185,8 +174,7 @@ const App = () => {
                         value={refreshRate}
                         placeholder="0"
                         onChange={updateRefreshRate}
-                    />{' '}
-                    {isRefreshRateInLocalStorage ? <CheckIcon /> : ''}
+                    />
                 </FormControl>
                 <FormControl>
                     <FormControl.Label>Default tab</FormControl.Label>
@@ -234,7 +222,11 @@ const App = () => {
                     </Button>
                     <Text
                         opacity={testSuccess === null ? 0 : 100}
-                        sx={{ color: testSuccess === true ? '#28a745' : '#dc3545', fontSize: 18, textAlign: 'center' }}
+                        sx={{
+                            color: testSuccess === true ? 'success.fg' : 'danger.fg',
+                            fontSize: 18,
+                            textAlign: 'center'
+                        }}
                     >
                         {testSuccess === true ? 'Success' : 'Could not connect'}
                     </Text>
