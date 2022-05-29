@@ -2,9 +2,7 @@ import * as browser from 'webextension-polyfill';
 import { getLatestDataFromGitLab, getLocalData, setTodoAsDone } from './endpoints';
 import { getProjectsList } from './endpoints/getProjectsList';
 import { pickRandomMemberOfGroup } from './endpoints/pickRandomMemberOfGroup';
-import { setBadge } from './utils/setBadge';
-
-let ERROR_TRACKER: Error | null;
+import { setGlobalError } from './utils/globalError';
 
 console.log('background script loaded');
 
@@ -17,11 +15,10 @@ browser.storage.local.get(['refreshRate']).then((settings) => {
     browser.alarms.onAlarm.addListener(async () => {
         try {
             await getLatestDataFromGitLab();
-            ERROR_TRACKER = null;
+            await setGlobalError(null);
         } catch (error) {
             if (error instanceof Error) {
-                ERROR_TRACKER = error;
-                setBadge('Error', 'red');
+                await setGlobalError(error);
             }
         }
         console.log('Next refresh in', time);
@@ -32,19 +29,18 @@ browser.storage.local.get(['refreshRate']).then((settings) => {
 
 browser.runtime.onMessage.addListener((message) => {
     if (message.type === 'getLocalData') {
-        return getLocalData(ERROR_TRACKER);
+        return getLocalData();
     }
 
     if (message.type === 'getLatestDataFromGitLab') {
         return new Promise(async (resolve) => {
             try {
                 await getLatestDataFromGitLab();
-                ERROR_TRACKER = null;
+                await setGlobalError(null);
                 resolve(true);
             } catch (error) {
                 if (error instanceof Error) {
-                    ERROR_TRACKER = error;
-                    setBadge('Error', 'red');
+                    await setGlobalError(error);
                 }
                 resolve(false);
             }

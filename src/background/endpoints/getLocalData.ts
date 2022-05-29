@@ -1,8 +1,11 @@
 import * as browser from 'webextension-polyfill';
+import { getGlobalError } from '../utils/globalError';
 
-export const getLocalData = async (global_error: Error | null) => {
-    if (global_error) {
-        return Promise.resolve({ error: global_error.message });
+export const getLocalData = async () => {
+    const globalError = await getGlobalError();
+
+    if (globalError) {
+        return Promise.resolve({ error: globalError });
     }
 
     return await browser.storage.local.get([
