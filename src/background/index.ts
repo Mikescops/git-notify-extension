@@ -1,7 +1,7 @@
 import * as browser from 'webextension-polyfill';
 import { getLatestDataFromGitLab, getLocalData, setTodoAsDone } from './endpoints';
 import { getProjectsList } from './endpoints/getProjectsList';
-import { pickRandomMemberOfGroup } from './endpoints/pickRandomMemberOfGroup';
+import { getMembersOfGroup } from './endpoints/getMembersOfGroup';
 import { setGlobalError } from './utils/globalError';
 
 console.log('background script loaded');
@@ -55,8 +55,8 @@ browser.runtime.onMessage.addListener((message) => {
         return getProjectsList();
     }
 
-    if (message.type === 'pickRandomMemberOfGroup') {
-        return pickRandomMemberOfGroup(message.groupId);
+    if (message.type === 'getMembersOfGroup') {
+        return getMembersOfGroup(message.groupId);
     }
 
     if (message.type === 'updateRefreshRate') {

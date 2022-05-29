@@ -33,7 +33,7 @@ export const PickReviewer = () => {
     const getMembersOfGroup = useCallback((groupIds) => {
         const selectedGroup = groupIds[0].id;
         browser.runtime
-            .sendMessage({ type: 'pickRandomMemberOfGroup', groupId: selectedGroup })
+            .sendMessage({ type: 'getMembersOfGroup', groupId: selectedGroup })
             .then((response) => {
                 setMembersOfGroup(response);
                 pickSomeone(response);
