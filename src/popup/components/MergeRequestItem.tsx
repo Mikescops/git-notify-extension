@@ -59,7 +59,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         href={mr.web_url}
                         className={'mrTitle'}
                         target="_blank"
-                        sx={{ color: mr.approvals.approved ? '#0b7f26' : '#000' }}
+                        sx={{ color: mr.approvals.approved ? 'success.fg' : 'fg.default' }}
                         title={`${mr.title} - ${author.name}\n${mr.description}`}
                     >
                         {mr.title}
@@ -90,7 +90,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         {mr.merge_status === 'can_be_merged' && mr.approvals.approved ? (
                             <Label
                                 size="small"
-                                sx={{ color: '#fff', bg: '#28a745' }}
+                                sx={{ color: 'canvas.default', bg: 'success.emphasis' }}
                                 className={'mrLabel'}
                                 title="Approved and can be merged!"
                             >
@@ -100,7 +100,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         {mr.merge_status !== 'can_be_merged' && mr.approvals.approved ? (
                             <Label
                                 size="small"
-                                sx={{ color: '#fff', bg: '#fd7e14' }}
+                                sx={{ color: 'canvas.default', bg: 'attention.emphasis' }}
                                 className={'mrLabel'}
                                 title="Approved but you may need to rebase before merging."
                             >
@@ -110,17 +110,25 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         {mr.merge_status !== 'can_be_merged' && !mr.approvals.approved ? (
                             <Label
                                 size="small"
-                                sx={{ color: '#fff', bg: '#dc3545' }}
+                                sx={{ color: 'canvas.default', bg: 'danger.emphasis' }}
                                 className={'mrLabel'}
                                 title="Cannot be merged, you may need to rebase first."
                             >
                                 <IssueOpenedIcon />
                             </Label>
                         ) : null}
-                        <Label size="small" sx={{ color: '#000', bg: '#fff' }} className={'mrLabel'}>
+                        <Label
+                            size="small"
+                            sx={{ color: 'neutral.emphasis', bg: 'canvas.default' }}
+                            className={'mrLabel'}
+                        >
                             <CommentDiscussionIcon /> &#160;{mr.user_notes_count}
                         </Label>
-                        <Label size="small" sx={{ color: '#8e8e8e', bg: '#fff' }} className={'mrLabel'}>
+                        <Label
+                            size="small"
+                            sx={{ color: 'neutral.emphasis', bg: 'canvas.default' }}
+                            className={'mrLabel'}
+                        >
                             <ClockIcon /> &#160;{timeElapsed}
                         </Label>
                     </div>

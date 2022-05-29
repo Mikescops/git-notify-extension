@@ -1,5 +1,5 @@
 body {
-    background: #fafbfc;
+    background: transparent;
     font-family: Arial;
 }
 
@@ -12,11 +12,11 @@ body {
 }
 
 .subNav {
-    background: white;
+    background: transparent;
     /* border-color matches TabNav lib */
-    border-right: 1px solid rgb(225, 228, 232);
-    border-bottom: 1px solid rgb(225, 228, 232);
-    border-left: 1px solid rgb(225, 228, 232);
+    border-right: 1px solid rgba(225, 228, 232, 0.5);
+    border-bottom: 1px solid rgba(225, 228, 232, 0.5);
+    border-left: 1px solid rgba(225, 228, 232, 0.5);
     display: flex;
     justify-content: space-between;
     padding: 8px;
@@ -28,11 +28,11 @@ body {
 }
 
 .mrList {
-    background: white;
+    background: transparent;
     /* border-color matches TabNav lib */
-    border-right: 1px solid rgb(225, 228, 232);
-    border-bottom: 1px solid rgb(225, 228, 232);
-    border-left: 1px solid rgb(225, 228, 232);
+    border-right: 1px solid rgba(225, 228, 232, 0.5);
+    border-bottom: 1px solid rgba(225, 228, 232, 0.5);
+    border-left: 1px solid rgba(225, 228, 232, 0.5);
     overflow: auto;
     /* This is a fix for Chrome */
     overflow: overlay;
@@ -66,7 +66,7 @@ body {
 .mrLabel {
     margin-right: 4px;
     overflow: auto;
-    border: #eaeaea;
+    border: var(--color-border-subtle);
 }
 
 .mrApproved {
@@ -104,13 +104,13 @@ body {
     height: 20px;
     text-align: center;
     border-radius: 50%;
-    color: #fff;
-    background-color: forestgreen;
+    color: rgb(255, 255, 255);
+    background-color: rgb(34, 139, 34);
 }
 
 .moreAssigneesIcon {
     display: inline-block;
-    background: #ddd;
+    background: rgb(221, 221, 221);
     max-height: 40px;
     vertical-align: middle;
     text-align: center;
@@ -120,7 +120,7 @@ body {
 }
 
 .moreAssigneesIcon:hover {
-    background: #ccc;
+    background: rgb(204, 204, 204);
 }
 
 .emptyInbox {

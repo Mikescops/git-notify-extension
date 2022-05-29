@@ -56,7 +56,7 @@ export const TodoItem = ({ todo }: Props) => {
                         <Text className={'todoBody'} title={todo.body}>
                             &#34;{todo.body}&#34;
                         </Text>
-                        <Label size="small" color="#8e8e8e" className={'mrLabel'}>
+                        <Label size="small" sx={{ color: 'neutral.emphasis' }} className={'mrLabel'}>
                             <ClockIcon /> &#160;{timeElapsed}
                         </Label>
                     </div>

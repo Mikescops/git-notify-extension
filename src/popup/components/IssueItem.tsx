@@ -30,7 +30,7 @@ export const IssueItem = ({ issue }: Props) => {
                         href={issue.web_url}
                         className={'mrTitle'}
                         target="_blank"
-                        sx={{ color: '#000' }}
+                        sx={{ color: 'fg.default' }}
                         title={`${issue.title} - ${author.name}\n${issue.description}`}
                     >
                         {issue.title}
@@ -42,10 +42,18 @@ export const IssueItem = ({ issue }: Props) => {
                         <BranchName as={Button} sx={{ mr: 2 }} className={'mrBranchName'}>
                             <RepoIcon /> {issue.references.full}
                         </BranchName>
-                        <Label size="small" sx={{ color: '#000', bg: '#fff' }} className={'mrLabel'}>
+                        <Label
+                            size="small"
+                            sx={{ color: 'neutral.emphasis', bg: 'canvas.default' }}
+                            className={'mrLabel'}
+                        >
                             <CommentDiscussionIcon /> {issue.user_notes_count}
                         </Label>
-                        <Label size="small" sx={{ color: '#8e8e8e', bg: '#fff' }} className={'mrLabel'}>
+                        <Label
+                            size="small"
+                            sx={{ color: 'neutral.emphasis', bg: 'canvas.default' }}
+                            className={'mrLabel'}
+                        >
                             <ClockIcon /> &#160;{timeElapsed}
                         </Label>
                     </div>

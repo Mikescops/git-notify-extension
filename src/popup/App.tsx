@@ -1,6 +1,6 @@
 import * as browser from 'webextension-polyfill';
 import React, { useState, useCallback, useEffect } from 'react';
-import { ThemeProvider } from '@primer/react';
+import { ThemeProvider, Box } from '@primer/react';
 import { Nav } from './components/Nav';
 import { Content } from './components/Content';
 import { Footer } from './components/Footer';
@@ -67,8 +67,8 @@ const App = () => {
     useEffect(() => applySettings(), [applySettings]);
 
     return (
-        <ThemeProvider>
-            <div className={'container'}>
+        <ThemeProvider colorMode="auto">
+            <Box className={'container'}>
                 <Nav currentTab={currentTab} setCurrentTab={setCurrentTab} mrData={mrData} />
                 <Content
                     appStatus={appStatus}
@@ -84,7 +84,7 @@ const App = () => {
                     fetchData={fetchData}
                     gitlabAddress={gitlabAddress}
                 />
-            </div>
+            </Box>
         </ThemeProvider>
     );
 };

@@ -77,7 +77,7 @@ export const PickReviewer = () => {
             {selectedMember ? (
                 <Box display="flex" flexWrap="nowrap" sx={{ margin: 3, alignItems: 'baseline' }}>
                     <AvatarWithTooltip assignee={selectedMember} direction="e" size={60} />{' '}
-                    <Box sx={{ ml: 2, fontSize: 18 }}>
+                    <Box sx={{ ml: 2, fontSize: 18, color: 'fg.default' }}>
                         <strong>{selectedMember.name}</strong> has been chosen
                     </Box>
                 </Box>
