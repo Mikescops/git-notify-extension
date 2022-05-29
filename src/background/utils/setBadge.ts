@@ -1,12 +1,12 @@
 import * as browser from 'webextension-polyfill';
 
-export const setBadge = (text: string, color: string) => {
+export const setBadge = async (text: string, color: string) => {
     const action = browser.action || browser.browserAction;
 
-    action.setBadgeText({
+    await action.setBadgeText({
         text
     });
-    action.setBadgeBackgroundColor({
+    await action.setBadgeBackgroundColor({
         color
     });
     if (typeof action.setBadgeTextColor === 'function') {

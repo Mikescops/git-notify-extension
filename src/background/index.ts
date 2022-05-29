@@ -22,7 +22,7 @@ browser.storage.local.get(['refreshRate']).then((settings) => {
             }
         }
         console.log('Next refresh in', time);
-        browser.alarms.clear('fetchGitLab');
+        await browser.alarms.clear('fetchGitLab');
         browser.alarms.create('fetchGitLab', { when: Date.now() + time * 1000 });
     });
 });

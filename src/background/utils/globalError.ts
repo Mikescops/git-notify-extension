@@ -9,7 +9,7 @@ export const setGlobalError = async (error: Error | null) => {
             message: error.message,
             stack: error.stack
         };
-        setBadge('Error', 'red');
+        await setBadge('Error', 'red');
         return await browser.storage.local.set({ globalError: JSON.stringify(globalError) });
     }
     return await browser.storage.local.remove('globalError');

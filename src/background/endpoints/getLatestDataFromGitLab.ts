@@ -103,7 +103,7 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         lastUpdateDateUnix
     });
 
-    setBadge(badgeText.length > 0 ? badgeText.join('⋅') : '', badgeColor);
+    await setBadge(badgeText.length > 0 ? badgeText.join('⋅') : '', badgeColor);
 
     return console.log('API Fetched successfully');
 };
