@@ -3,7 +3,7 @@ import { Autocomplete, FormControl, Button, Box } from '@primer/react';
 import { SyncIcon } from '@primer/octicons-react';
 import * as browser from 'webextension-polyfill';
 import { GitlabTypes } from '../../background/types';
-import { AvatarWithTooltip } from './AvatarWithTooltip';
+import { AvatarWithTooltip } from '../components/AvatarWithTooltip';
 
 export const PickReviewer = () => {
     interface Group {
@@ -11,8 +11,8 @@ export const PickReviewer = () => {
         id: number;
     }
     const [value, setValue] = React.useState('');
-    const handleInputChange = (e: any) => {
-        setValue(e.currentTarget.value);
+    const handleInputChange = (event: any) => {
+        setValue(event.currentTarget.value);
     };
     const [groups, setGroupsList] = useState<Group[]>([]);
     const [membersOfGroup, setMembersOfGroup] = useState<GitlabTypes.UserSchema[]>([]);

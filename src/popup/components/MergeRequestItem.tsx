@@ -25,8 +25,8 @@ export const MergeRequestItem = ({ mr }: Props) => {
     const timeElapsed = calculateTimeElapsed(mr.created_at);
 
     const [copyBranchStatus, setCopyBranchStatus] = useState(false);
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text);
+    const copyToClipboard = async (text: string) => {
+        await navigator.clipboard.writeText(text);
         setCopyBranchStatus(true);
     };
 
@@ -82,7 +82,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                                 sx={{ mr: 2 }}
                                 className={'mrBranchName'}
                                 title={mr.source_branch}
-                                onClick={() => copyToClipboard(mr.source_branch)}
+                                onClick={async () => await copyToClipboard(mr.source_branch)}
                             >
                                 <GitMergeIcon /> {mr.references.full}
                             </BranchName>
