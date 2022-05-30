@@ -18,7 +18,7 @@ export const getMembersOfGroup = async (groupId: number): Promise<GroupMember[]>
     groupMergeRequests.forEach((mr) => {
         removeDuplicateObjectFromArray([...(mr.assignees ?? []), ...(mr.reviewers ?? [])], 'id').forEach((assignee) => {
             const userIndex = groupMembersWithCount.findIndex((user) => user.id === assignee.id);
-            if (userIndex !== -1) {
+            if (userIndex !== -1 && assignee.id !== mr.author.id) {
                 groupMembersWithCount[userIndex].mergeRequestsCount += 1;
             }
         });
