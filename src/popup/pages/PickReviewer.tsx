@@ -90,7 +90,9 @@ export const PickReviewer = () => {
                         <Text sx={{ fontSize: 18, color: 'fg.default' }}>
                             <strong>{selectedMember.name}</strong> has been chosen
                         </Text>
-                        <Text as="div">currently assigned to {selectedMember.mergeRequestsCount} opened PRs</Text>
+                        <Text as="div" sx={{ color: 'fg.default' }}>
+                            currently assigned to {selectedMember.mergeRequestsCount} opened PRs
+                        </Text>
                     </Box>
                 </Box>
             ) : null}
