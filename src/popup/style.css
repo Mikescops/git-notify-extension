@@ -1,10 +1,12 @@
 body {
-    background: transparent;
     font-family: Arial;
+    margin: 0;
 }
 
 .container {
     width: 700px;
+    padding: 8px;
+    border-radius: 2px;
 }
 
 .hidden {

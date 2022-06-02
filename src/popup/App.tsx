@@ -68,7 +68,7 @@ const App = () => {
 
     return (
         <ThemeProvider colorMode="auto">
-            <Box className={'container'}>
+            <Box className={'container'} sx={{ bg: 'canvas.default' }}>
                 <Nav currentTab={currentTab} setCurrentTab={setCurrentTab} mrData={mrData} />
                 <Content
                     appStatus={appStatus}

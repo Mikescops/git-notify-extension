@@ -26,3 +26,7 @@ export interface GetSettingsResponse {
     address: string;
     alertBadgeCounters: number[];
 }
+
+export interface GroupMember extends GitlabTypes.UserSchema {
+    mergeRequestsCount: number;
+}

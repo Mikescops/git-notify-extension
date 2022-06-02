@@ -98,7 +98,7 @@ const App = () => {
 
     return (
         <ThemeProvider colorMode="auto">
-            <Box display="grid" gridGap={3} sx={{ width: 500, p: 2, pl: 4, pr: 6 }}>
+            <Box display="grid" gridGap={3} sx={{ width: 500, p: 2, pl: 4, pr: 6, bg: 'canvas.default' }}>
                 <FormControl>
                     <FormControl.Label>Using GitLab Community Edition</FormControl.Label>
                     <Checkbox
