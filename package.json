@@ -1,6 +1,6 @@
 {
   "name": "gitlab-notify",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Don't miss any GitLab merge requests and rocket up your productivity.",
   "main": "index.js",
   "repository": "https://github.com/Mikescops/gitlab-notify-extension",
