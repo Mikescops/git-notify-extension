@@ -128,6 +128,7 @@ const App = () => {
                         </Link>
                     </FormControl.Label>
                     <TextInput
+                        type="password"
                         leadingVisual={KeyIcon}
                         trailingVisual={isGitlabTokenInLocalStorage ? CheckIcon : undefined}
                         block
