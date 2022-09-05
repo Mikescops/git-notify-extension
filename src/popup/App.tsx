@@ -1,10 +1,11 @@
-import * as browser from 'webextension-polyfill';
 import React, { useState, useCallback, useEffect } from 'react';
 import { ThemeProvider, Box } from '@primer/react';
 import { Nav } from './components/Nav';
 import { Content } from './components/Content';
 import { Footer } from './components/Footer';
 import { getMergeRequestList, MergeRequestSendMessageReply } from './utils/mergeRequestDownloader';
+import { TabId } from '../common/types';
+import { readConfiguration } from '../common/configuration';
 import { AppStatus } from './types';
 
 import './style.css';
@@ -23,11 +24,11 @@ const App = () => {
         lastUpdateDateUnix: Date.now()
     });
 
-    const [currentTab, setCurrentTab] = useState(0);
+    const [currentTab, setCurrentTab] = useState('to_review' as TabId);
     const [gitlabAddress, setGitlabAddress] = useState('');
 
     const applySettings = useCallback(() => {
-        const getSettings = browser.storage.local.get(['defaultTab', 'gitlabAddress']);
+        const getSettings = readConfiguration(['defaultTab', 'gitlabAddress']);
         getSettings.then((settings) => {
             setCurrentTab(settings.defaultTab ? settings.defaultTab : 0);
             setGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : 'https://gitlab.com');

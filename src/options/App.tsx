@@ -15,9 +15,10 @@ import {
 } from '@primer/react';
 import { KeyIcon, ServerIcon, PackageDependenciesIcon, CheckIcon, InfoIcon, ClockIcon } from '@primer/octicons-react';
 import './style.css';
-import { updateConfiguration } from './utils/updateConfiguration';
+import { updateConfiguration, readConfiguration } from '../common/configuration';
+import { TabId } from '../common/types';
 
-const getSettings = browser.storage.local.get([
+const getSettings = readConfiguration([
     'gitlabCE',
     'gitlabToken',
     'gitlabAddress',
@@ -31,7 +32,7 @@ const App = () => {
     const [gitlabToken, setGitlabToken] = useState('');
     const [gitlabAddress, setGitlabAddress] = useState('');
     const [refreshRate, setRefreshRate] = useState(40);
-    const [defaultTab, setDefaultTab] = useState(0);
+    const [defaultTab, setDefaultTab] = useState('to_review' as TabId);
     const [alertBadgeCounters, setAlertBadgeCounters] = useState([0]);
     const [testSuccess, setTestSuccess] = useState(null);
     const [isGitlabTokenInLocalStorage, setIsGitlabTokenInLocalStorage] = useState(false);
@@ -51,7 +52,7 @@ const App = () => {
             setRefreshRate(settings.refreshRate ?? 40);
             setIsRefreshRateInLocalStorage(settings.refreshRate);
 
-            setDefaultTab(settings.defaultTab ?? 0);
+            setDefaultTab(settings.defaultTab ?? 'to_review');
 
             setAlertBadgeCounters(settings.alertBadgeCounters ? Array.from(settings.alertBadgeCounters) : []);
         });
@@ -83,7 +84,7 @@ const App = () => {
 
     const updateDefaultTab = async (event: any) => {
         setDefaultTab(event.target.value);
-        await updateConfiguration({ defaultTab: parseInt(event.target.value) });
+        await updateConfiguration({ defaultTab: event.target.value });
     };
 
     const updateAlertBadgeCounters = async (event: any) => {
@@ -179,16 +180,16 @@ const App = () => {
                 <FormControl>
                     <FormControl.Label>Default tab</FormControl.Label>
                     <Select name="default-tab" onChange={updateDefaultTab}>
-                        <Select.Option selected={defaultTab === 0} value="0">
+                        <Select.Option selected={defaultTab === 'to_review'} value="to_review">
                             To Review
                         </Select.Option>
-                        <Select.Option selected={defaultTab === 1} value="1">
+                        <Select.Option selected={defaultTab === 'under_review'} value="under_review">
                             Under Review
                         </Select.Option>
-                        <Select.Option selected={defaultTab === 2} value="2">
+                        <Select.Option selected={defaultTab === 'issues'} value="issues">
                             Issues
                         </Select.Option>
-                        <Select.Option selected={defaultTab === 3} value="3">
+                        <Select.Option selected={defaultTab === 'todo_list'} value="todo_list">
                             To-Do List
                         </Select.Option>
                     </Select>
