@@ -14,7 +14,7 @@ export const Nav = (props: Props) => {
 
     const mrDataReviewRatio =
         mrData?.mrReviewed || mrData?.mrGiven ? `${mrData.mrReviewed} / ${mrData.mrGiven.length}` : 'Unknown';
-    const issuesAssignedNumber = mrData?.issuesAssigned ? mrData.issuesAssigned.length : 0;
+    const issuesCount = mrData?.issues ? mrData.issues.length : 0;
 
     return (
         <TabNav aria-label="Main" className={'navbarCategories'}>
@@ -42,9 +42,9 @@ export const Nav = (props: Props) => {
             </TabNav.Link>
             <TabNav.Link href="#Issues" onClick={() => setCurrentTab(2)} className={currentTab === 2 ? 'selected' : ''}>
                 Issues{' '}
-                <Tooltip aria-label={`${issuesAssignedNumber}  are assigned to you`} direction="s">
+                <Tooltip aria-label={`${issuesCount}  are assigned to you`} direction="s">
                     <Label size="small" sx={{ bg: '#fd7e14', color: 'canvas.default' }}>
-                        {issuesAssignedNumber}
+                        {issuesCount}
                     </Label>
                 </Tooltip>
             </TabNav.Link>

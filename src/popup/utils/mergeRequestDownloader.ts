@@ -8,7 +8,7 @@ export interface MergeRequestSendMessageReply {
     mrToReview: number;
     mrGiven: MergeRequestsDetails[];
     mrReviewed: number;
-    issuesAssigned: GitlabTypes.IssueSchema[];
+    issues: GitlabTypes.IssueSchema[];
     todos: GitlabTypes.TodoSchema[];
     lastUpdateDateUnix: number;
     error?: GlobalError;
@@ -24,7 +24,7 @@ export const getMergeRequestList = async (): Promise<MergeRequestSendMessageRepl
             mrToReview: 0,
             mrGiven: [],
             mrReviewed: 0,
-            issuesAssigned: [],
+            issues: [],
             todos: [],
             lastUpdateDateUnix: Date.now()
         };
