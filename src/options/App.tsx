@@ -128,6 +128,7 @@ const App = () => {
                         </Link>
                     </FormControl.Label>
                     <TextInput
+                        type="password"
                         leadingVisual={KeyIcon}
                         trailingVisual={isGitlabTokenInLocalStorage ? CheckIcon : undefined}
                         block
@@ -185,6 +186,9 @@ const App = () => {
                         </Select.Option>
                         <Select.Option selected={defaultTab === 'under_review'} value="under_review">
                             Under Review
+                        </Select.Option>
+                        <Select.Option selected={defaultTab === 'drafts'} value="drafts">
+                            Drafts
                         </Select.Option>
                         <Select.Option selected={defaultTab === 'issues'} value="issues">
                             Issues

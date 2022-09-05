@@ -19,6 +19,7 @@ const App = () => {
         mrToReview: 0,
         mrGiven: [],
         mrReviewed: 0,
+        myDrafts: [],
         issues: [],
         todos: [],
         lastUpdateDateUnix: Date.now()

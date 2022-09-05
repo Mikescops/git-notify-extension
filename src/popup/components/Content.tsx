@@ -42,6 +42,12 @@ export const Content = (props: Props) => {
         return <PickReviewer />;
     }
 
-    const mergeRequestsToDisplay = currentTab === 'to_review' ? mrData.mrReceived : mrData.mrGiven;
+    const mrToDisplayByTabId = {
+        to_review: mrData.mrReceived,
+        under_review: mrData.mrGiven,
+        drafts: mrData.myDrafts
+    };
+
+    const mergeRequestsToDisplay = mrToDisplayByTabId[currentTab] ?? mrData.mrReceived;
     return <MergeRequests mergeRequests={mergeRequestsToDisplay} />;
 };

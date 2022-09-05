@@ -49,12 +49,16 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         gitlabCE: settings.gitlabCE
     });
 
+    const mrGivenDetailsNoDraft = mrGivenDetails.filter((mr) => !mr.work_in_progress);
+
     let mrReviewed = 0;
-    mrGivenDetails.forEach((mr) => {
+    mrGivenDetailsNoDraft.forEach((mr) => {
         if (mr.approvals.approved) {
             mrReviewed += 1;
         }
     });
+
+    const myDrafts = mrGivenDetails.filter((mr) => mr.work_in_progress);
 
     const issues = await gitlabApi.Issues.all({
         state: 'opened',
@@ -96,8 +100,9 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
     await browser.storage.local.set({
         mrReceived: mrReceivedDetails,
         mrToReview,
-        mrGiven: mrGivenDetails,
+        mrGiven: mrGivenDetailsNoDraft,
         mrReviewed,
+        myDrafts,
         issues,
         todos,
         lastUpdateDateUnix
