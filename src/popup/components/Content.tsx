@@ -1,6 +1,7 @@
 import React from 'react';
 import { Flash } from '@primer/react';
 
+import { TabId } from '../../common/types';
 import { AppStatus } from '../types';
 import { MergeRequestSendMessageReply } from '../utils/mergeRequestDownloader';
 
@@ -13,7 +14,7 @@ import { MergeRequests } from '../pages/MergeRequests';
 interface Props {
     appStatus: AppStatus;
     mrData: MergeRequestSendMessageReply;
-    currentTab: number;
+    currentTab: TabId;
     errorMessage: string;
     errorStack: string;
 }
@@ -29,18 +30,18 @@ export const Content = (props: Props) => {
         return <ErrorFlash message={errorMessage} stack={errorStack} />;
     }
 
-    if (currentTab === 2) {
+    if (currentTab === 'issues') {
         return <Issues issues={mrData.issues} />;
     }
 
-    if (currentTab === 3) {
+    if (currentTab === 'todo_list') {
         return <Todos todos={mrData.todos} />;
     }
 
-    if (currentTab === 4) {
+    if (currentTab === 'pick') {
         return <PickReviewer />;
     }
 
-    const mergeRequestsToDisplay = currentTab === 0 ? mrData.mrReceived : mrData.mrGiven;
+    const mergeRequestsToDisplay = currentTab === 'to_review' ? mrData.mrReceived : mrData.mrGiven;
     return <MergeRequests mergeRequests={mergeRequestsToDisplay} />;
 };

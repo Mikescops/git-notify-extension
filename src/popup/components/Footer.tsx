@@ -4,10 +4,11 @@ import { Box, Tooltip, ProgressBar, Button, Link } from '@primer/react';
 import { SyncIcon, VersionsIcon, PeopleIcon, GearIcon } from '@primer/octicons-react';
 import { getHumanReadableDate } from '../helpers';
 import { MergeRequestSendMessageReply } from '../utils/mergeRequestDownloader';
+import { TabId } from '../../common/types';
 import { AppStatus } from '../types';
 
 interface Props {
-    currentTab: number;
+    currentTab: TabId;
     mrData: MergeRequestSendMessageReply;
     appStatus: AppStatus;
     fetchData: () => void;
@@ -25,10 +26,10 @@ export const Footer = (props: Props) => {
         }
         let mrNumber = 0;
         let mrTotal = 0;
-        if (currentTab === 0) {
+        if (currentTab === 'to_review') {
             mrTotal = mrData.mrReceived?.length ?? 0;
             mrNumber = mrTotal - mrData.mrToReview;
-        } else if (currentTab === 1) {
+        } else if (currentTab === 'under_review') {
             mrTotal = mrData.mrGiven?.length ?? 0;
             mrNumber = mrData.mrReviewed;
         } else {
