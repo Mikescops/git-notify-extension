@@ -13,7 +13,7 @@ export const getLocalData = async () => {
         'mrGiven',
         'mrToReview',
         'mrReviewed',
-        'issuesAssigned',
+        'issues',
         'todos',
         'lastUpdateDateUnix'
     ]);

@@ -30,7 +30,7 @@ export const Content = (props: Props) => {
     }
 
     if (currentTab === 2) {
-        return <Issues issues={mrData.issuesAssigned} />;
+        return <Issues issues={mrData.issues} />;
     }
 
     if (currentTab === 3) {
