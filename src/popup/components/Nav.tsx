@@ -42,6 +42,16 @@ export const Nav = (props: Props) => {
                 </Tooltip>
             </TabNav.Link>
             <TabNav.Link
+                href="#Drafts"
+                onClick={() => setCurrentTab('drafts')}
+                className={currentTab === 'drafts' ? 'selected' : ''}
+            >
+                Drafts{' '}
+                <Label size="small" sx={{ bg: '#484848', color: 'canvas.default' }}>
+                    {mrData?.myDrafts?.length ?? 0}
+                </Label>
+            </TabNav.Link>
+            <TabNav.Link
                 href="#Issues"
                 onClick={() => setCurrentTab('issues')}
                 className={currentTab === 'issues' ? 'selected' : ''}

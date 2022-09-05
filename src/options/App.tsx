@@ -186,6 +186,9 @@ const App = () => {
                         <Select.Option selected={defaultTab === 'under_review'} value="under_review">
                             Under Review
                         </Select.Option>
+                        <Select.Option selected={defaultTab === 'drafts'} value="drafts">
+                            Drafts
+                        </Select.Option>
                         <Select.Option selected={defaultTab === 'issues'} value="issues">
                             Issues
                         </Select.Option>
