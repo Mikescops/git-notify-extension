@@ -17,13 +17,19 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         state: 'opened',
         scope: 'assigned_to_me'
     });
+
     const mrReceived = await gitlabApi.MergeRequests.all({
         state: 'opened',
         scope: 'all',
         reviewer_id: currentUser.id
     });
 
-    const requests = removeDuplicateObjectFromArray([...mrAssigned, ...mrReceived], 'iid');
+    // On gitlab you can be the author of an MR, tagged as assignee or reviewer
+    // or all at the same time. We clean all unnecessary duplicates and MRs
+    // current user is the creator of from the requests list.
+    const requests = removeDuplicateObjectFromArray([...mrAssigned, ...mrReceived], 'iid').filter(
+        (merge) => merge.author.id !== currentUser.id
+    );
 
     const mrReceivedDetails = await fetchMRExtraInfo({
         gitlabApi,

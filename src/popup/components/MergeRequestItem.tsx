@@ -8,7 +8,7 @@ import {
     CommentDiscussionIcon,
     PlusIcon
 } from '@primer/octicons-react';
-import { AvatarWithTooltip } from './AvatarWithTooltip';
+import { AvatarWithTooltip, UserWithApproval } from './AvatarWithTooltip';
 import { calculateTimeElapsed, removeDuplicateObjectFromArray } from '../helpers';
 import { GitlabTypes, MergeRequestsDetails } from '../../background/types';
 
@@ -35,6 +35,10 @@ export const MergeRequestItem = ({ mr }: Props) => {
 
     const avatars = reviewers
         .map((assignee) => {
+            // In TS spread operator loses the typing. Because of Omit
+            // I am not sure loses even more. Resulting type is { approve: boolean | undefined}
+            // Because assignee is type of Omit<GitlabTypes.UserSchema, 'created_at'>
+            // it is safe to cast output type to a UserWithApproval type
             return {
                 ...assignee,
                 approved:
@@ -43,7 +47,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                     mr.approvals.approved_by.filter((approval) => {
                         return approval.user.id === assignee.id;
                     }).length > 0
-            };
+            } as UserWithApproval;
         })
         .sort((a, b) => Number(b.approved) - Number(a.approved))
         .slice(0, 3);

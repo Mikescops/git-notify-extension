@@ -23,6 +23,6 @@ export const getHumanReadableDate = (timestamp: number) => {
     return new Date(timestamp).toUTCString();
 };
 
-export const removeDuplicateObjectFromArray = (array: any[], key: string) => {
+export const removeDuplicateObjectFromArray = <T>(array: T[], key: string): T[] => {
     return array.filter((obj, index, self) => index === self.findIndex((element) => element[key] === obj[key]));
 };
