@@ -3,7 +3,7 @@ import { Avatar, Tooltip } from '@primer/react';
 import { CheckIcon } from '@primer/octicons-react';
 import { GitlabTypes } from '../../background/types';
 
-interface UserWithApproval extends GitlabTypes.UserSchema {
+export interface UserWithApproval extends GitlabTypes.UserSchema {
     approved?: boolean;
 }
 
