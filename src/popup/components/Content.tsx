@@ -1,5 +1,3 @@
-import { Flash } from '@primer/react';
-
 import { TabId } from '../../common/types';
 import { AppStatus } from '../types';
 import { MergeRequestSendMessageReply } from '../utils/mergeRequestDownloader';
@@ -9,6 +7,7 @@ import { Todos } from '../pages/Todos';
 import { Issues } from '../pages/Issues';
 import { ErrorFlash } from './ErrorFlash';
 import { MergeRequests } from '../pages/MergeRequests';
+import { Loading } from './Loading';
 
 interface Props {
     appStatus: AppStatus;
@@ -22,7 +21,7 @@ export const Content = (props: Props) => {
     const { appStatus, mrData, currentTab, errorMessage, errorStack } = props;
 
     if (appStatus === 'loading' || appStatus === 'idle') {
-        return <Flash>Fetching content...</Flash>;
+        return <Loading />;
     }
 
     if (appStatus === 'error') {

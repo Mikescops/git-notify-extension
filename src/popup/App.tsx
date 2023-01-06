@@ -32,7 +32,7 @@ export const App = () => {
     const applySettings = useCallback(() => {
         const getSettings = readConfiguration(['defaultTab', 'gitlabAddress']);
         getSettings.then((settings) => {
-            setCurrentTab(settings.defaultTab ? settings.defaultTab : 0);
+            setCurrentTab(settings.defaultTab ? settings.defaultTab : 'to_review');
             setGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : 'https://gitlab.com');
         });
     }, []);

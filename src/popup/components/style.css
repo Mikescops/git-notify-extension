@@ -1,5 +1,5 @@
-.navbarCategories nav {
-    overflow: inherit;
+.navbarCategories div:first-child {
+    overflow: visible;
 }
 
 .emptyContainer {

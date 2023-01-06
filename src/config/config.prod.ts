@@ -3,6 +3,6 @@ export const config = {
     gitlabCE: false,
     token: '',
     address: 'https://gitlab.com',
-    defaultTab: 0,
+    defaultTab: 'to_review',
     alertBadgeCounters: [0]
 };
