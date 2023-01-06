@@ -28,6 +28,10 @@ browser.storage.local.get(['refreshRate']).then((settings) => {
 });
 
 browser.runtime.onMessage.addListener((message) => {
+    if (message.type === 'ping') {
+        return Promise.resolve('pong');
+    }
+
     if (message.type === 'getLocalData') {
         return getLocalData();
     }

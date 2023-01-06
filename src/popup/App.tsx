@@ -4,6 +4,7 @@ import { Nav } from './components/Nav';
 import { Content } from './components/Content';
 import { Footer } from './components/Footer';
 import { getMergeRequestList, MergeRequestSendMessageReply } from './utils/mergeRequestDownloader';
+import { pingBackend } from './utils/ping';
 import { TabId } from '../common/types';
 import { readConfiguration } from '../common/configuration';
 import { AppStatus } from './types';
@@ -36,32 +37,37 @@ const App = () => {
         });
     }, []);
 
+    const setError = (error: Error) => {
+        setAppStatus('error');
+        setErrorMessage(error.message);
+        setErrorStack(error.stack ?? '');
+    };
+
     // useEffect vs useCallback
     // https://medium.com/@infinitypaul/reactjs-useeffect-usecallback-simplified-91e69fb0e7a3
     const fetchData = useCallback(() => {
-        setAppStatus('loading');
-        getMergeRequestList()
-            .then((response) => {
-                if (!response) {
-                    setAppStatus('error');
-                    setErrorMessage('Something went wrong');
-                    return;
-                }
-                if (response.error) {
-                    setAppStatus('error');
-                    setErrorMessage(`${response.error.name}: ${response.error.message}`);
-                    setErrorStack(response.error.stack ?? '');
-                    return;
+        pingBackend()
+            .then((backendAvaialble) => {
+                if (!backendAvaialble) {
+                    return setError(new Error('Extension backend is unresponsive, try to reload the extension'));
                 }
 
-                setMrData(response);
-                setAppStatus('success');
+                setAppStatus('loading');
+                getMergeRequestList()
+                    .then((response) => {
+                        if (!response) {
+                            return setError(new Error('Something went wrong'));
+                        }
+                        if (response.error) {
+                            return setError(response.error);
+                        }
+
+                        setMrData(response);
+                        setAppStatus('success');
+                    })
+                    .catch((error) => setError(error));
             })
-            .catch((error) => {
-                setAppStatus('error');
-                setErrorMessage('Something went wrong');
-                setErrorStack(error.stack ?? '');
-            });
+            .catch((error) => setError(error));
     }, []);
 
     // call fetch data and apply settings at component mount
