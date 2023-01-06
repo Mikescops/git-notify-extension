@@ -45,6 +45,7 @@ body {
 
 .mrItem {
     cursor: default !important;
+    overflow: visible !important;
 }
 
 .mrTitle {

@@ -16,3 +16,9 @@
     width: 200px;
     margin: 25px auto;
 }
+
+.popoverContent {
+    width: 350px !important;
+    white-space: break-spaces;
+    word-wrap: break-word;
+}
