@@ -1,4 +1,3 @@
-import React from 'react';
 import { Details, Flash } from '@primer/react';
 
 interface Props {

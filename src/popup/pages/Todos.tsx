@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Button, FilterList } from '@primer/react';
 import { CheckIcon } from '@primer/octicons-react';
 import * as browser from 'webextension-polyfill';

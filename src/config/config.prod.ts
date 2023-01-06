@@ -1,4 +1,4 @@
-module.exports = {
+export const config = {
     mode: 'production',
     gitlabCE: false,
     token: '',

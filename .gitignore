@@ -1,6 +1,6 @@
 # Configs
-src/config/config.js
-src/config/config.dev.js
+src/config
+!src/config/config.prod.ts
 
 # VScode
 .vscode
@@ -91,6 +91,9 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-# Neutrino build directory
+# Build directory
 build
 build/**/*
+dist
+.parcel-cache
+parcel-bundle-reports

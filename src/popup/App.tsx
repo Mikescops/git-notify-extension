@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { ThemeProvider, Box } from '@primer/react';
 import { Nav } from './components/Nav';
 import { Content } from './components/Content';
@@ -11,7 +11,7 @@ import { AppStatus } from './types';
 
 import './style.css';
 
-const App = () => {
+export const App = () => {
     const [appStatus, setAppStatus] = useState<AppStatus>('idle');
     const [errorMessage, setErrorMessage] = useState('');
     const [errorStack, setErrorStack] = useState('');
@@ -96,5 +96,3 @@ const App = () => {
         </ThemeProvider>
     );
 };
-
-export default App;

@@ -1,5 +1,5 @@
 import * as browser from 'webextension-polyfill';
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
     Button,
     Box,
@@ -27,7 +27,7 @@ const getSettings = readConfiguration([
     'alertBadgeCounters'
 ]);
 
-const App = () => {
+export const App = () => {
     const [gitlabCE, setGitlabCE] = useState(false);
     const [gitlabToken, setGitlabToken] = useState('');
     const [gitlabAddress, setGitlabAddress] = useState('');
@@ -240,5 +240,3 @@ const App = () => {
         </ThemeProvider>
     );
 };
-
-export default App;

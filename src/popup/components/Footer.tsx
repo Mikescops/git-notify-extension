@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
 import * as browser from 'webextension-polyfill';
+import { useCallback } from 'react';
 import { Box, Tooltip, ProgressBar, Button, Link } from '@primer/react';
 import { SyncIcon, VersionsIcon, PeopleIcon, GearIcon } from '@primer/octicons-react';
 import { getHumanReadableDate } from '../helpers';

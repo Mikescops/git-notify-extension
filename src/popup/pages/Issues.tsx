@@ -1,4 +1,3 @@
-import React from 'react';
 import { FilterList } from '@primer/react';
 import { GitlabTypes } from '../../background/types';
 import { EmptyItems } from '../components/EmptyItems';

@@ -28,9 +28,4 @@ declare global {
     type SafeDictionary<K extends string, T> = { [key in K]: T };
 }
 
-const nodeSetImmediate = global.setImmediate;
-
-export const setImmediate = (cb: (...args: any[]) => void, ...args: any[]): void => {
-    nodeSetImmediate(cb, ...args);
-    return;
-};
+export default this;

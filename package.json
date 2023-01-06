@@ -1,60 +1,79 @@
 {
-  "name": "gitlab-notify",
-  "version": "1.7.0",
-  "description": "Don't miss any GitLab merge requests and rocket up your productivity.",
-  "main": "index.js",
-  "repository": "https://github.com/Mikescops/gitlab-notify-extension",
-  "scripts": {
-    "start": "npm run copy-config:dev && webpack-dev-server --mode development --open --port 5003",
-    "build:dev": "npm run copy-config:dev && webpack --mode production",
-    "build:prod": "rm -rf build/; npm run copy-config:prod && webpack --mode production",
-    "copy-config:setup": "cp src/config/config.prod.js src/config/config.dev.js",
-    "copy-config:dev": "cp src/config/config.dev.js src/config/config.js",
-    "copy-config:prod": "cp src/config/config.prod.js src/config/config.js",
-    "lint": "tsc --noEmit --rootDir src/ && eslint webpack*.js \"src/**/*.ts{,x}\"",
-    "lint:fix": "npm run lint -- --quiet --fix",
-    "zip": "mv build/v2/* build/; mv build/v3/* build/; rm -r build/v2/ build/v3/; npx neutrino-webextension-zip '!.github/' '!previews/' '!src/config/config.dev.js', '!src/config/config.js'"
-  },
-  "author": "Corentin Mors (corentin@pixelswap.fr)",
-  "license": "ISC",
-  "browserslist": [
-    "last 2 Chrome versions",
-    "last 2 Firefox versions"
-  ],
-  "dependencies": {
-    "@gitbeaker/browser": "^35.6.0",
-    "@primer/octicons-react": "^17.2.0",
-    "@primer/react": "^35.2.2"
-  },
-  "devDependencies": {
-    "@neutrinojs/copy": "^9.5.0",
-    "@neutrinojs/react": "^9.5.0",
-    "@neutrinojs/standardjs": "^9.5.0",
-    "@neutrinojs/style-loader": "^9.5.0",
-    "@types/react-dom": "^18.0.5",
-    "@types/styled-components": "^5.1.25",
-    "@types/webextension-polyfill": "^0.8.3",
-    "@typescript-eslint/eslint-plugin": "^5.26.0",
-    "@typescript-eslint/parser": "^5.26.0",
-    "eslint": "^8.16.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-compat": "^4.0.2",
-    "eslint-plugin-react": "^7.30.0",
-    "eslint-plugin-react-hooks": "^4.5.0",
-    "neutrino": "^9.5.0",
-    "neutrino-webextension": "^1.2.2",
-    "neutrinojs-typescript": "^1.1.6",
-    "prettier": "^2.6.2",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "styled-components": "^5.3.5",
-    "typescript": "^4.7.2",
-    "webextension-polyfill": "^0.9.0",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12"
-  },
-  "engines": {
-    "node": "14.x.x",
-    "npm": ">=6"
-  }
+    "name": "gitlab-notify",
+    "version": "2.0.0",
+    "description": "Don't miss any GitLab merge requests and rocket up your productivity.",
+    "repository": "https://github.com/Mikescops/gitlab-notify-extension",
+    "source": "src/popup/popup.html",
+    "scripts": {
+        "start": "npm run copy-config:dev; parcel --host localhost --target mv3",
+        "build:dev": "npm run copy-config:dev; parcel build --target mv3",
+        "build:prod": "rm -rf dist/; npm run copy-config:prod; npm run build:prod:mv3; npm run build:prod:mv2",
+        "build:prod:mv3": "parcel build --target mv3",
+        "build:prod:mv2": "parcel build --target mv2",
+        "copy-config:setup": "cp src/config/config.prod.ts src/config/config.dev.ts",
+        "copy-config:dev": "cp src/config/config.dev.ts src/config/config.ts",
+        "copy-config:prod": "cp src/config/config.prod.ts src/config/config.ts",
+        "lint": "tsc --noEmit --rootDir src/ && eslint \"src/**/*.ts{,x}\"",
+        "lint:fix": "npm run lint -- --quiet --fix",
+        "build-analyser": "parcel build src/manifest/manifest.json --reporter @parcel/reporter-bundle-analyzer",
+        "zip": "npm run zip:chrome; npm run zip:edge; npm run zip:firefox; npm run zip:source",
+        "zip:chrome": "ts-node ./src/tools/zip.ts dist/mv3 chrome.zip",
+        "zip:edge": "ts-node ./src/tools/zip.ts dist/mv3 edge.zip",
+        "zip:firefox": "ts-node ./src/tools/zip.ts dist/mv2 firefox.zip",
+        "zip:source": "git archive --format=zip HEAD -o dist/source.zip"
+    },
+    "author": "Corentin Mors (corentin@pixelswap.fr)",
+    "license": "ISC",
+    "browserslist": [
+        "last 2 Chrome versions",
+        "last 2 Firefox versions"
+    ],
+    "targets": {
+        "mv3": {
+            "source": "src/manifest/manifest.json",
+            "context": "service-worker",
+            "sourceMap": false
+        },
+        "mv2": {
+            "source": "src/manifest-v2/manifest.json",
+            "context": "service-worker",
+            "sourceMap": false
+        }
+    },
+    "dependencies": {
+        "@gitbeaker/browser": "^35.8.0",
+        "@primer/octicons-react": "^17.10.1",
+        "@primer/react": "^35.16.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "webextension-polyfill": "^0.10.0"
+    },
+    "devDependencies": {
+        "@parcel/config-webextension": "^2.8.2",
+        "@parcel/reporter-bundle-analyzer": "^2.8.2",
+        "@parcel/transformer-typescript-tsc": "^2.8.2",
+        "@types/archiver": "^5.3.1",
+        "@types/node": "^18.11.18",
+        "@types/react-dom": "^18.0.10",
+        "@types/styled-components": "^5.1.26",
+        "@types/webextension-polyfill": "^0.9.2",
+        "@typescript-eslint/eslint-plugin": "^5.48.0",
+        "@typescript-eslint/parser": "^5.48.0",
+        "archiver": "^5.3.1",
+        "eslint": "^8.31.0",
+        "eslint-config-prettier": "^8.6.0",
+        "eslint-plugin-compat": "^4.0.2",
+        "eslint-plugin-react": "^7.31.11",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "parcel": "^2.8.2",
+        "prettier": "^2.8.1",
+        "process": "^0.11.10",
+        "styled-components": "^5.3.6",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.4"
+    },
+    "engines": {
+        "node": "16.x.x",
+        "npm": ">=6"
+    }
 }

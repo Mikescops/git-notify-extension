@@ -47,8 +47,6 @@ Then, you get zipped packages for each browser that are supported.
 
 ## Assets and Documentation
 
--   Neutrino https://neutrinojs.org/
--   Neutrino for WebExtensions https://github.com/crimx/neutrino-webextension
 -   React https://reactjs.org/docs
 -   Primer Components https://primer.style/components/
 -   Octoicons https://octicons.github.com/
