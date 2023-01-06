@@ -1,5 +1,3 @@
-import React from 'react';
-
 import emptyInbox from '../assets/empty_inbox.svg';
 import './style.css';
 

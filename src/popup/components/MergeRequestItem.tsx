@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Avatar, BranchName, FilterList, Box, Link, Label, Tooltip } from '@primer/react';
 import {
     GitMergeIcon,

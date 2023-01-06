@@ -1,4 +1,3 @@
-import React from 'react';
 import { Avatar, BranchName, FilterList, Box, Button, Link, Label, Tooltip } from '@primer/react';
 import { ClockIcon, CommentDiscussionIcon, PlusIcon, RepoIcon } from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';

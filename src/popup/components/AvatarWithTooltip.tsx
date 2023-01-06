@@ -1,4 +1,3 @@
-import React from 'react';
 import { Avatar, Tooltip } from '@primer/react';
 import { CheckIcon } from '@primer/octicons-react';
 import { GitlabTypes } from '../../background/types';

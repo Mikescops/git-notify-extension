@@ -1,0 +1,30 @@
+{
+    "manifest_version": 3,
+    "version": "2.0.0",
+    "name": "GitLab Notify",
+    "short_name": "GitLab Notify",
+    "description": "Don't miss any GitLab merge requests or issues and rocket up your productivity.",
+    "icons": {
+        "48": "../../assets/icons/icon48.png",
+        "96": "../../assets/icons/icon96.png",
+        "128": "../../assets/icons/icon128.png"
+    },
+    "background": {
+        "service_worker": "../background/index.ts",
+        "type": "module"
+    },
+    "options_ui": {
+        "page": "../options/options.html"
+    },
+    "action": {
+        "default_popup": "../popup/popup.html"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": ["assets/*"],
+            "matches": [],
+            "extension_ids": []
+        }
+    ],
+    "permissions": ["storage", "alarms", "unlimitedStorage"]
+}
