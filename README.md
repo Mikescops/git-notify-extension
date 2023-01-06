@@ -1,6 +1,6 @@
 # GitLab Notify Extension
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/mikescops/gitlab-notify-extension) ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/mikescops/gitlab-notify-extension/Lint%20&%20Build%20CI/master) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ekfpkkhpemajcbniegjicehdphdabhop) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ekfpkkhpemajcbniegjicehdphdabhop) ![Mozilla Add-on](https://img.shields.io/amo/v/gitlab-notify) ![Mozilla Add-on](https://img.shields.io/amo/users/gitlab-notify)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/mikescops/gitlab-notify-extension) ![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/mikescops/gitlab-notify-extension/pr-validation.yml?branch=master) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ekfpkkhpemajcbniegjicehdphdabhop) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ekfpkkhpemajcbniegjicehdphdabhop) ![Mozilla Add-on](https://img.shields.io/amo/v/gitlab-notify) ![Mozilla Add-on](https://img.shields.io/amo/users/gitlab-notify)
 
 _Don't miss any GitLab merge requests or issues and rocket up your productivity._
 
@@ -12,8 +12,10 @@ _Don't miss any GitLab merge requests or issues and rocket up your productivity.
 
 -   List Merge Requests you are assigned to
 -   List Merge Requests you created
+-   List your draft Merge Requests
 -   List Issues you are assigned to
 -   Display your To-Do List
+-   Pick a random contributor of a repository to assign them to a MR 😈
 
 It comes with a bunch of features to let you access easily the information you're looking for and is customizable so it fits your needs.
 
@@ -60,5 +62,5 @@ Then, you get zipped packages for each browser that are supported.
 
 ## Contributors (thanks for your help!)
 
-| [Paola Ducolin](https://github.com/pducolin) | [Bradley Cushing](https://github.com/bradcush) |
-| -------------------------------------------- | ---------------------------------------------- |
+| [Paola Ducolin](https://github.com/pducolin) | [Bradley Cushing](https://github.com/bradcush) | [Bastien Granger](https://github.com/bastienGranger) | [Quentin Barbe](https://github.com/forty) |
+| -------------------------------------------- | ---------------------------------------------- | ---------------------------------------------------- | ----------------------------------------- |
