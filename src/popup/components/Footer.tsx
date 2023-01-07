@@ -6,6 +6,7 @@ import { getHumanReadableDate } from '../helpers';
 import { MergeRequestSendMessageReply } from '../utils/mergeRequestDownloader';
 import { TabId } from '../../common/types';
 import { AppStatus } from '../types';
+import { createNewTab } from '../utils/createNewTab';
 
 interface Props {
     currentTab: TabId;
@@ -62,7 +63,12 @@ export const Footer = (props: Props) => {
                 </Tooltip>
 
                 <Tooltip aria-label={'Open your projects'} direction="n">
-                    <Link href={gitlabAddress + '/dashboard/projects'} target="_blank">
+                    <Link
+                        href={gitlabAddress + '/dashboard/projects'}
+                        onClick={(event: React.MouseEvent<HTMLElement>) =>
+                            createNewTab(event, gitlabAddress + '/dashboard/projects')
+                        }
+                    >
                         <Button variant="default" size="small" sx={{ mr: 2 }}>
                             <VersionsIcon />
                         </Button>
@@ -70,7 +76,12 @@ export const Footer = (props: Props) => {
                 </Tooltip>
 
                 <Tooltip aria-label={'Open your groups'} direction="n">
-                    <Link href={gitlabAddress + '/dashboard/groups'} target="_blank">
+                    <Link
+                        href={gitlabAddress + '/dashboard/groups'}
+                        onClick={(event: React.MouseEvent<HTMLElement>) =>
+                            createNewTab(event, gitlabAddress + '/dashboard/groups')
+                        }
+                    >
                         <Button variant="default" size="small" sx={{ mr: 2 }}>
                             <PeopleIcon />
                         </Button>

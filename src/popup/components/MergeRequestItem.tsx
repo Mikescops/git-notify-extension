@@ -11,6 +11,7 @@ import {
 import { AvatarWithTooltip, UserWithApproval } from './AvatarWithTooltip';
 import { calculateTimeElapsed, removeDuplicateObjectFromArray } from '../helpers';
 import { GitlabTypes, MergeRequestsDetails } from '../../background/types';
+import { createNewTab } from '../utils/createNewTab';
 
 interface Props {
     mr: MergeRequestsDetails;
@@ -61,8 +62,8 @@ export const MergeRequestItem = ({ mr }: Props) => {
                     <Link
                         as="a"
                         href={mr.web_url}
+                        onClick={(event: React.MouseEvent<HTMLElement>) => createNewTab(event, mr.web_url)}
                         className={'mrTitle'}
-                        target="_blank"
                         sx={{ color: mr.approvals.approved ? 'success.fg' : 'fg.default' }}
                         title={`${mr.title} - ${author.name}\n${mr.description}`}
                     >

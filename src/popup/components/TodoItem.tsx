@@ -4,6 +4,7 @@ import { Avatar, Box, Button, FilterList, Label, Link, Text, Tooltip } from '@pr
 import { ClockIcon, CheckIcon } from '@primer/octicons-react';
 import { calculateTimeElapsed } from '../helpers';
 import { GitlabTypes } from '../../background/types';
+import { createNewTab } from '../utils/createNewTab';
 
 interface Props {
     todo: GitlabTypes.TodoSchema;
@@ -49,7 +50,12 @@ export const TodoItem = ({ todo }: Props) => {
                     <Avatar src={todo.author.avatar_url} alt={todo.author.name} square size={40} sx={{ mr: 2 }} />
                 </Box>
                 <Box mr={2} style={{ flex: 1 }}>
-                    <Link as="a" href={todo.target_url} className={'mrTitle'} target="_blank">
+                    <Link
+                        as="a"
+                        href={todo.target_url}
+                        onClick={(event: React.MouseEvent<HTMLElement>) => createNewTab(event, todo.target_url)}
+                        className={'mrTitle'}
+                    >
                         {actionToText(todo.author.name, todo.action_name)} !{todo.target.iid}
                     </Link>
                     <div>

@@ -3,6 +3,7 @@ import { ClockIcon, CommentDiscussionIcon, PlusIcon, RepoIcon } from '@primer/oc
 import { AvatarWithTooltip } from './AvatarWithTooltip';
 import { calculateTimeElapsed } from '../helpers';
 import { GitlabTypes } from '../../background/types';
+import { createNewTab } from '../utils/createNewTab';
 
 interface Props {
     issue: GitlabTypes.IssueSchema;
@@ -27,8 +28,8 @@ export const IssueItem = ({ issue }: Props) => {
                     <Link
                         as="a"
                         href={issue.web_url}
+                        onClick={(event: React.MouseEvent<HTMLElement>) => createNewTab(event, issue.web_url)}
                         className={'mrTitle'}
-                        target="_blank"
                         sx={{ color: 'fg.default' }}
                         title={`${issue.title} - ${author.name}\n${issue.description}`}
                     >
