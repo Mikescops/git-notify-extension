@@ -121,7 +121,7 @@ export const App = () => {
                             <Tooltip
                                 wrap={true}
                                 aria-label="Click to open GitLab documentation.
-                    The extension requires 'api' + 'read_user' rights."
+                    The extension requires 'api' right (or just 'read_api' but all write operations will fail)."
                             >
                                 <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
                             </Tooltip>

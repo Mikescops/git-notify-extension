@@ -10,10 +10,11 @@ import { readConfiguration } from '../common/configuration';
 import { AppStatus } from './types';
 
 import './style.css';
+import { GlobalError } from '../common/errors';
 
 export const App = () => {
     const [appStatus, setAppStatus] = useState<AppStatus>('idle');
-    const [error, setError] = useState<Error>();
+    const [error, setError] = useState<GlobalError>();
     const [mrData, setMrData] = useState<MergeRequestSendMessageReply>({
         mrReceived: [],
         mrToReview: 0,
@@ -64,9 +65,9 @@ export const App = () => {
                         setMrData(response);
                         setAppStatus('success');
                     })
-                    .catch((error) => setError(error));
+                    .catch((error: Error) => setError(error));
             })
-            .catch((error) => setError(error));
+            .catch((error: Error) => setError(error));
     }, []);
 
     // call fetch data and apply settings at component mount
