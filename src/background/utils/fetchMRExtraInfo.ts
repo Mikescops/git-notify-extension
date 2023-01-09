@@ -9,39 +9,38 @@ interface FetchMRExtraInfoParams {
 
 export const fetchMRExtraInfo = async (params: FetchMRExtraInfoParams): Promise<MergeRequestsDetails[]> => {
     const { gitlabApi, mrList, gitlabCE } = params;
-    const mrWithDetails: MergeRequestsDetails[] = [];
 
     if (mrList.length < 1) {
-        return Promise.resolve(mrWithDetails);
+        return Promise.resolve([]);
     }
 
-    for (const mr of mrList) {
+    const requestsToExecute = mrList.map((mr) => {
         if (gitlabCE === true) {
-            const alternateResponse = {
+            return Promise.resolve({
+                iid: mr.iid,
                 user_has_approved: false,
                 approved: false,
                 approved_by: []
-            };
-
-            mrWithDetails.push({
-                ...mr,
-                approvals: alternateResponse
             });
-
-            continue;
         }
 
-        const approvals = await gitlabApi.MergeRequestApprovals.configuration(mr.project_id, {
+        return gitlabApi.MergeRequestApprovals.configuration(mr.project_id, {
             mergerequestIid: mr.iid
         });
+    });
+
+    const approvalsPerMr = await Promise.all(requestsToExecute);
+
+    const mrWithDetails: MergeRequestsDetails[] = approvalsPerMr.map((approvals) => {
         if (approvals instanceof Error) {
             throw new GitLabIsCE();
         }
-        mrWithDetails.push({
-            ...mr,
+
+        return {
+            ...mrList[mrList.findIndex((mr) => mr.iid === approvals.iid)],
             approvals
-        });
-    }
+        };
+    });
 
     return mrWithDetails
         .sort((a, b) => (a.created_at < b.created_at ? 1 : -1))

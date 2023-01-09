@@ -13,16 +13,47 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
     const gitlabApi = initGitlabApi(settings);
     const currentUser = await gitlabApi.Users.current();
 
-    const mrAssigned = await gitlabApi.MergeRequests.all({
+    /** Fetching MR "To Review" */
+
+    const mrAssignedRequest = gitlabApi.MergeRequests.all({
         state: 'opened',
         scope: 'assigned_to_me'
     });
 
-    const mrReceived = await gitlabApi.MergeRequests.all({
+    const mrReceivedRequest = gitlabApi.MergeRequests.all({
         state: 'opened',
         scope: 'all',
         reviewer_id: currentUser.id
     });
+
+    /** Fetching MR "Under review" */
+
+    const mrGivenRequest = gitlabApi.MergeRequests.all({
+        state: 'opened',
+        scope: 'created_by_me'
+    });
+
+    /** Fetching "Issues" */
+
+    const issuesRequest = gitlabApi.Issues.all({
+        state: 'opened',
+        scope: 'assigned_to_me'
+    });
+
+    /** Fetching "Todos" */
+
+    const todosRequest = gitlabApi.Todos.all({
+        state: 'pending',
+        per_page: 100
+    });
+
+    const [mrAssigned, mrReceived, mrGiven, issues, todos] = await Promise.all([
+        mrAssignedRequest,
+        mrReceivedRequest,
+        mrGivenRequest,
+        issuesRequest,
+        todosRequest
+    ]);
 
     // On gitlab you can be the author of an MR, tagged as assignee or reviewer
     // or all at the same time. We clean all unnecessary duplicates and MRs
@@ -44,11 +75,6 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         }
     });
 
-    const mrGiven = await gitlabApi.MergeRequests.all({
-        state: 'opened',
-        scope: 'created_by_me'
-    });
-
     const mrGivenDetails = await fetchMRExtraInfo({
         gitlabApi,
         mrList: mrGiven,
@@ -64,19 +90,11 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         }
     });
 
+    /** Filtering "Drafts" */
+
     const myDrafts = mrGivenDetails.filter((mr) => mr.work_in_progress);
 
-    const issues = await gitlabApi.Issues.all({
-        state: 'opened',
-        scope: 'assigned_to_me'
-    });
-
-    const todos = await gitlabApi.Todos.all({
-        state: 'pending',
-        per_page: 100
-    });
-
-    // Update alert badge
+    /** Update alert badge */
 
     const alertBadgeCounters = settings.alertBadgeCounters;
     const badgeText = [];
@@ -99,7 +117,7 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         badgeColor = '#1f78d1'; // blue
     }
 
-    // Save the fetched data
+    /** Save the fetched data */
 
     const lastUpdateDateUnix = new Date().getTime();
 
