@@ -69,7 +69,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                     >
                         {mr.title}
                     </Link>
-                    <div>
+                    <Box display="flex">
                         <Tooltip
                             sx={{ mr: 2 }}
                             aria-label={author.name || ''}
@@ -80,11 +80,12 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         </Tooltip>
                         <Tooltip
                             aria-label={copyBranchStatus ? '✔️ Copied' : '📋 Copy branch name to clipboard'}
-                            direction="n"
+                            direction="e"
+                            className={'mrBranchNameParent'}
+                            sx={{ mr: 2 }}
                         >
                             <BranchName
                                 as={'span'}
-                                sx={{ mr: 2 }}
                                 className={'mrBranchName'}
                                 title={mr.source_branch}
                                 onClick={async () => await copyToClipboard(mr.source_branch)}
@@ -124,8 +125,16 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         ) : null}
                         <Label
                             size="small"
-                            sx={{ color: 'neutral.emphasis', bg: 'canvas.default' }}
+                            sx={{
+                                color: mr.blocking_discussions_resolved ? 'neutral.emphasis' : 'canvas.default',
+                                bg: mr.blocking_discussions_resolved ? 'canvas.default' : '#fd7e14'
+                            }}
                             className={'mrLabel'}
+                            title={
+                                mr.blocking_discussions_resolved
+                                    ? 'All threads are resolved'
+                                    : 'Some threads are not resolved yet.'
+                            }
                         >
                             <CommentDiscussionIcon /> &#160;{mr.user_notes_count}
                         </Label>
@@ -136,7 +145,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         >
                             <ClockIcon /> &#160;{timeElapsed}
                         </Label>
-                    </div>
+                    </Box>
                 </Box>
                 <Box className={'avatarsList'}>
                     {avatarsUI}{' '}

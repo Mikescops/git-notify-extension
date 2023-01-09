@@ -57,6 +57,11 @@ body {
     overflow: hidden;
 }
 
+.mrBranchNameParent {
+    align-self: center;
+    display: inline-flex;
+}
+
 .mrBranchName {
     max-width: 320px;
     text-overflow: ellipsis;
@@ -69,6 +74,8 @@ body {
     margin-right: 4px;
     overflow: auto;
     border: var(--color-border-subtle);
+    align-self: center;
+    display: inline-flex;
 }
 
 .mrApproved {
@@ -96,6 +103,8 @@ body {
 
 .inline-avatar {
     vertical-align: top !important;
+    align-self: center;
+    display: inline-flex;
 }
 
 .statusMark {
