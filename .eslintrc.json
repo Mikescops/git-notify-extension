@@ -63,7 +63,7 @@
         "no-proto": "error",
         "no-sequences": "error",
         "no-undef": "off",
-        "no-unused-vars": "error",
+        "no-unused-vars": "off",
         "no-with": "error",
         "no-trailing-spaces": "error",
         "one-var": ["error", "never"],

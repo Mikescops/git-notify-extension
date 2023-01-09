@@ -13,8 +13,7 @@ import './style.css';
 
 export const App = () => {
     const [appStatus, setAppStatus] = useState<AppStatus>('idle');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [errorStack, setErrorStack] = useState('');
+    const [error, setError] = useState<Error>();
     const [mrData, setMrData] = useState<MergeRequestSendMessageReply>({
         mrReceived: [],
         mrToReview: 0,
@@ -37,11 +36,11 @@ export const App = () => {
         });
     }, []);
 
-    const setError = (error: Error) => {
-        setAppStatus('error');
-        setErrorMessage(error.message);
-        setErrorStack(error.stack ?? '');
-    };
+    useEffect(() => {
+        if (error) {
+            setAppStatus('error');
+        }
+    }, [error]);
 
     // useEffect vs useCallback
     // https://medium.com/@infinitypaul/reactjs-useeffect-usecallback-simplified-91e69fb0e7a3
@@ -78,13 +77,7 @@ export const App = () => {
         <ThemeProvider colorMode="auto">
             <Box className={'container'} sx={{ bg: 'canvas.default' }}>
                 <Nav currentTab={currentTab} setCurrentTab={setCurrentTab} mrData={mrData} />
-                <Content
-                    appStatus={appStatus}
-                    mrData={mrData}
-                    currentTab={currentTab}
-                    errorMessage={errorMessage}
-                    errorStack={errorStack}
-                />
+                <Content appStatus={appStatus} mrData={mrData} currentTab={currentTab} error={error} />
                 <Footer
                     currentTab={currentTab}
                     mrData={mrData}

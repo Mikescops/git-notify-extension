@@ -13,19 +13,18 @@ interface Props {
     appStatus: AppStatus;
     mrData: MergeRequestSendMessageReply;
     currentTab: TabId;
-    errorMessage: string;
-    errorStack: string;
+    error?: Error;
 }
 
 export const Content = (props: Props) => {
-    const { appStatus, mrData, currentTab, errorMessage, errorStack } = props;
+    const { appStatus, mrData, currentTab, error } = props;
 
     if (appStatus === 'loading' || appStatus === 'idle') {
         return <Loading />;
     }
 
-    if (appStatus === 'error') {
-        return <ErrorFlash message={errorMessage} stack={errorStack} />;
+    if (appStatus === 'error' && error) {
+        return <ErrorFlash error={error} />;
     }
 
     if (currentTab === 'issues') {

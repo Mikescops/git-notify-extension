@@ -5,6 +5,7 @@ import { ClockIcon, CheckIcon } from '@primer/octicons-react';
 import { calculateTimeElapsed } from '../helpers';
 import { GitlabTypes } from '../../background/types';
 import { createNewTab } from '../utils/createNewTab';
+import { ErrorFlash } from './ErrorFlash';
 
 interface Props {
     todo: GitlabTypes.TodoSchema;
@@ -31,21 +32,27 @@ const actionToText = (author: string, action: string) => {
     }
 };
 
-export const TodoItem = ({ todo }: Props) => {
-    const [visibility, setVisibility] = useState(true);
+export const TodoItem = (props: Props) => {
+    const { todo } = props;
+
+    const [visibility, setVisibility] = useState<boolean>(true);
+    const [error, setError] = useState<Error>();
 
     const timeElapsed = calculateTimeElapsed(todo.created_at);
 
     const setTodoAsDone = useCallback(() => {
         browser.runtime
             .sendMessage({ type: 'setTodoAsDone', todoId: todo.id })
-            .then(() => setVisibility(false))
-            .catch((error) => console.error(error));
+            .then(() => {
+                setError(undefined);
+                setVisibility(false);
+            })
+            .catch((error) => setError(error));
     }, [todo.id]);
 
     return (
         <FilterList.Item className={visibility ? 'mrItem' : 'hidden'}>
-            <Box display="flex" flexWrap="nowrap">
+            <Box display="flex" flexWrap="wrap">
                 <Box className={'avatarsList'}>
                     <Avatar src={todo.author.avatar_url} alt={todo.author.name} square size={40} sx={{ mr: 2 }} />
                 </Box>
@@ -74,6 +81,7 @@ export const TodoItem = ({ todo }: Props) => {
                         </Button>
                     </Tooltip>
                 </Box>
+                {error ? <ErrorFlash error={error} style={{ width: '100%' }} /> : <></>}
             </Box>
         </FilterList.Item>
     );
