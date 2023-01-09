@@ -28,7 +28,7 @@ const actionToText = (author: string, action: string) => {
         case 'marked':
             return 'You were marked on';
         default:
-            return 'Your received a notification';
+            return 'You received a notification';
     }
 };
 
