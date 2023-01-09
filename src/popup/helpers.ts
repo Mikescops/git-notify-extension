@@ -26,3 +26,10 @@ export const getHumanReadableDate = (timestamp: number) => {
 export const removeDuplicateObjectFromArray = <T>(array: T[], key: string): T[] => {
     return array.filter((obj, index, self) => index === self.findIndex((element) => element[key] === obj[key]));
 };
+
+export const cleanupDescription = (description: string) => {
+    return description
+        .replace(/<!--[\s\S]*?-->/g, '')
+        .replace(/\n{2,}/g, '\n\n')
+        .trim();
+};

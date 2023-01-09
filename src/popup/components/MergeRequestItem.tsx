@@ -9,7 +9,7 @@ import {
     PlusIcon
 } from '@primer/octicons-react';
 import { AvatarWithTooltip, UserWithApproval } from './AvatarWithTooltip';
-import { calculateTimeElapsed, removeDuplicateObjectFromArray } from '../helpers';
+import { calculateTimeElapsed, cleanupDescription, removeDuplicateObjectFromArray } from '../helpers';
 import { GitlabTypes, MergeRequestsDetails } from '../../background/types';
 import { createNewTab } from '../utils/createNewTab';
 
@@ -65,7 +65,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         onClick={(event: React.MouseEvent<HTMLElement>) => createNewTab(event, mr.web_url)}
                         className={'mrTitle'}
                         sx={{ color: mr.approvals.approved ? 'success.fg' : 'fg.default' }}
-                        title={`${mr.title} - ${author.name}\n${mr.description}`}
+                        title={`${mr.title} - ${author.name}\n\n${cleanupDescription(mr.description)}`}
                     >
                         {mr.title}
                     </Link>
