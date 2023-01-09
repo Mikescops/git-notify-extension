@@ -8,12 +8,14 @@ import { Issues } from '../pages/Issues';
 import { ErrorFlash } from './ErrorFlash';
 import { MergeRequests } from '../pages/MergeRequests';
 import { Loading } from './Loading';
+import { GlobalError } from '../../common/errors';
+import { Onboarding } from '../pages/Onboarding';
 
 interface Props {
     appStatus: AppStatus;
     mrData: MergeRequestSendMessageReply;
     currentTab: TabId;
-    error?: Error;
+    error?: GlobalError;
 }
 
 export const Content = (props: Props) => {
@@ -24,6 +26,10 @@ export const Content = (props: Props) => {
     }
 
     if (appStatus === 'error' && error) {
+        if (error.name === 'GitLabTokenNotSet' || error.name === 'GitLabAddressNotSet') {
+            return <Onboarding />;
+        }
+
         return <ErrorFlash error={error} />;
     }
 

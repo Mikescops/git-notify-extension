@@ -1,5 +1,6 @@
 import { Gitlab } from '@gitbeaker/browser';
-import { FailFetchSettings, GitLabTokenNotSet, GitLabAddressNotSet } from '../errors';
+import { GitLabAddressNotSet, GitLabTokenNotSet } from '../../common/errors';
+import { FailFetchSettings } from '../errors';
 import { GetSettingsResponse, GitlabAPI } from '../types';
 
 export const initGitlabApi = (settings: GetSettingsResponse): GitlabAPI => {

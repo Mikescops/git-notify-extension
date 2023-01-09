@@ -1,15 +1,19 @@
 import * as browser from 'webextension-polyfill';
-import { GlobalError } from '../types';
+import { GitLabAddressNotSet, GitLabTokenNotSet, GlobalError } from '../../common/errors';
 import { setBadge } from './setBadge';
 
 export const setGlobalError = async (error: Error | null) => {
     if (error) {
         const globalError = {
-            name: error.name,
+            name: error.constructor.name ?? error.name,
             message: error.message,
             stack: error.stack
         };
-        await setBadge('Error', 'red');
+
+        const badgeColor =
+            error instanceof GitLabAddressNotSet || error instanceof GitLabTokenNotSet ? 'orange' : 'red';
+        await setBadge('!', badgeColor);
+
         return await browser.storage.local.set({ globalError: JSON.stringify(globalError) });
     }
     return await browser.storage.local.remove('globalError');

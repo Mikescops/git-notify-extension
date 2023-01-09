@@ -3,12 +3,6 @@ export { Types as GitlabTypes } from '@gitbeaker/browser';
 
 export type GitlabAPI = InstanceType<typeof Gitlab>;
 
-export interface GlobalError {
-    name: string;
-    message: string;
-    stack?: string;
-}
-
 export interface MergeRequestsDetails extends GitlabTypes.MergeRequestSchema {
     approvals: Approvals | GitlabTypes.MergeRequestLevelMergeRequestApprovalSchema;
 }
