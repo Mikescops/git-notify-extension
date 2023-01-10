@@ -1,17 +1,17 @@
 export class GlobalError extends Error {
-    constructor(message: string) {
+    constructor(readonly name: string, message: string) {
         super(message);
     }
 }
 
 export class GitLabTokenNotSet extends GlobalError {
     constructor() {
-        super('No GitLab token set, visit options.');
+        super('GitLabTokenNotSet', 'No GitLab token set, visit options.');
     }
 }
 
 export class GitLabAddressNotSet extends GlobalError {
     constructor() {
-        super('No GitLab host address set, visit options.');
+        super('GitLabAddressNotSet', 'No GitLab host address set, visit options.');
     }
 }

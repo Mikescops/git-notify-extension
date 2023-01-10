@@ -5,7 +5,7 @@ import { setBadge } from './setBadge';
 export const setGlobalError = async (error: Error | null) => {
     if (error) {
         const globalError = {
-            name: error.constructor.name ?? error.name,
+            name: error.name,
             message: error.message,
             stack: error.stack
         };
