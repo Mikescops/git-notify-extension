@@ -1,10 +1,12 @@
-import { Avatar, FilterList, Box, Link, Label, Tooltip } from '@primer/react';
-import { ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
+import { Avatar, FilterList, Box, Link, Label, Tooltip, Button, Details, IconButton, useDetails } from '@primer/react';
+import { ChevronDownIcon, ChevronRightIcon, ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
-import { calculateTimeElapsed } from '../helpers';
+import { calculateTimeElapsed, cleanupDescription } from '../helpers';
 import { GitlabTypes } from '../../background/types';
 import { createNewTab } from '../utils/createNewTab';
 import { ProjectName } from './ProjectName';
+import { MarkdownViewer } from '@primer/react/lib-esm/drafts';
+import { marked } from 'marked';
 
 interface Props {
     issue: GitlabTypes.IssueSchema;
@@ -21,18 +23,40 @@ export const IssueItem = ({ issue }: Props) => {
             const assignee = assigneeRaw as GitlabTypes.UserSchema;
             return <AvatarWithTooltip assignee={assignee} key={assignee.id} />;
         });
+    const labels = issue.labels?.map((label) => {
+        return (
+            <Label sx={{ m: 0.8 }} key={label}>
+                {label.replace('::', ' | ')}
+            </Label>
+        );
+    });
+
+    const { getDetailsProps, open, setOpen } = useDetails({
+        closeOnOutsideClick: true
+    });
 
     return (
         <FilterList.Item className={'mrItem'}>
-            <Box display="flex" flexWrap="nowrap">
-                <Box mr={2} style={{ flex: 1 }}>
+            <Box display="flex" flexWrap="wrap">
+                <Box mr={2} display={'flex'} flexWrap="wrap" flex={1}>
+                    <IconButton
+                        as="div"
+                        variant="invisible"
+                        size="small"
+                        sx={{ padding: 0, lineHeight: '14px' }}
+                        onClick={(e: Event) => {
+                            e.preventDefault();
+                            setOpen(!open ?? true);
+                        }}
+                        icon={open ? ChevronDownIcon : ChevronRightIcon}
+                    />
                     <Link
                         as="a"
                         href={issue.web_url}
                         onClick={(event: React.MouseEvent<HTMLElement>) => createNewTab(event, issue.web_url)}
                         className={'mrTitle'}
                         sx={{ color: 'fg.default' }}
-                        title={`${issue.title} - ${author.name}\n${issue.description}`}
+                        title={`${issue.title} - ${author.name}\n${cleanupDescription(issue.description)}`}
                     >
                         {issue.title}
                     </Link>
@@ -75,6 +99,19 @@ export const IssueItem = ({ issue }: Props) => {
                         ''
                     )}
                 </Box>
+                <Details {...getDetailsProps()} sx={{ width: '100%' }}>
+                    <Button as="summary" sx={{ display: 'none' }} hidden={true}>
+                        hidden
+                    </Button>
+                    <Box className={'markdownContent'} sx={{ bg: 'neutral.subtle' }}>
+                        <MarkdownViewer
+                            openLinksInNewTab={true}
+                            dangerousRenderedHTML={{ __html: marked.parse(cleanupDescription(issue.description)) }}
+                        />
+                        <br />
+                        {labels}
+                    </Box>
+                </Details>
             </Box>
         </FilterList.Item>
     );

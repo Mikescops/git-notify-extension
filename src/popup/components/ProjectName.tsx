@@ -27,8 +27,6 @@ export const ProjectName = (props: Props) => {
 
     useEffect(() => settings(), [settings]);
 
-    console.log(projectDirectoryPrefix);
-
     return (
         <Tooltip
             aria-label={copyBranchStatus ? '✔️ Copied' : `📋 Copy ${props.label ?? 'name'} to clipboard`}

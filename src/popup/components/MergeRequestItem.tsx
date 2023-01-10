@@ -1,5 +1,5 @@
-import { Avatar, FilterList, Box, Link, Label, Tooltip } from '@primer/react';
-import { ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
+import { Avatar, FilterList, Box, Link, Label, Tooltip, Details, useDetails, IconButton, Button } from '@primer/react';
+import { ChevronDownIcon, ChevronRightIcon, ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
 import { AvatarWithTooltip, UserWithApproval } from './AvatarWithTooltip';
 import { calculateTimeElapsed, cleanupDescription, removeDuplicateObjectFromArray } from '../helpers';
 import { GitlabTypes, MergeRequestsDetails } from '../../background/types';
@@ -7,6 +7,8 @@ import { createNewTab } from '../utils/createNewTab';
 import { PipelineBadge } from './PipelineBadge';
 import { MergeBadge } from './MergeBadge';
 import { ProjectName } from './ProjectName';
+import { MarkdownViewer } from '@primer/react/drafts';
+import { marked } from 'marked';
 
 interface Props {
     mr: MergeRequestsDetails;
@@ -44,10 +46,25 @@ export const MergeRequestItem = ({ mr }: Props) => {
 
     const avatarsUI = avatars.map((assignee) => <AvatarWithTooltip assignee={assignee} key={assignee.id} />);
 
+    const { getDetailsProps, open, setOpen } = useDetails({
+        closeOnOutsideClick: true
+    });
+
     return (
         <FilterList.Item className={mrApproved ? 'mrApproved mrItem' : 'mrItem'}>
-            <Box display="flex" flexWrap="nowrap">
-                <Box mr={2} style={{ flex: 1 }}>
+            <Box display="flex" flexWrap="wrap">
+                <Box mr={2} display={'flex'} flexWrap="wrap" flex={1}>
+                    <IconButton
+                        as="div"
+                        variant="invisible"
+                        size="small"
+                        sx={{ padding: 0, lineHeight: '14px' }}
+                        onClick={(e: Event) => {
+                            e.preventDefault();
+                            setOpen(!open ?? true);
+                        }}
+                        icon={open ? ChevronDownIcon : ChevronRightIcon}
+                    />
                     <Link
                         as="a"
                         href={mr.web_url}
@@ -112,6 +129,18 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         ''
                     )}
                 </Box>
+                <Box flexBasis={'100%'} width={0}></Box>
+                <Details {...getDetailsProps()} sx={{ width: '100%' }}>
+                    <Button as="summary" sx={{ display: 'none' }} hidden={true}>
+                        hidden
+                    </Button>
+                    <Box className={'markdownContent'} sx={{bg: 'neutral.subtle'}}>
+                        <MarkdownViewer
+                            openLinksInNewTab={true}
+                            dangerousRenderedHTML={{ __html: marked.parse(cleanupDescription(mr.description)) }}
+                        />
+                    </Box>
+                </Details>
             </Box>
         </FilterList.Item>
     );
