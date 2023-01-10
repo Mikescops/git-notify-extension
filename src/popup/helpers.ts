@@ -28,6 +28,9 @@ export const removeDuplicateObjectFromArray = <T>(array: T[], key: string): T[] 
 };
 
 export const cleanupDescription = (description: string) => {
+    if (!description || typeof description !== 'string' || description === '') {
+        return '';
+    }
     return description
         .replace(/^[\u200B\u200C\u200D\u200E\u200F\uFEFF]/, '')
         .replace(/<!--[\s\S]*?-->/g, '')

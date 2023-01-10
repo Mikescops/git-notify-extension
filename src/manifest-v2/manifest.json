@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "version": "2.1.0",
+    "version": "2.1.1",
     "name": "GitLab Notify",
     "short_name": "GitLab Notify",
     "description": "Don't miss any GitLab merge requests or issues and rocket up your productivity.",
