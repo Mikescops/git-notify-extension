@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { Avatar, BranchName, FilterList, Box, Link, Label, Tooltip } from '@primer/react';
-import { GitMergeIcon, ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
+import { Avatar, FilterList, Box, Link, Label, Tooltip } from '@primer/react';
+import { ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
 import { AvatarWithTooltip, UserWithApproval } from './AvatarWithTooltip';
 import { calculateTimeElapsed, cleanupDescription, removeDuplicateObjectFromArray } from '../helpers';
 import { GitlabTypes, MergeRequestsDetails } from '../../background/types';
 import { createNewTab } from '../utils/createNewTab';
 import { PipelineBadge } from './PipelineBadge';
 import { MergeBadge } from './MergeBadge';
+import { ProjectName } from './ProjectName';
 
 interface Props {
     mr: MergeRequestsDetails;
@@ -19,12 +19,6 @@ export const MergeRequestItem = ({ mr }: Props) => {
     }
 
     const timeElapsed = calculateTimeElapsed(mr.created_at);
-
-    const [copyBranchStatus, setCopyBranchStatus] = useState(false);
-    const copyToClipboard = async (text: string) => {
-        await navigator.clipboard.writeText(text);
-        setCopyBranchStatus(true);
-    };
 
     const author = mr.author as GitlabTypes.UserSchema;
     const reviewers = removeDuplicateObjectFromArray([...(mr.assignees ?? []), ...(mr.reviewers ?? [])], 'id');
@@ -73,21 +67,11 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         >
                             <Avatar src={author.avatar_url} size={20} className={'avatar-small'} />
                         </Tooltip>
-                        <Tooltip
-                            aria-label={copyBranchStatus ? '✔️ Copied' : '📋 Copy branch name to clipboard'}
-                            direction="e"
-                            className={'mrBranchNameParent'}
-                            sx={{ mr: 2 }}
-                        >
-                            <BranchName
-                                as={'span'}
-                                className={'mrBranchName'}
-                                title={mr.source_branch}
-                                onClick={async () => await copyToClipboard(mr.source_branch)}
-                            >
-                                <GitMergeIcon /> {mr.references.full}
-                            </BranchName>
-                        </Tooltip>
+                        <ProjectName
+                            textToCopy={mr.source_branch}
+                            projectName={mr.references.full}
+                            label={'branch name'}
+                        />
                         <PipelineBadge pipeline={mr.pipeline} />
                         <MergeBadge mergeStatus={mr.merge_status} mrApproved={Boolean(mr.approvals.approved)} />
                         <Label

@@ -1,9 +1,10 @@
-import { Avatar, BranchName, FilterList, Box, Button, Link, Label, Tooltip } from '@primer/react';
-import { ClockIcon, CommentDiscussionIcon, PlusIcon, RepoIcon } from '@primer/octicons-react';
+import { Avatar, FilterList, Box, Link, Label, Tooltip } from '@primer/react';
+import { ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
 import { calculateTimeElapsed } from '../helpers';
 import { GitlabTypes } from '../../background/types';
 import { createNewTab } from '../utils/createNewTab';
+import { ProjectName } from './ProjectName';
 
 interface Props {
     issue: GitlabTypes.IssueSchema;
@@ -35,13 +36,15 @@ export const IssueItem = ({ issue }: Props) => {
                     >
                         {issue.title}
                     </Link>
-                    <div>
+                    <Box display="flex">
                         <Tooltip sx={{ mr: 2 }} aria-label={author.name} direction="e" className={'inline-avatar'}>
                             <Avatar src={author.avatar_url} size={20} className={'avatar-small'} />
                         </Tooltip>
-                        <BranchName as={Button} sx={{ mr: 2 }} className={'mrBranchName'}>
-                            <RepoIcon /> {issue.references.full}
-                        </BranchName>
+                        <ProjectName
+                            textToCopy={issue.references.full}
+                            projectName={issue.references.full}
+                            label={'issue reference'}
+                        />
                         <Label
                             size="small"
                             sx={{ color: 'neutral.emphasis', bg: 'canvas.default' }}
@@ -56,7 +59,7 @@ export const IssueItem = ({ issue }: Props) => {
                         >
                             <ClockIcon /> &#160;{timeElapsed}
                         </Label>
-                    </div>
+                    </Box>
                 </Box>
                 <Box className={'avatarsList'}>
                     {avatars}{' '}
