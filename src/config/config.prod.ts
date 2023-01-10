@@ -4,5 +4,6 @@ export const config = {
     token: '',
     address: 'https://gitlab.com',
     defaultTab: 'to_review',
-    alertBadgeCounters: [0]
+    alertBadgeCounters: [0],
+    draftInToReviewTab: true
 };
