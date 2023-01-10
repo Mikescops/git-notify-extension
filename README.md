@@ -16,6 +16,7 @@ _Don't miss any GitLab merge requests or issues and rocket up your productivity.
 -   List Issues you are assigned to
 -   Display your To-Do List
 -   Pick a random contributor of a repository to assign them to a MR 😈
+-   Display the pipelines statuses and unresolved threads for merges requests
 
 It comes with a bunch of features to let you access easily the information you're looking for and is customizable so it fits your needs.
 

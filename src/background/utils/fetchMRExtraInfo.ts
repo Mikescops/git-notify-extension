@@ -15,29 +15,40 @@ export const fetchMRExtraInfo = async (params: FetchMRExtraInfoParams): Promise<
     }
 
     const requestsToExecute = mrList.map((mr) => {
+        const mrDetailsRequest = gitlabApi.MergeRequests.show(mr.project_id, mr.iid);
+
         if (gitlabCE === true) {
-            return Promise.resolve({
-                iid: mr.iid,
-                user_has_approved: false,
-                approved: false,
-                approved_by: []
-            });
+            return Promise.all([
+                mrDetailsRequest,
+                Promise.resolve({
+                    iid: mr.iid,
+                    user_has_approved: false,
+                    approved: false,
+                    approved_by: []
+                })
+            ]);
         }
 
-        return gitlabApi.MergeRequestApprovals.configuration(mr.project_id, {
-            mergerequestIid: mr.iid
-        });
+        return Promise.all([
+            mrDetailsRequest,
+            gitlabApi.MergeRequestApprovals.configuration(mr.project_id, {
+                mergerequestIid: mr.iid
+            })
+        ]);
     });
 
-    const approvalsPerMr = await Promise.all(requestsToExecute);
+    const mrDetails = await Promise.all(requestsToExecute);
 
-    const mrWithDetails: MergeRequestsDetails[] = approvalsPerMr.map((approvals) => {
+    const mrWithDetails: MergeRequestsDetails[] = mrDetails.map((mr) => {
+        const mrDetails = mr[0];
+        const approvals = mr[1];
+
         if (approvals instanceof Error) {
             throw new GitLabIsCE();
         }
 
         return {
-            ...mrList[mrList.findIndex((mr) => mr.iid === approvals.iid)],
+            ...mrDetails,
             approvals
         };
     });
