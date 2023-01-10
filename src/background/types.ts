@@ -5,6 +5,7 @@ export type GitlabAPI = InstanceType<typeof Gitlab>;
 
 export interface MergeRequestsDetails extends GitlabTypes.MergeRequestSchema {
     approvals: Approvals | GitlabTypes.MergeRequestLevelMergeRequestApprovalSchema;
+    pipeline?: GitlabTypes.PipelineSchema;
 }
 
 export interface Approvals {

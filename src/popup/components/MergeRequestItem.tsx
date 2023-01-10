@@ -1,17 +1,12 @@
 import { useState } from 'react';
 import { Avatar, BranchName, FilterList, Box, Link, Label, Tooltip } from '@primer/react';
-import {
-    GitMergeIcon,
-    IssueClosedIcon,
-    IssueOpenedIcon,
-    ClockIcon,
-    CommentDiscussionIcon,
-    PlusIcon
-} from '@primer/octicons-react';
+import { GitMergeIcon, ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
 import { AvatarWithTooltip, UserWithApproval } from './AvatarWithTooltip';
 import { calculateTimeElapsed, cleanupDescription, removeDuplicateObjectFromArray } from '../helpers';
 import { GitlabTypes, MergeRequestsDetails } from '../../background/types';
 import { createNewTab } from '../utils/createNewTab';
+import { PipelineBadge } from './PipelineBadge';
+import { MergeBadge } from './MergeBadge';
 
 interface Props {
     mr: MergeRequestsDetails;
@@ -93,36 +88,8 @@ export const MergeRequestItem = ({ mr }: Props) => {
                                 <GitMergeIcon /> {mr.references.full}
                             </BranchName>
                         </Tooltip>
-                        {mr.merge_status === 'can_be_merged' && mr.approvals.approved ? (
-                            <Label
-                                size="small"
-                                sx={{ color: 'canvas.default', bg: 'success.emphasis' }}
-                                className={'mrLabel'}
-                                title="Approved and can be merged!"
-                            >
-                                <IssueClosedIcon />
-                            </Label>
-                        ) : null}
-                        {mr.merge_status !== 'can_be_merged' && mr.approvals.approved ? (
-                            <Label
-                                size="small"
-                                sx={{ color: 'canvas.default', bg: 'attention.emphasis' }}
-                                className={'mrLabel'}
-                                title="Approved but you may need to rebase before merging."
-                            >
-                                <IssueOpenedIcon />
-                            </Label>
-                        ) : null}
-                        {mr.merge_status !== 'can_be_merged' && !mr.approvals.approved ? (
-                            <Label
-                                size="small"
-                                sx={{ color: 'canvas.default', bg: 'danger.emphasis' }}
-                                className={'mrLabel'}
-                                title="Cannot be merged, you may need to rebase first."
-                            >
-                                <IssueOpenedIcon />
-                            </Label>
-                        ) : null}
+                        <PipelineBadge pipeline={mr.pipeline} />
+                        <MergeBadge mergeStatus={mr.merge_status} mrApproved={Boolean(mr.approvals.approved)} />
                         <Label
                             size="small"
                             sx={{
