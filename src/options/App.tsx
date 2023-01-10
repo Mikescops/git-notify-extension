@@ -24,24 +24,26 @@ const getSettings = readConfiguration([
     'gitlabAddress',
     'refreshRate',
     'defaultTab',
-    'alertBadgeCounters'
+    'alertBadgeCounters',
+    'draftInToReviewTab'
 ]);
 
 export const App = () => {
-    const [gitlabCE, setGitlabCE] = useState(false);
+    const [gitlabCE, setGitlabCE] = useState<boolean>(false);
     const [gitlabToken, setGitlabToken] = useState('');
     const [gitlabAddress, setGitlabAddress] = useState('');
     const [refreshRate, setRefreshRate] = useState(40);
-    const [defaultTab, setDefaultTab] = useState('to_review' as TabId);
+    const [defaultTab, setDefaultTab] = useState<TabId>('to_review');
     const [alertBadgeCounters, setAlertBadgeCounters] = useState([0]);
+    const [draftInToReviewTab, setDraftInToReviewTab] = useState<boolean>(true);
     const [testSuccess, setTestSuccess] = useState(null);
-    const [isGitlabTokenInLocalStorage, setIsGitlabTokenInLocalStorage] = useState(false);
-    const [isGitlabAddressInLocalStorage, setIsGitlabAddressInLocalStorage] = useState(false);
-    const [isRefreshRateInLocalStorage, setIsRefreshRateInLocalStorage] = useState(false);
+    const [isGitlabTokenInLocalStorage, setIsGitlabTokenInLocalStorage] = useState<boolean>(false);
+    const [isGitlabAddressInLocalStorage, setIsGitlabAddressInLocalStorage] = useState<boolean>(false);
+    const [isRefreshRateInLocalStorage, setIsRefreshRateInLocalStorage] = useState<boolean>(false);
 
     useEffect(() => {
         getSettings.then((settings) => {
-            setGitlabCE(settings.gitlabCE ?? false);
+            setGitlabCE(Boolean(settings.gitlabCE));
 
             setGitlabToken(settings.gitlabToken ?? '');
             setIsGitlabTokenInLocalStorage(settings.gitlabToken);
@@ -55,6 +57,8 @@ export const App = () => {
             setDefaultTab(settings.defaultTab ?? 'to_review');
 
             setAlertBadgeCounters(settings.alertBadgeCounters ? Array.from(settings.alertBadgeCounters) : []);
+
+            setDraftInToReviewTab(settings.draftInToReviewTab ?? true);
         });
     }, []);
 
@@ -93,6 +97,11 @@ export const App = () => {
         await updateConfiguration({ alertBadgeCounters: options });
     };
 
+    const updateDraftInToReviewTab = async (event: any) => {
+        setDraftInToReviewTab(event.target.checked);
+        await updateConfiguration({ draftInToReviewTab: event.target.checked });
+    };
+
     const testConnection = useCallback(() => {
         browser.runtime.sendMessage({ type: 'getLatestDataFromGitLab' }).then((success) => setTestSuccess(success));
     }, []);
@@ -107,7 +116,7 @@ export const App = () => {
                         name="gitlabCE"
                         value="GitLab CE Mode"
                         onChange={updateGitlabCE}
-                        checked={gitlabCE ? true : false}
+                        checked={gitlabCE}
                     />
                     <FormControl.Caption>(approvals are a premium feature)</FormControl.Caption>
                 </FormControl>
@@ -219,6 +228,19 @@ export const App = () => {
                             To-Do List
                         </option>
                     </select>
+                </FormControl>
+                <FormControl>
+                    <FormControl.Label>View draft MRs in &quot;To Review&quot; tab</FormControl.Label>
+                    <Checkbox
+                        type="checkbox"
+                        name="draftInToReviewTab"
+                        value="View draft in To Review tab"
+                        onChange={updateDraftInToReviewTab}
+                        checked={draftInToReviewTab}
+                    />
+                    <FormControl.Caption>
+                        (merge requests marked as &quot;Draft:&quot; will be ignored if unchecked)
+                    </FormControl.Caption>
                 </FormControl>
 
                 <>

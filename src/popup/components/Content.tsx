@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from 'react';
 import { TabId } from '../../common/types';
 import { AppStatus } from '../types';
 import { MergeRequestSendMessageReply } from '../utils/mergeRequestDownloader';
@@ -10,6 +11,7 @@ import { MergeRequests } from '../pages/MergeRequests';
 import { Loading } from './Loading';
 import { GlobalError } from '../../common/errors';
 import { Onboarding } from '../pages/Onboarding';
+import { readConfiguration } from '../../common/configuration';
 
 interface Props {
     appStatus: AppStatus;
@@ -20,6 +22,17 @@ interface Props {
 
 export const Content = (props: Props) => {
     const { appStatus, mrData, currentTab, error } = props;
+
+    const [draftInToReviewTab, setDraftInToReviewTab] = useState<boolean>(true);
+
+    const contentSettings = useCallback(() => {
+        const getSettings = readConfiguration(['draftInToReviewTab']);
+        getSettings.then((settings) => {
+            setDraftInToReviewTab(Boolean(settings.draftInToReviewTab));
+        });
+    }, []);
+
+    useEffect(() => contentSettings(), [contentSettings]);
 
     if (appStatus === 'loading' || appStatus === 'idle') {
         return <Loading />;
@@ -51,6 +64,11 @@ export const Content = (props: Props) => {
         drafts: mrData.myDrafts
     };
 
-    const mergeRequestsToDisplay = mrToDisplayByTabId[currentTab] ?? mrData.mrReceived;
+    let mergeRequestsToDisplay = mrToDisplayByTabId[currentTab] ?? mrData.mrReceived;
+
+    if (currentTab === 'to_review' && !draftInToReviewTab) {
+        mergeRequestsToDisplay = mergeRequestsToDisplay.filter((mr) => !mr.work_in_progress);
+    }
+
     return <MergeRequests mergeRequests={mergeRequestsToDisplay} />;
 };

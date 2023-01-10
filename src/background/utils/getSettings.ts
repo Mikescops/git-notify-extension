@@ -6,27 +6,27 @@ import { GetSettingsResponse } from '../types';
  * During dev address and token are pulled from the config files in order to save time
  */
 export const getSettings = async (): Promise<GetSettingsResponse> => {
+    const settings = await browser.storage.local.get([
+        'gitlabCE',
+        'gitlabToken',
+        'gitlabAddress',
+        'alertBadgeCounters'
+    ]);
+
     if (config.mode === 'production') {
-        const settings = await browser.storage.local.get([
-            'gitlabCE',
-            'gitlabToken',
-            'gitlabAddress',
-            'alertBadgeCounters'
-        ]);
         return {
             token: settings.gitlabToken,
             address: settings.gitlabAddress,
-            gitlabCE: settings.gitlabCE || false,
+            gitlabCE: Boolean(settings.gitlabCE),
             alertBadgeCounters: settings.alertBadgeCounters || [0]
         };
     }
 
     const { token, address } = config;
-    const settings = await browser.storage.local.get(['gitlabCE', 'alertBadgeCounters']);
     return {
         token,
         address,
-        gitlabCE: settings.gitlabCE || false,
+        gitlabCE: Boolean(settings.gitlabCE),
         alertBadgeCounters: settings.alertBadgeCounters || [0]
     };
 };
