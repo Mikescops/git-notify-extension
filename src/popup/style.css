@@ -48,11 +48,13 @@ body {
 }
 
 .mrTitle {
+    width: 100%;
+    max-width: 475px;
     font-weight: bold;
     margin-bottom: 5px;
+    margin-left: 5px;
     display: block;
     text-decoration: none;
-    max-width: 500px;
     text-overflow: ellipsis;
     overflow: hidden;
 }
