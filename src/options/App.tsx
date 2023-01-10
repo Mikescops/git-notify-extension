@@ -13,7 +13,15 @@ import {
     Select,
     ThemeProvider
 } from '@primer/react';
-import { KeyIcon, ServerIcon, PackageDependenciesIcon, CheckIcon, InfoIcon, ClockIcon } from '@primer/octicons-react';
+import {
+    KeyIcon,
+    ServerIcon,
+    PackageDependenciesIcon,
+    CheckIcon,
+    InfoIcon,
+    ClockIcon,
+    FileDirectoryIcon
+} from '@primer/octicons-react';
 import './style.css';
 import { updateConfiguration, readConfiguration } from '../common/configuration';
 import { TabId } from '../common/types';
@@ -25,7 +33,8 @@ const getSettings = readConfiguration([
     'refreshRate',
     'defaultTab',
     'alertBadgeCounters',
-    'draftInToReviewTab'
+    'draftInToReviewTab',
+    'projectDirectoryPrefix'
 ]);
 
 export const App = () => {
@@ -36,6 +45,7 @@ export const App = () => {
     const [defaultTab, setDefaultTab] = useState<TabId>('to_review');
     const [alertBadgeCounters, setAlertBadgeCounters] = useState([0]);
     const [draftInToReviewTab, setDraftInToReviewTab] = useState<boolean>(true);
+    const [projectDirectoryPrefix, setProjectDirectoryPrefix] = useState<string>('');
     const [testSuccess, setTestSuccess] = useState(null);
     const [isGitlabTokenInLocalStorage, setIsGitlabTokenInLocalStorage] = useState<boolean>(false);
     const [isGitlabAddressInLocalStorage, setIsGitlabAddressInLocalStorage] = useState<boolean>(false);
@@ -59,6 +69,8 @@ export const App = () => {
             setAlertBadgeCounters(settings.alertBadgeCounters ? Array.from(settings.alertBadgeCounters) : []);
 
             setDraftInToReviewTab(settings.draftInToReviewTab ?? true);
+
+            setProjectDirectoryPrefix(settings.projectDirectoryPrefix ?? '');
         });
     }, []);
 
@@ -100,6 +112,11 @@ export const App = () => {
     const updateDraftInToReviewTab = async (event: any) => {
         setDraftInToReviewTab(event.target.checked);
         await updateConfiguration({ draftInToReviewTab: event.target.checked });
+    };
+
+    const updateProjectDirectoryPrefix = async (event: any) => {
+        setProjectDirectoryPrefix(event.target.value);
+        await updateConfiguration({ projectDirectoryPrefix: event.target.value });
     };
 
     const testConnection = useCallback(() => {
@@ -241,6 +258,28 @@ export const App = () => {
                     <FormControl.Caption>
                         (merge requests marked as &quot;Draft:&quot; will be ignored if unchecked)
                     </FormControl.Caption>
+                </FormControl>
+                <FormControl>
+                    <FormControl.Label>
+                        Projects directory prefix{' '}
+                        <Tooltip
+                            aria-label="Sometimes your project are in a sub-directory like 'teams/code/projects/'
+                            which makes the project name difficult to read.
+                            Set a prefix here that will be substitute each time."
+                        >
+                            <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
+                        </Tooltip>
+                    </FormControl.Label>
+                    <TextInput
+                        leadingVisual={FileDirectoryIcon}
+                        block
+                        variant={'small'}
+                        name="project-directory-prefix"
+                        value={projectDirectoryPrefix}
+                        placeholder="teams/code/projects/"
+                        onChange={updateProjectDirectoryPrefix}
+                        aria-label="project-directory-prefix"
+                    />
                 </FormControl>
 
                 <>
