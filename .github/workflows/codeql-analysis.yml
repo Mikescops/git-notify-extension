@@ -30,9 +30,7 @@ jobs:
               with:
                   languages: ${{ matrix.language }}
 
-            - run: |
-                  npm ci
-                  npm run build:prod
+            - run: npm ci
 
             - name: Perform CodeQL Analysis
               uses: github/codeql-action/analyze@v1
