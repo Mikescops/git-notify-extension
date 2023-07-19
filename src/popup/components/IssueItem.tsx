@@ -74,7 +74,7 @@ export const IssueItem = ({ issue }: Props) => {
                             sx={{ color: 'neutral.emphasis', bg: 'canvas.default' }}
                             className={'mrLabel'}
                         >
-                            <CommentDiscussionIcon /> {issue.user_notes_count}
+                            <CommentDiscussionIcon /> &#160;{issue.user_notes_count}
                         </Label>
                         <Label
                             size="small"
