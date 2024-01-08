@@ -24,7 +24,14 @@ export const getHumanReadableDate = (timestamp: number) => {
 };
 
 export const removeDuplicateObjectFromArray = <T>(array: T[], key: string): T[] => {
-    return array.filter((obj, index, self) => index === self.findIndex((element) => element[key] === obj[key]));
+    return array.filter(
+        (obj, index, self) =>
+            index ===
+            self.findIndex(
+                (element) =>
+                    (element as { [index: string]: unknown })[key] === (obj as { [index: string]: unknown })[key]
+            )
+    );
 };
 
 export const cleanupDescription = (description: string) => {
