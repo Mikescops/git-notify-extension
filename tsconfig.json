@@ -19,7 +19,6 @@
         "removeComments": true,
         "noLib": false,
         "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true,
         "strictNullChecks": true,
         "sourceMap": false,
         "jsx": "react-jsx",
