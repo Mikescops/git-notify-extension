@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import * as browser from 'webextension-polyfill';
-import { Avatar, Box, Button, FilterList, Label, Link, Text, Tooltip } from '@primer/react';
+import { Avatar, Box, Button, ActionList, Label, Link, Text, Tooltip } from '@primer/react';
 import { ClockIcon, CheckIcon } from '@primer/octicons-react';
 import { calculateTimeElapsed } from '../helpers';
 import { GitlabTypes } from '../../background/types';
@@ -51,7 +51,7 @@ export const TodoItem = (props: Props) => {
     }, [todo.id]);
 
     return (
-        <FilterList.Item className={visibility ? 'mrItem' : 'hidden'}>
+        <ActionList.Item className={visibility ? 'mrItem' : 'hidden'}>
             <Box display="flex" flexWrap="wrap">
                 <Box className={'avatarsList'}>
                     <Avatar src={todo.author.avatar_url} alt={todo.author.name} square size={40} sx={{ mr: 2 }} />
@@ -76,13 +76,13 @@ export const TodoItem = (props: Props) => {
                 </Box>
                 <Box>
                     <Tooltip aria-label={'Mark as done'} direction="w">
-                        <Button variant="outline" size="small" mt={1} onClick={setTodoAsDone}>
+                        <Button variant="default" size="small" className={'mt-1'} onClick={setTodoAsDone}>
                             <CheckIcon />
                         </Button>
                     </Tooltip>
                 </Box>
-                {error ? <ErrorFlash error={error} style={{ width: '100%' }} /> : <></>}
+                {error ? <ErrorFlash error={error} /> : <></>}
             </Box>
-        </FilterList.Item>
+        </ActionList.Item>
     );
 };

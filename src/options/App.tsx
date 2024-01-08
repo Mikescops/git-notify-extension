@@ -7,7 +7,7 @@ import {
     TextInput,
     Text,
     Tooltip,
-    StyledOcticon,
+    Octicon,
     Link,
     FormControl,
     Select,
@@ -149,7 +149,7 @@ export const App = () => {
                                 aria-label="Click to open GitLab documentation.
                     The extension requires 'api' right (or just 'read_api' but all write operations will fail)."
                             >
-                                <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
+                                <Octicon icon={InfoIcon} size={15} color="blue.5" />
                             </Tooltip>
                         </Link>
                     </FormControl.Label>
@@ -170,7 +170,7 @@ export const App = () => {
                     <FormControl.Label>
                         GitLab Host Address{' '}
                         <Tooltip aria-label="Example: https://gitlab.com">
-                            <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
+                            <Octicon icon={InfoIcon} size={15} color="blue.5" />
                         </Tooltip>
                     </FormControl.Label>
                     <TextInput
@@ -189,7 +189,7 @@ export const App = () => {
                     <FormControl.Label>
                         Refresh rate in seconds{' '}
                         <Tooltip aria-label="It is not recommended to go below 30 seconds.">
-                            <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
+                            <Octicon icon={InfoIcon} size={15} color="blue.5" />
                         </Tooltip>
                     </FormControl.Label>
                     <TextInput
@@ -228,7 +228,7 @@ export const App = () => {
                     <FormControl.Label>
                         Alert badge counters{' '}
                         <Tooltip aria-label="You can select multiple counters but display might be too small.">
-                            <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
+                            <Octicon icon={InfoIcon} size={15} color="blue.5" />
                         </Tooltip>
                     </FormControl.Label>
                     <select name="alert-badge-counters" multiple onChange={updateAlertBadgeCounters}>
@@ -267,7 +267,7 @@ export const App = () => {
                             which makes the project name difficult to read.
                             Set a prefix here that will be substitute each time."
                         >
-                            <StyledOcticon icon={InfoIcon} size={15} color="blue.5" />
+                            <Octicon icon={InfoIcon} size={15} color="blue.5" />
                         </Tooltip>
                     </FormControl.Label>
                     <TextInput

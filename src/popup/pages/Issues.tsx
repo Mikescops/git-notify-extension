@@ -1,4 +1,4 @@
-import { FilterList } from '@primer/react';
+import { ActionList } from '@primer/react';
 import { GitlabTypes } from '../../background/types';
 import { EmptyItems } from '../components/EmptyItems';
 import { IssueItem } from '../components/IssueItem';
@@ -12,10 +12,10 @@ export const Issues = (props: Props): JSX.Element => {
         return <EmptyItems />;
     }
     return (
-        <FilterList className={'mrList'}>
+        <ActionList className={'mrList'}>
             {props.issues.map((issue: GitlabTypes.IssueSchema) => (
                 <IssueItem issue={issue} key={issue.id} />
             ))}
-        </FilterList>
+        </ActionList>
     );
 };

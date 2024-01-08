@@ -1,4 +1,4 @@
-import { FilterList } from '@primer/react';
+import { ActionList } from '@primer/react';
 import { EmptyItems } from '../components/EmptyItems';
 import { MergeRequestsDetails } from '../../background/types';
 import { MergeRequestItem } from '../components/MergeRequestItem';
@@ -14,10 +14,10 @@ export const MergeRequests = (props: Props): JSX.Element => {
     }
 
     return (
-        <FilterList className={'mrList'}>
+        <ActionList className={'mrList'}>
             {mergeRequests.map((mr: MergeRequestsDetails) => (
                 <MergeRequestItem mr={mr} key={mr.id} />
             ))}
-        </FilterList>
+        </ActionList>
     );
 };

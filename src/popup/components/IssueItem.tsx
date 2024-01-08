@@ -1,4 +1,4 @@
-import { Avatar, FilterList, Box, Link, Label, Tooltip, Button, Details, IconButton, useDetails } from '@primer/react';
+import { Avatar, ActionList, Box, Link, Label, Tooltip, Button, Details, IconButton, useDetails } from '@primer/react';
 import { ChevronDownIcon, ChevronRightIcon, ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
 import { calculateTimeElapsed, cleanupDescription } from '../helpers';
@@ -36,19 +36,20 @@ export const IssueItem = ({ issue }: Props) => {
     });
 
     return (
-        <FilterList.Item className={'mrItem'}>
+        <ActionList.Item className={'mrItem'}>
             <Box display="flex" flexWrap="wrap">
                 <Box mr={2} display={'flex'} flexWrap="wrap" flex={1}>
                     <IconButton
                         as="div"
                         variant="invisible"
                         size="small"
-                        sx={{ padding: 0, lineHeight: '14px' }}
-                        onClick={(e: Event) => {
+                        className={'mrIconButton'}
+                        onClick={(e) => {
                             e.preventDefault();
                             setOpen(!open ?? true);
                         }}
                         icon={open ? ChevronDownIcon : ChevronRightIcon}
+                        aria-labelledby="icon-button-label"
                     />
                     <Link
                         as="a"
@@ -113,6 +114,6 @@ export const IssueItem = ({ issue }: Props) => {
                     </Box>
                 </Details>
             </Box>
-        </FilterList.Item>
+        </ActionList.Item>
     );
 };
