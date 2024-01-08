@@ -1,4 +1,4 @@
-import { Avatar, FilterList, Box, Link, Label, Tooltip, Details, useDetails, IconButton, Button } from '@primer/react';
+import { Avatar, ActionList, Box, Link, Label, Tooltip, Details, useDetails, IconButton, Button } from '@primer/react';
 import { ChevronDownIcon, ChevronRightIcon, ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
 import { AvatarWithTooltip, UserWithApproval } from './AvatarWithTooltip';
 import { calculateTimeElapsed, cleanupDescription, removeDuplicateObjectFromArray } from '../helpers';
@@ -51,19 +51,20 @@ export const MergeRequestItem = ({ mr }: Props) => {
     });
 
     return (
-        <FilterList.Item className={mrApproved ? 'mrApproved mrItem' : 'mrItem'}>
+        <ActionList.Item className={mrApproved ? 'mrApproved mrItem' : 'mrItem'}>
             <Box display="flex" flexWrap="wrap">
                 <Box mr={2} display={'flex'} flexWrap="wrap" flex={1}>
                     <IconButton
                         as="div"
                         variant="invisible"
                         size="small"
-                        sx={{ padding: 0, lineHeight: '14px' }}
-                        onClick={(e: Event) => {
+                        className={'mrIconButton'}
+                        onClick={(e) => {
                             e.preventDefault();
                             setOpen(!open ?? true);
                         }}
                         icon={open ? ChevronDownIcon : ChevronRightIcon}
+                        aria-labelledby="icon-button-label"
                     />
                     <Link
                         as="a"
@@ -134,7 +135,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                     <Button as="summary" sx={{ display: 'none' }} hidden={true}>
                         hidden
                     </Button>
-                    <Box className={'markdownContent'} sx={{bg: 'neutral.subtle'}}>
+                    <Box className={'markdownContent'} sx={{ bg: 'neutral.subtle' }}>
                         <MarkdownViewer
                             openLinksInNewTab={true}
                             dangerousRenderedHTML={{ __html: marked.parse(cleanupDescription(mr.description)) }}
@@ -142,6 +143,6 @@ export const MergeRequestItem = ({ mr }: Props) => {
                     </Box>
                 </Details>
             </Box>
-        </FilterList.Item>
+        </ActionList.Item>
     );
 };

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Button, FilterList } from '@primer/react';
+import { Button, ActionList } from '@primer/react';
 import { CheckIcon } from '@primer/octicons-react';
 import * as browser from 'webextension-polyfill';
 import { GitlabTypes } from '../../background/types';
@@ -35,11 +35,11 @@ export const Todos = (props: Props): JSX.Element => {
                     </Button>
                 </div>
             ) : null}
-            <FilterList className={'mrList'}>
+            <ActionList className={'mrList'}>
                 {props.todos.map((todo: GitlabTypes.TodoSchema) => (
                     <TodoItem todo={todo} key={todo.id} />
                 ))}
-            </FilterList>
+            </ActionList>
         </>
     );
 };

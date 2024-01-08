@@ -47,6 +47,13 @@ body {
     cursor: default !important;
 }
 
+.mrIconButton {
+    padding: 0 !important;
+    line-height: 14px !important;
+    height: 18px !important;
+    width: 18px !important;
+}
+
 .mrTitle {
     width: 100%;
     max-width: 475px;
@@ -56,6 +63,7 @@ body {
     display: block;
     text-decoration: none;
     text-overflow: ellipsis;
+    text-wrap: nowrap;
     overflow: hidden;
 }
 
@@ -67,6 +75,7 @@ body {
 .mrBranchName {
     max-width: 320px;
     text-overflow: ellipsis;
+    text-wrap: nowrap;
     overflow: hidden;
     cursor: pointer;
     max-width: 250px;
@@ -76,7 +85,7 @@ body {
     margin-right: 4px;
     overflow: auto;
     border: var(--color-border-subtle);
-    align-self: center;
+    align-self: normal;
     display: inline-flex;
 }
 
@@ -105,7 +114,7 @@ body {
 
 .inline-avatar {
     vertical-align: top !important;
-    align-self: center;
+    align-self: normal;
     display: inline-flex;
 }
 

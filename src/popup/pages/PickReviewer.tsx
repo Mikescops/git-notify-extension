@@ -31,7 +31,7 @@ export const PickReviewer = () => {
             .catch((error) => console.error(error));
     }, []);
 
-    const getMembersOfGroup = useCallback((groupIds) => {
+    const getMembersOfGroup = useCallback((groupIds: Group[]) => {
         setLoadingMembers(true);
         const selectedGroup = groupIds[0].id;
         browser.runtime
@@ -64,7 +64,7 @@ export const PickReviewer = () => {
                         />
                         {selectedMember ? (
                             <Button
-                                leadingIcon={SyncIcon}
+                                icon={SyncIcon}
                                 variant="invisible"
                                 size="medium"
                                 sx={{ ml: 2 }}
@@ -75,10 +75,11 @@ export const PickReviewer = () => {
                         ) : null}
                     </Box>
                     <Autocomplete.Menu
-                        items={groups}
+                        items={groups as any}
                         selectedItemIds={[]}
-                        onSelectedChange={getMembersOfGroup}
+                        onSelectedChange={getMembersOfGroup as any}
                         loading={groups.length === 0}
+                        aria-labelledby="autocomplete-label"
                     />
                 </Autocomplete>
             </FormControl>
