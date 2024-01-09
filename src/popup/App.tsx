@@ -74,6 +74,25 @@ export const App = () => {
     useEffect(() => fetchData(), [fetchData]);
     useEffect(() => applySettings(), [applySettings]);
 
+    // prevent details element from closing when clicking on summary
+    useEffect(() => {
+        const handleClick = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            if (
+                target.tagName.toLowerCase() === 'summary' &&
+                target.parentElement?.tagName.toLowerCase() === 'details'
+            ) {
+                event.stopPropagation();
+            }
+        };
+
+        document.addEventListener('click', handleClick, true);
+
+        return () => {
+            document.removeEventListener('click', handleClick, true);
+        };
+    }, []);
+
     return (
         <ThemeProvider colorMode="auto">
             <Box className={'container'} sx={{ bg: 'canvas.default' }}>

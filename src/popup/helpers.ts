@@ -1,3 +1,5 @@
+import sanitizeHtml from 'sanitize-html';
+
 export const calculateTimeElapsed = (timestamp: number | string) => {
     const startStamp = new Date(timestamp).getTime();
     const newDate = new Date();
@@ -38,9 +40,7 @@ export const cleanupDescription = (description: string) => {
     if (!description || typeof description !== 'string' || description === '') {
         return '';
     }
-    return description
-        .replace(/^[\u200B\u200C\u200D\u200E\u200F\uFEFF]/, '')
-        .replace(/<!--[\s\S]*?-->/g, '')
-        .replace(/\n{2,}/g, '\n\n')
-        .trim();
+    return sanitizeHtml(description, {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'summary', 'details'])
+    });
 };

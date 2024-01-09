@@ -24,6 +24,28 @@
     margin: 6px 0;
 }
 
+.markdownContent details {
+    border: 1px solid #6a6a6a;
+    border-radius: 4px;
+    padding: 0.5em 0.5em 0;
+    margin-bottom: 0.5em;
+}
+
+.markdownContent summary {
+    font-weight: bold;
+    margin: -0.5em -0.5em 0;
+    padding: 0.5em;
+}
+
+.markdownContent details[open] {
+    padding: 0.5em;
+}
+
+.markdownContent details[open] summary {
+    border-bottom: 1px solid #6a6a6a;
+    margin-bottom: 0.5em;
+}
+
 .markdown-body div > *:first-child {
     margin-top: 0;
 }

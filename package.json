@@ -47,6 +47,7 @@
         "marked": "^11.1.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "sanitize-html": "^2.11.0",
         "webextension-polyfill": "^0.10.0"
     },
     "devDependencies": {
@@ -57,11 +58,13 @@
         "@types/node": "^18.11.18",
         "@types/react": "^18.2.47",
         "@types/react-dom": "^18.0.10",
+        "@types/sanitize-html": "^2.9.5",
         "@types/styled-components": "^5.1.26",
         "@types/webextension-polyfill": "^0.10.7",
         "@typescript-eslint/eslint-plugin": "^6.18.0",
         "@typescript-eslint/parser": "^6.18.0",
         "archiver": "^6.0.1",
+        "buffer": "^5.5.0||^6.0.0",
         "eslint": "^8.31.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-compat": "^4.0.2",
