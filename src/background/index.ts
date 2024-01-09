@@ -1,8 +1,8 @@
 import * as browser from 'webextension-polyfill';
-import { getLatestDataFromGitLab, getLocalData, setTodoAsDone } from './endpoints';
+import { getLatestDataFromGitLab, setTodoAsDone } from './endpoints';
 import { getProjectsList } from './endpoints/getProjectsList';
 import { getMembersOfGroup } from './endpoints/getMembersOfGroup';
-import { setGlobalError } from './utils/globalError';
+import { setGlobalError } from '../common/globalError';
 
 console.log('background script loaded');
 
@@ -30,10 +30,6 @@ browser.storage.local.get(['refreshRate']).then((settings) => {
 browser.runtime.onMessage.addListener((message) => {
     if (message.type === 'ping') {
         return Promise.resolve('pong');
-    }
-
-    if (message.type === 'getLocalData') {
-        return getLocalData();
     }
 
     if (message.type === 'getLatestDataFromGitLab') {

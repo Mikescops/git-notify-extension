@@ -1,8 +1,6 @@
-import * as browser from 'webextension-polyfill';
 import { MergeRequestsDetails, GitlabTypes } from '../../background/types';
 import { GlobalError } from '../../common/errors';
-
-const REQUEST_TYPE_GET_LOCAL_DATA = 'getLocalData';
+import { getLocalData } from '../../common/getLocalData';
 
 export interface MergeRequestSendMessageReply {
     mrReceived: MergeRequestsDetails[];
@@ -17,11 +15,9 @@ export interface MergeRequestSendMessageReply {
 }
 
 export const getMergeRequestList = async (): Promise<MergeRequestSendMessageReply> => {
-    const response = (await browser.runtime.sendMessage({
-        type: REQUEST_TYPE_GET_LOCAL_DATA
-    })) as MergeRequestSendMessageReply;
+    const response = await getLocalData();
 
-    if (response instanceof Error || !response || response.error) {
+    if ('error' in response) {
         return {
             error: response.error,
             mrReceived: [],
@@ -35,5 +31,5 @@ export const getMergeRequestList = async (): Promise<MergeRequestSendMessageRepl
         };
     }
 
-    return response;
+    return response as MergeRequestSendMessageReply;
 };
