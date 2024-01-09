@@ -34,15 +34,15 @@ To-Do list:
 
 Install dependencies:
 
-`npm ci`
+`pnpm ci`
 
 Copy dev config file and set your personal GitLab token in it:
 
-`npm run copy-config:setup`
+`pnpm run copy-config:setup`
 
 To build **prod**:
 
-`npm run build:prod && npm run zip`
+`pnpm run build:prod && pnpm run zip`
 
 Then, you get zipped packages for each browser that are supported.
 
