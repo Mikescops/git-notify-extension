@@ -17,34 +17,43 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
 
     const mrAssignedRequest = gitlabApi.MergeRequests.all({
         state: 'opened',
-        scope: 'assigned_to_me'
+        scope: 'assigned_to_me',
+        perPage: 100,
+        maxPages: 5
     });
 
     const mrReceivedRequest = gitlabApi.MergeRequests.all({
         state: 'opened',
         scope: 'all',
-        reviewer_id: currentUser.id
+        reviewer_id: currentUser.id,
+        perPage: 100,
+        maxPages: 5
     });
 
     /** Fetching MR "Under review" */
 
     const mrGivenRequest = gitlabApi.MergeRequests.all({
         state: 'opened',
-        scope: 'created_by_me'
+        scope: 'created_by_me',
+        perPage: 100,
+        maxPages: 5
     });
 
     /** Fetching "Issues" */
 
     const issuesRequest = gitlabApi.Issues.all({
         state: 'opened',
-        scope: 'assigned_to_me'
+        scope: 'assigned_to_me',
+        perPage: 100,
+        maxPages: 5
     });
 
     /** Fetching "Todos" */
 
     const todosRequest = gitlabApi.Todos.all({
         state: 'pending',
-        per_page: 100
+        per_page: 100,
+        maxPages: 5
     });
 
     const [mrAssigned, mrReceived, mrGiven, issues, todos] = await Promise.all([

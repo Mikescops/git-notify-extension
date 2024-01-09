@@ -16,6 +16,11 @@ export const initGitlabApi = (settings: GetSettingsResponse): GitlabAPI => {
         throw new GitLabAddressNotSet();
     }
 
+    settings.address = settings.address.replace(/\/$/, '');
+    if (!settings.address.startsWith('http')) {
+        settings.address = `https://${settings.address}`;
+    }
+
     return new Gitlab({
         host: settings.address,
         token: settings.token,

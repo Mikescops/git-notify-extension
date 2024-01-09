@@ -158,7 +158,6 @@ export const App = () => {
                         leadingVisual={KeyIcon}
                         trailingVisual={isGitlabTokenInLocalStorage ? CheckIcon : undefined}
                         block
-                        variant={'small'}
                         name="gitlab-token"
                         value={gitlabToken}
                         placeholder="<your_token_here>"
@@ -177,7 +176,6 @@ export const App = () => {
                         leadingVisual={ServerIcon}
                         trailingVisual={isGitlabAddressInLocalStorage ? CheckIcon : undefined}
                         block
-                        variant={'small'}
                         name="gitlab-address"
                         value={gitlabAddress}
                         placeholder="<host_address_here>"
@@ -273,7 +271,6 @@ export const App = () => {
                     <TextInput
                         leadingVisual={FileDirectoryIcon}
                         block
-                        variant={'small'}
                         name="project-directory-prefix"
                         value={projectDirectoryPrefix}
                         placeholder="teams/code/projects/"
