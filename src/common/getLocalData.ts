@@ -1,5 +1,5 @@
 import * as browser from 'webextension-polyfill';
-import { getGlobalError } from '../utils/globalError';
+import { getGlobalError } from './globalError';
 
 export const getLocalData = async () => {
     const globalError = await getGlobalError();
@@ -8,7 +8,7 @@ export const getLocalData = async () => {
         return Promise.resolve({ error: globalError });
     }
 
-    return await browser.storage.local.get([
+    return browser.storage.local.get([
         'mrReceived',
         'mrGiven',
         'mrToReview',

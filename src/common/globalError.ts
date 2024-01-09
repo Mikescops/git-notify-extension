@@ -1,6 +1,6 @@
 import * as browser from 'webextension-polyfill';
-import { GitLabAddressNotSet, GitLabTokenNotSet, GlobalError } from '../../common/errors';
-import { setBadge } from './setBadge';
+import { GitLabAddressNotSet, GitLabTokenNotSet, GlobalError } from './errors';
+import { setBadge } from '../background/utils/setBadge';
 
 export const setGlobalError = async (error: Error | null) => {
     if (error) {
