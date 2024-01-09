@@ -45,14 +45,17 @@ export const App = () => {
 
     // useEffect vs useCallback
     // https://medium.com/@infinitypaul/reactjs-useeffect-usecallback-simplified-91e69fb0e7a3
-    const fetchData = useCallback(() => {
-        pingBackend()
-            .then((backendAvaialble) => {
-                if (!backendAvaialble) {
-                    return setError(new Error('Extension backend is unresponsive, try to reload the extension'));
+    const fetchData = useCallback((forceRefresh?: boolean) => {
+        if (forceRefresh) {
+            setAppStatus('loading');
+        }
+        pingBackend(forceRefresh)
+            .then((handledError) => {
+                if (handledError) {
+                    setAppStatus('error');
+                    return setError(handledError);
                 }
 
-                setAppStatus('loading');
                 getMergeRequestList()
                     .then((response) => {
                         if (!response) {

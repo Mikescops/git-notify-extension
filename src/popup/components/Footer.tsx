@@ -12,7 +12,7 @@ interface Props {
     currentTab: TabId;
     mrData: MergeRequestSendMessageReply;
     appStatus: AppStatus;
-    fetchData: () => void;
+    fetchData: (forceRefresh?: boolean) => void;
     gitlabAddress: string;
 }
 
@@ -57,7 +57,13 @@ export const Footer = (props: Props) => {
 
             <Box display="flex" flexWrap="nowrap" style={{ marginTop: '6px' }}>
                 <Tooltip aria-label={'Last update: ' + getHumanReadableDate(mrData.lastUpdateDateUnix)} direction="n">
-                    <Button onClick={fetchData} variant="default" size="small" sx={{ mr: 2 }}>
+                    <Button
+                        onClick={() => fetchData(true)}
+                        variant="default"
+                        size="small"
+                        sx={{ mr: 2 }}
+                        disabled={appStatus === 'loading'}
+                    >
                         <SyncIcon /> Refresh
                     </Button>
                 </Tooltip>
