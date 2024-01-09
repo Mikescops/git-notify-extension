@@ -29,13 +29,13 @@ dependencies:
 
 devDependencies:
   '@parcel/config-webextension':
-    specifier: ^2.8.2
+    specifier: ^2.11.0
     version: 2.11.0(@parcel/core@2.11.0)(typescript@5.3.3)
   '@parcel/reporter-bundle-analyzer':
-    specifier: ^2.8.2
+    specifier: ^2.11.0
     version: 2.11.0(@parcel/core@2.11.0)
   '@parcel/transformer-typescript-tsc':
-    specifier: ^2.8.2
+    specifier: ^2.11.0
     version: 2.11.0(@parcel/core@2.11.0)(typescript@5.3.3)
   '@types/archiver':
     specifier: ^6.0.2
@@ -80,7 +80,7 @@ devDependencies:
     specifier: ^4.6.0
     version: 4.6.0(eslint@8.56.0)
   parcel:
-    specifier: ^2.8.2
+    specifier: ^2.11.0
     version: 2.11.0(typescript@5.3.3)
   prettier:
     specifier: ^3.1.1

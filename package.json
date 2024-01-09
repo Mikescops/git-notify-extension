@@ -50,9 +50,9 @@
         "webextension-polyfill": "^0.10.0"
     },
     "devDependencies": {
-        "@parcel/config-webextension": "^2.8.2",
-        "@parcel/reporter-bundle-analyzer": "^2.8.2",
-        "@parcel/transformer-typescript-tsc": "^2.8.2",
+        "@parcel/config-webextension": "^2.11.0",
+        "@parcel/reporter-bundle-analyzer": "^2.11.0",
+        "@parcel/transformer-typescript-tsc": "^2.11.0",
         "@types/archiver": "^6.0.2",
         "@types/node": "^18.11.18",
         "@types/react": "^18.2.47",
@@ -67,7 +67,7 @@
         "eslint-plugin-compat": "^4.0.2",
         "eslint-plugin-react": "^7.31.11",
         "eslint-plugin-react-hooks": "^4.6.0",
-        "parcel": "^2.8.2",
+        "parcel": "^2.11.0",
         "prettier": "^3.1.1",
         "process": "^0.11.10",
         "styled-components": "^5.1.26",
