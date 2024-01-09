@@ -44,7 +44,13 @@ body {
 }
 
 .mrItem {
+    margin: 0 !important;
     cursor: default !important;
+}
+
+.mrItem:hover {
+    background: transparent !important;
+    box-shadow: inset 0 0 0 1px rgba(208, 215, 222, 0.32) !important;
 }
 
 .mrIconButton {
