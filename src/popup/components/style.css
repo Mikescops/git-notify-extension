@@ -46,6 +46,14 @@
     margin-bottom: 0.5em;
 }
 
+.markdownContent table,
+.markdownContent th,
+.markdownContent td {
+    border: 1px solid #6a6a6a;
+    border-collapse: collapse;
+    padding: 0.5em;
+}
+
 .markdown-body div > *:first-child {
     margin-top: 0;
 }
