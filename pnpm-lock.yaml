@@ -24,8 +24,8 @@ dependencies:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
   sanitize-html:
-    specifier: ^2.11.0
-    version: 2.11.0
+    specifier: ^2.12.1
+    version: 2.12.1
   webextension-polyfill:
     specifier: ^0.10.0
     version: 0.10.0
@@ -4293,9 +4293,6 @@ packages:
     resolution: {integrity: sha512-H/RI1/DmuOkL8RuG/EpNPvtzrbF+7jA/R56ydEEm+lqFbYktKB4COR7JXdHkZXRgbSJyimrFB8d0r9+SaRnj0Q==}
     engines: {node: '>= 12.0.0'}
     hasBin: true
-    peerDependenciesMeta:
-      '@parcel/core':
-        optional: true
     dependencies:
       '@parcel/config-default': 2.11.0(@parcel/core@2.11.0)(typescript@5.3.3)
       '@parcel/core': 2.11.0
@@ -4682,8 +4679,8 @@ packages:
       is-regex: 1.1.4
     dev: true
 
-  /sanitize-html@2.11.0:
-    resolution: {integrity: sha512-BG68EDHRaGKqlsNjJ2xUB7gpInPA8gVx/mvjO743hZaeMCZ2DwzW7xvsqZ+KNU4QKwj86HJ3uu2liISf2qBBUA==}
+  /sanitize-html@2.12.1:
+    resolution: {integrity: sha512-Plh+JAn0UVDpBRP/xEjsk+xDCoOvMBwQUf/K+/cBAVuTbtX8bj2VB7S1sL1dssVpykqp0/KPSesHrqXtokVBpA==}
     dependencies:
       deepmerge: 4.3.1
       escape-string-regexp: 4.0.0
