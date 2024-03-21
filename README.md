@@ -2,11 +2,11 @@
 
 <img src="./assets/icons/git-ghost.png" align="left" alt="image" style="width:150px;height:auto;float:left;padding-right:20px;">
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/mikescops/git-notify-extension) ![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/mikescops/git-notify-extension/pr-validation.yml?branch=master) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ekfpkkhpemajcbniegjicehdphdabhop) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ekfpkkhpemajcbniegjicehdphdabhop) ![Mozilla Add-on](https://img.shields.io/amo/v/gitlab-notify) ![Mozilla Add-on](https://img.shields.io/amo/users/gitlab-notify)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/mikescops/git-notify-extension) ![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/mikescops/git-notify-extension/pr-validation.yml?branch=master) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ekfpkkhpemajcbniegjicehdphdabhop) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ekfpkkhpemajcbniegjicehdphdabhop) ![Mozilla Add-on](https://img.shields.io/amo/v/git-notify) ![Mozilla Add-on](https://img.shields.io/amo/users/git-notify)
 
 _Don't miss any GitLab merge requests or issues and rocket up your productivity._
 
-[Chrome Web Store](https://chrome.google.com/webstore/detail/ekfpkkhpemajcbniegjicehdphdabhop) | [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/gitlab-notify/) | [Microsoft Edge Add-on](https://microsoftedge.microsoft.com/addons/detail/jjnpgaeopmlbaacjkedohiehmeopjoed)
+[Chrome Web Store](https://chrome.google.com/webstore/detail/ekfpkkhpemajcbniegjicehdphdabhop) | [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/git-notify/) | [Microsoft Edge Add-on](https://microsoftedge.microsoft.com/addons/detail/jjnpgaeopmlbaacjkedohiehmeopjoed)
 
 <br clear="left"/>
 
