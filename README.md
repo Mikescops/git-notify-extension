@@ -1,24 +1,28 @@
-# GitLab Notify Extension
+# Git Notify Extension For GitLab
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/mikescops/gitlab-notify-extension) ![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/mikescops/gitlab-notify-extension/pr-validation.yml?branch=master) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ekfpkkhpemajcbniegjicehdphdabhop) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ekfpkkhpemajcbniegjicehdphdabhop) ![Mozilla Add-on](https://img.shields.io/amo/v/gitlab-notify) ![Mozilla Add-on](https://img.shields.io/amo/users/gitlab-notify)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/mikescops/git-notify-extension) ![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/mikescops/git-notify-extension/pr-validation.yml?branch=master) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ekfpkkhpemajcbniegjicehdphdabhop) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ekfpkkhpemajcbniegjicehdphdabhop) ![Mozilla Add-on](https://img.shields.io/amo/v/gitlab-notify) ![Mozilla Add-on](https://img.shields.io/amo/users/gitlab-notify)
+
+<img src="./assets/icons/git-ghost.png" align="left" alt="image" style="width:150px;height:auto;float:left;padding-right:20px;">
 
 _Don't miss any GitLab merge requests or issues and rocket up your productivity._
 
 [Chrome Web Store](https://chrome.google.com/webstore/detail/ekfpkkhpemajcbniegjicehdphdabhop) | [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/gitlab-notify/) | [Microsoft Edge Add-on](https://microsoftedge.microsoft.com/addons/detail/jjnpgaeopmlbaacjkedohiehmeopjoed)
 
-![Preview of the browser extension: 23/09/2020](./previews/preview-reviews.png)
+<br clear="left"/>
 
-**Gitlab Notify is able to:**
+**Git Notify for GitLab is able to:**
 
 -   List Merge Requests you are assigned to
 -   List Merge Requests you created
 -   List your draft Merge Requests
 -   List Issues you are assigned to
 -   Display your To-Do List
--   Pick a random contributor of a repository to assign them to a MR 😈
+-   Pick a random contributor of a repository to assign them to a MR :rage1:
 -   Display the pipelines statuses and unresolved threads for merges requests
 
 It comes with a bunch of features to let you access easily the information you're looking for and is customizable so it fits your needs.
+
+![Preview of the browser extension: 23/09/2020](./previews/preview-reviews.png)
 
 ## Screenshots
 
@@ -63,3 +67,12 @@ Then, you get zipped packages for each browser that are supported.
 
 | [Paola Ducolin](https://github.com/pducolin) | [Bradley Cushing](https://github.com/bradcush) | [Bastien Granger](https://github.com/bastienGranger) | [Quentin Barbe](https://github.com/forty) |
 | -------------------------------------------- | ---------------------------------------------- | ---------------------------------------------------- | ----------------------------------------- |
+
+> [!TIP]
+> Original logo credits to [misutakitto](https://www.instagram.com/misutakitto/), use is strictly limited to this project.
+
+## Disclaimer
+
+> [!NOTE]
+> This project is not affiliated with GitLab. It is an open-source project maintained by volunteers.
+> "GITLAB" wordmark and "GITLAB" logo are the property of GitLab Inc.

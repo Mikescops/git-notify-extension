@@ -16,7 +16,7 @@ export const Onboarding = () => {
                     borderBottom: 'none'
                 }}
             >
-                <Heading sx={{ fontSize: 4, mb: 2 }}>Welcome to GitLab Notify!</Heading>
+                <Heading sx={{ fontSize: 4, mb: 2 }}>Welcome to Git Notify for GitLab!</Heading>
 
                 <ActionList>
                     <ActionList.Item
@@ -34,12 +34,12 @@ export const Onboarding = () => {
                     </ActionList.Item>
                     <ActionList.Item
                         sx={{ marginLeft: 0 }}
-                        onClick={(event) => createNewTab(event, 'https://github.com/Mikescops/gitlab-notify-extension')}
+                        onClick={(event) => createNewTab(event, 'https://github.com/Mikescops/git-notify-extension')}
                     >
                         <ActionList.LeadingVisual>
                             <LinkIcon />
                         </ActionList.LeadingVisual>
-                        github.com/Mikescops/gitlab-notify-extension
+                        github.com/Mikescops/git-notify-extension
                     </ActionList.Item>
                     <ActionList.Item
                         sx={{ marginLeft: 0 }}
