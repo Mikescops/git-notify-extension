@@ -1,8 +1,8 @@
 # Git Notify Extension For GitLab
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/mikescops/git-notify-extension) ![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/mikescops/git-notify-extension/pr-validation.yml?branch=master) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ekfpkkhpemajcbniegjicehdphdabhop) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ekfpkkhpemajcbniegjicehdphdabhop) ![Mozilla Add-on](https://img.shields.io/amo/v/gitlab-notify) ![Mozilla Add-on](https://img.shields.io/amo/users/gitlab-notify)
-
 <img src="./assets/icons/git-ghost.png" align="left" alt="image" style="width:150px;height:auto;float:left;padding-right:20px;">
+
+![GitHub package.json version](https://img.shields.io/github/package-json/v/mikescops/git-notify-extension) ![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/mikescops/git-notify-extension/pr-validation.yml?branch=master) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ekfpkkhpemajcbniegjicehdphdabhop) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ekfpkkhpemajcbniegjicehdphdabhop) ![Mozilla Add-on](https://img.shields.io/amo/v/gitlab-notify) ![Mozilla Add-on](https://img.shields.io/amo/users/gitlab-notify)
 
 _Don't miss any GitLab merge requests or issues and rocket up your productivity._
 

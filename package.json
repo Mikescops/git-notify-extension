@@ -1,6 +1,6 @@
 {
     "name": "git-notify-extension",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "description": "Don't miss any GitLab merge requests and rocket up your productivity.",
     "repository": "https://github.com/Mikescops/git-notify-extension",
     "source": "src/popup/popup.html",
