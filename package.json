@@ -1,8 +1,8 @@
 {
-    "name": "gitlab-notify",
+    "name": "git-notify-extension",
     "version": "2.2.0",
     "description": "Don't miss any GitLab merge requests and rocket up your productivity.",
-    "repository": "https://github.com/Mikescops/gitlab-notify-extension",
+    "repository": "https://github.com/Mikescops/git-notify-extension",
     "source": "src/popup/popup.html",
     "scripts": {
         "start": "npm run copy-config:dev; parcel --host localhost --target mv3",
