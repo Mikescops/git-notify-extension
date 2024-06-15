@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { TabId } from '../../common/types';
+import { Account, TabId } from '../../common/types';
 import { AppStatus } from '../types';
 import { MergeRequestSendMessageReply } from '../utils/mergeRequestDownloader';
 
@@ -26,9 +26,9 @@ export const Content = (props: Props) => {
     const [draftInToReviewTab, setDraftInToReviewTab] = useState<boolean>(true);
 
     const contentSettings = useCallback(() => {
-        const getSettings = readConfiguration(['draftInToReviewTab']);
+        const getSettings = readConfiguration<{ accounts: Account[] }>(['accounts']);
         getSettings.then((settings) => {
-            setDraftInToReviewTab(Boolean(settings.draftInToReviewTab));
+            setDraftInToReviewTab(Boolean(settings.accounts[0].draftInToReviewTab));
         });
     }, []);
 

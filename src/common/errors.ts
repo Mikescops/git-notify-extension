@@ -1,6 +1,15 @@
 export class GlobalError extends Error {
-    constructor(readonly name: string, message: string) {
+    constructor(
+        readonly name: string,
+        message: string
+    ) {
         super(message);
+    }
+}
+
+export class NoAccountSet extends GlobalError {
+    constructor() {
+        super('NoAccountSet', 'No account set, visit options.');
     }
 }
 

@@ -24,18 +24,14 @@ import {
 } from '@primer/octicons-react';
 import './style.css';
 import { updateConfiguration, readConfiguration } from '../common/configuration';
-import { TabId } from '../common/types';
+import { Account, TabId } from '../common/types';
 
-const getSettings = readConfiguration([
-    'gitlabCE',
-    'gitlabToken',
-    'gitlabAddress',
-    'refreshRate',
-    'defaultTab',
-    'alertBadgeCounters',
-    'draftInToReviewTab',
-    'projectDirectoryPrefix'
-]);
+const getSettings = readConfiguration<{
+    accounts: Account[];
+    refreshRate: number;
+    defaultTab: TabId;
+    alertBadgeCounters: number[];
+}>(['accounts', 'refreshRate', 'defaultTab', 'alertBadgeCounters']);
 
 export const App = () => {
     const [gitlabCE, setGitlabCE] = useState<boolean>(false);
@@ -53,24 +49,24 @@ export const App = () => {
 
     useEffect(() => {
         getSettings.then((settings) => {
-            setGitlabCE(Boolean(settings.gitlabCE));
+            setGitlabCE(Boolean(settings.accounts[0].gitlabCE));
 
-            setGitlabToken(settings.gitlabToken ?? '');
-            setIsGitlabTokenInLocalStorage(settings.gitlabToken);
+            setGitlabToken(settings.accounts[0].token ?? '');
+            setIsGitlabTokenInLocalStorage(Boolean(settings.accounts[0].token));
 
-            setGitlabAddress(settings.gitlabAddress ?? '');
-            setIsGitlabAddressInLocalStorage(settings.gitlabAddress);
+            setGitlabAddress(settings.accounts[0].address ?? '');
+            setIsGitlabAddressInLocalStorage(Boolean(settings.accounts[0].address));
 
             setRefreshRate(settings.refreshRate ?? 40);
-            setIsRefreshRateInLocalStorage(settings.refreshRate);
+            setIsRefreshRateInLocalStorage(Boolean(settings.refreshRate));
 
             setDefaultTab(settings.defaultTab ?? 'to_review');
 
             setAlertBadgeCounters(settings.alertBadgeCounters ? Array.from(settings.alertBadgeCounters) : []);
 
-            setDraftInToReviewTab(settings.draftInToReviewTab ?? true);
+            setDraftInToReviewTab(settings.accounts[0].draftInToReviewTab ?? true);
 
-            setProjectDirectoryPrefix(settings.projectDirectoryPrefix ?? '');
+            setProjectDirectoryPrefix(settings.accounts[0].projectDirectoryPrefix ?? '');
         });
     }, []);
 

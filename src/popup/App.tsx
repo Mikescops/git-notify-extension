@@ -5,7 +5,7 @@ import { Content } from './components/Content';
 import { Footer } from './components/Footer';
 import { getMergeRequestList, MergeRequestSendMessageReply } from './utils/mergeRequestDownloader';
 import { pingBackend } from './utils/ping';
-import { TabId } from '../common/types';
+import { Account, TabId } from '../common/types';
 import { readConfiguration } from '../common/configuration';
 import { AppStatus } from './types';
 
@@ -30,10 +30,10 @@ export const App = () => {
     const [gitlabAddress, setGitlabAddress] = useState('');
 
     const applySettings = useCallback(() => {
-        const getSettings = readConfiguration(['defaultTab', 'gitlabAddress']);
+        const getSettings = readConfiguration<{ defaultTab: TabId; accounts: Account[] }>(['defaultTab', 'accounts']);
         getSettings.then((settings) => {
-            setCurrentTab(settings.defaultTab ? settings.defaultTab : 'to_review');
-            setGitlabAddress(settings.gitlabAddress ? settings.gitlabAddress : 'https://gitlab.com');
+            setCurrentTab(settings.defaultTab ?? 'to_review');
+            setGitlabAddress(settings.accounts[0].address ?? 'https://gitlab.com');
         });
     }, []);
 
