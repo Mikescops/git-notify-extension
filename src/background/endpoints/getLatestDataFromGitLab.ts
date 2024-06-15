@@ -5,13 +5,14 @@ import { setBadge } from '../utils/setBadge';
 
 import { removeDuplicateObjectFromArray } from '../../popup/helpers';
 import { initGitlabApi } from '../utils/initGitlabApi';
+import { MergeRequestSchemaWithBasicLabels } from '@gitbeaker/rest';
 
 export const getLatestDataFromGitLab = async (): Promise<void> => {
     console.log('>> POLLING GITLAB API');
 
     const settings = await getSettings();
     const gitlabApi = initGitlabApi(settings);
-    const currentUser = await gitlabApi.Users.current();
+    const currentUser = await gitlabApi.Users.showCurrentUser();
 
     /** Fetching MR "To Review" */
 
@@ -20,7 +21,7 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         scope: 'assigned_to_me',
         perPage: 100,
         maxPages: 5
-    });
+    }) as Promise<MergeRequestSchemaWithBasicLabels[]>;
 
     const mrReceivedRequest = gitlabApi.MergeRequests.all({
         state: 'opened',
@@ -28,7 +29,7 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         reviewer_id: currentUser.id,
         perPage: 100,
         maxPages: 5
-    });
+    }) as Promise<MergeRequestSchemaWithBasicLabels[]>;
 
     /** Fetching MR "Under review" */
 
@@ -37,7 +38,7 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         scope: 'created_by_me',
         perPage: 100,
         maxPages: 5
-    });
+    }) as Promise<MergeRequestSchemaWithBasicLabels[]>;
 
     /** Fetching "Issues" */
 
@@ -50,9 +51,9 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
 
     /** Fetching "Todos" */
 
-    const todosRequest = gitlabApi.Todos.all({
+    const todosRequest = gitlabApi.TodoLists.all({
         state: 'pending',
-        per_page: 100,
+        perPage: 100,
         maxPages: 5
     });
 

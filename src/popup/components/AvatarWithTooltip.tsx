@@ -1,8 +1,8 @@
 import { Avatar, Tooltip } from '@primer/react';
 import { CheckIcon } from '@primer/octicons-react';
-import { GitlabTypes } from '../../background/types';
+import { UserSchema } from '@gitbeaker/rest';
 
-export interface UserWithApproval extends GitlabTypes.UserSchema {
+export interface UserWithApproval extends UserSchema {
     approved?: boolean;
 }
 

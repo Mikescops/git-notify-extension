@@ -1,4 +1,5 @@
-import { MergeRequestsDetails, GitlabTypes } from '../../background/types';
+import { IssueSchema, TodoSchema } from '@gitbeaker/rest';
+import { MergeRequestsDetails } from '../../background/types';
 import { GlobalError } from '../../common/errors';
 import { getLocalData } from '../../common/getLocalData';
 
@@ -8,8 +9,8 @@ export interface MergeRequestSendMessageReply {
     mrGiven: MergeRequestsDetails[];
     mrReviewed: number;
     myDrafts: MergeRequestsDetails[];
-    issues: GitlabTypes.IssueSchema[];
-    todos: GitlabTypes.TodoSchema[];
+    issues: IssueSchema[];
+    todos: TodoSchema[];
     lastUpdateDateUnix: number;
     error?: GlobalError;
 }

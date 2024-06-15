@@ -2,13 +2,14 @@ import { Avatar, ActionList, Box, Link, Label, Tooltip, Details, useDetails, Ico
 import { ChevronDownIcon, ChevronRightIcon, ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
 import { AvatarWithTooltip, UserWithApproval } from './AvatarWithTooltip';
 import { calculateTimeElapsed, cleanupDescription, removeDuplicateObjectFromArray } from '../helpers';
-import { GitlabTypes, MergeRequestsDetails } from '../../background/types';
+import { MergeRequestsDetails } from '../../background/types';
 import { createNewTab } from '../utils/createNewTab';
 import { PipelineBadge } from './PipelineBadge';
 import { MergeBadge } from './MergeBadge';
 import { ProjectName } from './ProjectName';
 import { MarkdownViewer } from '@primer/react/drafts';
 import { marked } from 'marked';
+import { UserSchema } from '@gitbeaker/rest';
 
 interface Props {
     mr: MergeRequestsDetails;
@@ -22,14 +23,14 @@ export const MergeRequestItem = ({ mr }: Props) => {
 
     const timeElapsed = calculateTimeElapsed(mr.created_at);
 
-    const author = mr.author as GitlabTypes.UserSchema;
+    const author = mr.author as UserSchema;
     const reviewers = removeDuplicateObjectFromArray([...(mr.assignees ?? []), ...(mr.reviewers ?? [])], 'id');
 
     const avatars = reviewers
         .map((assignee) => {
             // In TS spread operator loses the typing. Because of Omit
             // I am not sure loses even more. Resulting type is { approve: boolean | undefined}
-            // Because assignee is type of Omit<GitlabTypes.UserSchema, 'created_at'>
+            // Because assignee is type of Omit<UserSchema, 'created_at'>
             // it is safe to cast output type to a UserWithApproval type
             return {
                 ...assignee,

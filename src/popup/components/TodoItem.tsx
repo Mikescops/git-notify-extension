@@ -3,12 +3,12 @@ import * as browser from 'webextension-polyfill';
 import { Avatar, Box, Button, ActionList, Label, Link, Text, Tooltip } from '@primer/react';
 import { ClockIcon, CheckIcon } from '@primer/octicons-react';
 import { calculateTimeElapsed } from '../helpers';
-import { GitlabTypes } from '../../background/types';
 import { createNewTab } from '../utils/createNewTab';
 import { ErrorFlash } from './ErrorFlash';
+import { TodoSchema } from '@gitbeaker/rest';
 
 interface Props {
-    todo: GitlabTypes.TodoSchema;
+    todo: TodoSchema;
 }
 
 const actionToText = (author: string, action: string) => {
@@ -63,7 +63,7 @@ export const TodoItem = (props: Props) => {
                         onClick={(event: React.MouseEvent<HTMLElement>) => createNewTab(event, todo.target_url)}
                         className={'mrTitle'}
                     >
-                        {actionToText(todo.author.name, todo.action_name)} !{todo.target.iid}
+                        {actionToText(todo.author.name, todo.action_name)} !{String(todo.target.iid)}
                     </Link>
                     <div>
                         <Text className={'todoBody'} title={todo.body}>

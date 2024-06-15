@@ -1,9 +1,9 @@
 import { Label } from '@primer/react';
 import { GitMergeIcon, GitPullRequestDraftIcon, GitPullRequestClosedIcon } from '@primer/octicons-react';
-import { GitlabTypes } from '../../background/types';
+import { MergeRequestSchema } from '@gitbeaker/rest';
 
 interface Props {
-    mergeStatus: GitlabTypes.MergeRequestSchema['merge_status'];
+    mergeStatus: MergeRequestSchema['merge_status'];
     mrApproved: boolean;
 }
 

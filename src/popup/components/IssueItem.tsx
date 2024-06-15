@@ -2,31 +2,31 @@ import { Avatar, ActionList, Box, Link, Label, Tooltip, Button, Details, IconBut
 import { ChevronDownIcon, ChevronRightIcon, ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
 import { AvatarWithTooltip } from './AvatarWithTooltip';
 import { calculateTimeElapsed, cleanupDescription } from '../helpers';
-import { GitlabTypes } from '../../background/types';
 import { createNewTab } from '../utils/createNewTab';
 import { ProjectName } from './ProjectName';
-import { MarkdownViewer } from '@primer/react/lib-esm/drafts';
+import { MarkdownViewer } from '@primer/react/drafts';
+import { IssueSchema, UserSchema } from '@gitbeaker/rest';
 import { marked } from 'marked';
 
 interface Props {
-    issue: GitlabTypes.IssueSchema;
+    issue: IssueSchema;
 }
 
 export const IssueItem = ({ issue }: Props) => {
     const timeElapsed = calculateTimeElapsed(issue.created_at);
 
-    const author = issue.author as GitlabTypes.UserSchema;
-    const assignees = issue.assignees as GitlabTypes.UserSchema[];
+    const author = issue.author as UserSchema;
+    const assignees = issue.assignees as UserSchema[];
     const avatars =
         assignees &&
         assignees.slice(0, 3).map((assigneeRaw) => {
-            const assignee = assigneeRaw as GitlabTypes.UserSchema;
+            const assignee = assigneeRaw as UserSchema;
             return <AvatarWithTooltip assignee={assignee} key={assignee.id} />;
         });
     const labels = issue.labels?.map((label) => {
         return (
-            <Label sx={{ m: 0.8 }} key={label}>
-                {label.replace('::', ' | ')}
+            <Label sx={{ m: 0.8 }} key={label.toString()}>
+                {label.toString().replace('::', ' | ')}
             </Label>
         );
     });

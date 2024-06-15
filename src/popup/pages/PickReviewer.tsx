@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Autocomplete, FormControl, Button, Box, Text } from '@primer/react';
 import { PeopleIcon, SyncIcon } from '@primer/octicons-react';
 import * as browser from 'webextension-polyfill';
-import { GitlabTypes, GroupMember } from '../../background/types';
+import { GroupMember } from '../../background/types';
 import { AvatarWithTooltip } from '../components/AvatarWithTooltip';
+import { GroupSchema } from '@gitbeaker/rest';
 
 export const PickReviewer = () => {
     interface Group {
@@ -22,7 +23,7 @@ export const PickReviewer = () => {
     useEffect(() => {
         browser.runtime
             .sendMessage({ type: 'getProjectsList' })
-            .then((response: GitlabTypes.GroupSchema[]) => {
+            .then((response: GroupSchema[]) => {
                 const groups = response.map((project) => {
                     return { text: project.name, id: project.id };
                 });
