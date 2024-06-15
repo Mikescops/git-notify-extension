@@ -36,7 +36,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                 approved:
                     mr.approvals &&
                     mr.approvals.approved_by &&
-                    mr.approvals.approved_by.filter((approval) => {
+                    mr.approvals.approved_by?.filter((approval) => {
                         return approval.user.id === assignee.id;
                     }).length > 0
             } as UserWithApproval;
