@@ -1,10 +1,15 @@
+import {
+    ExpandedMergeRequestSchema,
+    MergeRequestLevelMergeRequestApprovalSchema,
+    MergeRequestSchemaWithBasicLabels
+} from '@gitbeaker/rest';
 import { GitLabIsCE } from '../errors';
-import { MergeRequestsDetails, GitlabAPI, GitlabTypes } from '../types';
+import { MergeRequestsDetails, GitlabAPI } from '../types';
 
 interface FetchMRExtraInfoParams {
     gitlabCE: boolean;
     gitlabApi: GitlabAPI;
-    mrList: GitlabTypes.MergeRequestSchema[];
+    mrList: MergeRequestSchemaWithBasicLabels[];
 }
 
 export const fetchMRExtraInfo = async (params: FetchMRExtraInfoParams): Promise<MergeRequestsDetails[]> => {
@@ -15,7 +20,10 @@ export const fetchMRExtraInfo = async (params: FetchMRExtraInfoParams): Promise<
     }
 
     const requestsToExecute = mrList.map((mr) => {
-        const mrDetailsRequest = gitlabApi.MergeRequests.show(mr.project_id, mr.iid);
+        const mrDetailsRequest = gitlabApi.MergeRequests.show(
+            mr.project_id,
+            mr.iid
+        ) as Promise<ExpandedMergeRequestSchema>;
 
         if (gitlabCE === true) {
             return Promise.all([
@@ -31,15 +39,15 @@ export const fetchMRExtraInfo = async (params: FetchMRExtraInfoParams): Promise<
 
         return Promise.all([
             mrDetailsRequest,
-            gitlabApi.MergeRequestApprovals.configuration(mr.project_id, {
-                mergerequestIid: mr.iid
-            })
+            gitlabApi.MergeRequestApprovals.showConfiguration(mr.project_id, {
+                mergerequestIId: mr.iid
+            }) as Promise<MergeRequestLevelMergeRequestApprovalSchema>
         ]);
     });
 
     const mrDetails = await Promise.all(requestsToExecute);
 
-    const mrWithDetails: MergeRequestsDetails[] = mrDetails.map((mr) => {
+    const mrWithDetails = mrDetails.map((mr) => {
         const mrDetails = mr[0];
         const approvals = mr[1];
 

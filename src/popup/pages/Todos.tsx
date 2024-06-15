@@ -2,12 +2,12 @@ import { useCallback, useState } from 'react';
 import { Button, ActionList } from '@primer/react';
 import { CheckIcon } from '@primer/octicons-react';
 import * as browser from 'webextension-polyfill';
-import { GitlabTypes } from '../../background/types';
 import { TodoItem } from '../components/TodoItem';
 import { EmptyItems } from '../components/EmptyItems';
+import { TodoSchema } from '@gitbeaker/rest';
 
 interface Props {
-    todos: GitlabTypes.TodoSchema[];
+    todos: TodoSchema[];
 }
 
 export const Todos = (props: Props): JSX.Element => {
@@ -36,7 +36,7 @@ export const Todos = (props: Props): JSX.Element => {
                 </div>
             ) : null}
             <ActionList className={'mrList'}>
-                {props.todos.map((todo: GitlabTypes.TodoSchema) => (
+                {props.todos.map((todo: TodoSchema) => (
                     <TodoItem todo={todo} key={todo.id} />
                 ))}
             </ActionList>

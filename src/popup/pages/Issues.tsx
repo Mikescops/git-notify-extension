@@ -1,10 +1,10 @@
 import { ActionList } from '@primer/react';
-import { GitlabTypes } from '../../background/types';
 import { EmptyItems } from '../components/EmptyItems';
 import { IssueItem } from '../components/IssueItem';
+import { IssueSchema } from '@gitbeaker/rest';
 
 interface Props {
-    issues: GitlabTypes.IssueSchema[];
+    issues: IssueSchema[];
 }
 
 export const Issues = (props: Props): JSX.Element => {
@@ -13,7 +13,7 @@ export const Issues = (props: Props): JSX.Element => {
     }
     return (
         <ActionList className={'mrList'}>
-            {props.issues.map((issue: GitlabTypes.IssueSchema) => (
+            {props.issues.map((issue: IssueSchema) => (
                 <IssueItem issue={issue} key={issue.id} />
             ))}
         </ActionList>

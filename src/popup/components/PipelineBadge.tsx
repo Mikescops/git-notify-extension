@@ -1,10 +1,10 @@
 import { Label, useTheme } from '@primer/react';
 import { CheckIcon, XIcon, IterationsIcon } from '@primer/octicons-react';
-import { GitlabTypes } from '../../background/types';
 import { createNewTab } from '../utils/createNewTab';
+import { PipelineSchema } from '@gitbeaker/rest';
 
 interface Props {
-    pipeline?: GitlabTypes.PipelineSchema;
+    pipeline: PipelineSchema | null;
 }
 
 export const PipelineBadge = (props: Props) => {
