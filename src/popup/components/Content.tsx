@@ -67,7 +67,7 @@ export const Content = (props: Props) => {
     let mergeRequestsToDisplay = mrToDisplayByTabId[currentTab] ?? mrData.mrReceived;
 
     if (currentTab === 'to_review' && !draftInToReviewTab) {
-        mergeRequestsToDisplay = mergeRequestsToDisplay.filter((mr) => !mr.work_in_progress);
+        mergeRequestsToDisplay = mergeRequestsToDisplay?.filter((mr) => !mr.work_in_progress);
     }
 
     return <MergeRequests mergeRequests={mergeRequestsToDisplay} />;
