@@ -75,7 +75,7 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
     const mrReceivedDetails = await fetchMRExtraInfo({
         gitlabApi,
         mrList: requests,
-        gitlabCE: settings.gitlabCE
+        gitlabCE: settings.accounts[0].gitlabCE
     });
 
     let mrToReview = 0;
@@ -88,7 +88,7 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
     const mrGivenDetails = await fetchMRExtraInfo({
         gitlabApi,
         mrList: mrGiven,
-        gitlabCE: settings.gitlabCE
+        gitlabCE: settings.accounts[0].gitlabCE
     });
 
     const mrGivenDetailsNoDraft = mrGivenDetails.filter((mr) => !mr.work_in_progress);

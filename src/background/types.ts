@@ -5,6 +5,7 @@ import {
     ApprovedByEntity,
     UserSchema
 } from '@gitbeaker/rest';
+import { Account } from '../common/types';
 
 export type GitlabAPI = InstanceType<typeof Gitlab>;
 
@@ -20,9 +21,7 @@ export interface Approvals {
 }
 
 export interface GetSettingsResponse {
-    gitlabCE: boolean;
-    token: string;
-    address: string;
+    accounts: Account[];
     alertBadgeCounters: number[];
 }
 

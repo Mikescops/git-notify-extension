@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { RepoIcon } from '@primer/octicons-react';
 import { Tooltip, BranchName } from '@primer/react';
 import { readConfiguration } from '../../common/configuration';
+import { Account } from '../../common/types';
 
 interface Props {
     textToCopy: string;
@@ -19,9 +20,9 @@ export const ProjectName = (props: Props) => {
     const [projectDirectoryPrefix, setProjectDirectoryPrefix] = useState<string>('');
 
     const settings = useCallback(() => {
-        const getSettings = readConfiguration(['projectDirectoryPrefix']);
+        const getSettings = readConfiguration<{ accounts: Account[] }>(['accounts']);
         getSettings.then((settings) => {
-            setProjectDirectoryPrefix(settings.projectDirectoryPrefix ?? '');
+            setProjectDirectoryPrefix(settings.accounts[0].projectDirectoryPrefix ?? '');
         });
     }, []);
 
