@@ -72,11 +72,17 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         (merge) => merge.author.id !== currentUser.id
     );
 
-    const mrReceivedDetails = await fetchMRExtraInfo({
-        gitlabApi,
-        mrList: requests,
-        gitlabCE: settings.accounts[0].gitlabCE
-    });
+    const mrReceivedDetails = (
+        await fetchMRExtraInfo({
+            gitlabApi,
+            mrList: requests,
+            gitlabCE: settings.accounts[0].gitlabCE
+        })
+    ).filter(
+        (mr) =>
+            settings.accounts[0].draftInToReviewTab ||
+            (!settings.accounts[0].draftInToReviewTab && !mr.work_in_progress)
+    );
 
     let mrToReview = 0;
     mrReceivedDetails.forEach((mr) => {

@@ -1,10 +1,19 @@
 import * as browser from 'webextension-polyfill';
-import { TabId } from '../common/types';
+import { Configuration, TabId } from '../common/types';
 import { config } from '../config/config';
 
 export const updateConfiguration = async (objectToStore: Record<string, any>): Promise<void> => {
     await browser.storage.local.set(objectToStore);
     console.log('Configuration Updated');
+};
+
+export const updateAccountConfiguration = async (
+    accountIndex: number,
+    objectToStore: Record<string, any>
+): Promise<void> => {
+    const settings = await readConfiguration<Configuration>(['accounts']);
+    settings.accounts[accountIndex] = { ...settings.accounts[accountIndex], ...objectToStore };
+    await updateConfiguration({ accounts: settings.accounts });
 };
 
 export const readConfiguration = async <T>(keys: string[]): Promise<T> => {
