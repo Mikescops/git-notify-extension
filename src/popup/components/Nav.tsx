@@ -1,6 +1,6 @@
 import React from 'react';
-import { TabNav, Label, Tooltip } from '@primer/react';
-import { CodeOfConductIcon } from '@primer/octicons-react';
+import { UnderlineNav } from '@primer/react';
+import { CodeOfConductIcon, Icon } from '@primer/octicons-react';
 import { MergeRequestSendMessageReply } from '../utils/mergeRequestDownloader';
 import { TabId } from '../../common/types';
 
@@ -17,69 +17,65 @@ export const Nav = (props: Props) => {
         mrData?.mrReviewed || mrData?.mrGiven ? `${mrData.mrReviewed} / ${mrData.mrGiven.length}` : 'Unknown';
     const issuesCount = mrData?.issues ? mrData.issues.length : 0;
 
+    interface NavItem {
+        label: string;
+        navigation: TabId;
+        color: string;
+        counter?: string | number;
+        icon?: Icon;
+    }
+
+    const items: NavItem[] = [
+        {
+            label: 'To Review',
+            navigation: 'to_review',
+            color: '220, 53, 69',
+            counter: mrData ? mrData.mrToReview : 0
+        },
+        {
+            label: 'Under Review',
+            navigation: 'under_review',
+            color: '40, 167, 69',
+            counter: mrData ? mrDataReviewRatio : 0
+        },
+        {
+            label: 'Drafts',
+            navigation: 'drafts',
+            color: '72, 72, 72',
+            counter: mrData?.myDrafts?.length ?? 0
+        },
+        { label: 'Issues', navigation: 'issues', color: '253, 126, 20', counter: issuesCount },
+        {
+            label: 'To-Do List',
+            navigation: 'todo_list',
+            color: '31, 120, 209',
+            counter: mrData?.todos ? mrData.todos.length : 0
+        },
+        { label: 'Pick', navigation: 'pick', color: '200, 200, 200', icon: CodeOfConductIcon }
+    ];
+
     return (
-        <TabNav aria-label="Main" className={'navbarCategories'}>
-            <TabNav.Link
-                href="#ToReview"
-                onClick={() => setCurrentTab('to_review')}
-                className={currentTab === 'to_review' ? 'selected' : ''}
-            >
-                To Review{' '}
-                <Label size="small" sx={{ bg: '#dc3545', color: 'canvas.default' }}>
-                    {mrData ? mrData.mrToReview : 0}
-                </Label>
-            </TabNav.Link>
-            <TabNav.Link
-                href="#UnderReview"
-                onClick={() => setCurrentTab('under_review')}
-                className={currentTab === 'under_review' ? 'selected' : ''}
-            >
-                Under Review{' '}
-                <Tooltip aria-label={`${mrDataReviewRatio}  have been reviewed`} direction="s">
-                    <Label size="small" sx={{ bg: '#28a745', color: 'canvas.default' }}>
-                        {mrData ? mrDataReviewRatio : 0}
-                    </Label>
-                </Tooltip>
-            </TabNav.Link>
-            <TabNav.Link
-                href="#Drafts"
-                onClick={() => setCurrentTab('drafts')}
-                className={currentTab === 'drafts' ? 'selected' : ''}
-            >
-                Drafts{' '}
-                <Label size="small" sx={{ bg: '#484848', color: 'canvas.default' }}>
-                    {mrData?.myDrafts?.length ?? 0}
-                </Label>
-            </TabNav.Link>
-            <TabNav.Link
-                href="#Issues"
-                onClick={() => setCurrentTab('issues')}
-                className={currentTab === 'issues' ? 'selected' : ''}
-            >
-                Issues{' '}
-                <Tooltip aria-label={`${issuesCount}  are assigned to you`} direction="s">
-                    <Label size="small" sx={{ bg: '#fd7e14', color: 'canvas.default' }}>
-                        {issuesCount}
-                    </Label>
-                </Tooltip>
-            </TabNav.Link>
-            <TabNav.Link
-                href="#ToDoList"
-                onClick={() => setCurrentTab('todo_list')}
-                className={currentTab === 'todo_list' ? 'selected' : ''}
-            >
-                To-Do List{' '}
-                <Label size="small" sx={{ bg: '#1f78d1', color: 'canvas.default' }}>
-                    {mrData?.todos ? mrData.todos.length : 0}
-                </Label>
-            </TabNav.Link>
-            <TabNav.Link
-                href="#Pick"
-                onClick={() => setCurrentTab('pick')}
-                className={currentTab === 'pick' ? 'selected' : ''}
-            >
-                <CodeOfConductIcon /> Pick
-            </TabNav.Link>
-        </TabNav>
+        <UnderlineNav aria-label="Main" loadingCounters={!mrData}>
+            {items.map((item, index) => (
+                <UnderlineNav.Item
+                    key={index}
+                    href={`#${item.navigation}`}
+                    onClick={() => setCurrentTab(item.navigation)}
+                    aria-current={currentTab === item.navigation ? 'page' : undefined}
+                    counter={item.counter}
+                    icon={item.icon}
+                    sx={{
+                        ':hover': { backgroundColor: `rgba(${item.color}, 0.1)` },
+                        ':is([aria-current="page"])': {
+                            'backgroundColor': `rgba(${item.color}, 0.2)`,
+                            'span:is([data-component="text"])': { fontWeight: 400 }
+                        },
+                        'span:last-child': { span: { backgroundColor: `rgb(${item.color})`, color: '#fff' } }
+                    }}
+                >
+                    {item.label}
+                </UnderlineNav.Item>
+            ))}
+        </UnderlineNav>
     );
 };

@@ -15,10 +15,6 @@ body {
 
 .subNav {
     background: transparent;
-    /* border-color matches TabNav lib */
-    border-right: 1px solid rgba(225, 228, 232, 0.5);
-    border-bottom: 1px solid rgba(225, 228, 232, 0.5);
-    border-left: 1px solid rgba(225, 228, 232, 0.5);
     display: flex;
     justify-content: space-between;
     padding: 8px;
@@ -31,10 +27,6 @@ body {
 
 .mrList {
     background: transparent;
-    /* border-color matches TabNav lib */
-    border-right: 1px solid rgba(225, 228, 232, 0.5);
-    border-bottom: 1px solid rgba(225, 228, 232, 0.5);
-    border-left: 1px solid rgba(225, 228, 232, 0.5);
     overflow: auto;
     /* This is a fix for Chrome */
     overflow: overlay;

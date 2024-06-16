@@ -12,8 +12,8 @@ dependencies:
     specifier: ^19.9.0
     version: 19.9.0(react@18.3.1)
   '@primer/react':
-    specifier: ^35.16.0
-    version: 35.32.2(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)(styled-components@5.3.11)
+    specifier: ^36.22.0
+    version: 36.22.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(@types/styled-components@5.1.34)(react-dom@18.3.1)(react@18.3.1)(styled-components@5.3.11)
   marked:
     specifier: ^11.2.0
     version: 11.2.0
@@ -523,8 +523,12 @@ packages:
     resolution: {integrity: sha512-uV8zSXUVpcS2Oxc4K6FqJwkEGn1wwKPi4H7McKzI1z9HVdH3lg1cZfQcQcIrnHirYAZ63ewBnP46opwDwJQUyg==}
     dev: false
 
-  /@github/relative-time-element@4.3.0:
-    resolution: {integrity: sha512-+tFjX9//HRS1HnBa5cNgfEtE52arwiutYg1TOF+Trk40SPxst9Q8Rtc3BKD6aKsvfbtub68vfhipgchGjj9o7g==}
+  /@github/relative-time-element@4.4.2:
+    resolution: {integrity: sha512-wTXunu3hmuGljA5CHaaoUIKV0oI35wno0FKJl2yqKplTRnsCA5bPNj4bDeVIubkuskql6jwionWLlGM1Y6QLaw==}
+    dev: false
+
+  /@github/tab-container-element@4.8.0:
+    resolution: {integrity: sha512-LxPe4RSNdmfXcjM5APzbwjzyD3aDOqtoKpKgGc7aXucp8t6SWetbJ5lNoZSRCNtKugUkOLnKY1+Zr5DcdbHrhg==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:
@@ -615,6 +619,10 @@ packages:
 
   /@lit-labs/react@1.2.1:
     resolution: {integrity: sha512-DiZdJYFU0tBbdQkfwwRSwYyI/mcWkg3sWesKRsHUd4G+NekTmmeq9fzsurvcKTNVa0comNljwtg4Hvi1ds3V+A==}
+    dev: false
+
+  /@lit-labs/ssr-dom-shim@1.2.0:
+    resolution: {integrity: sha512-yWJKmpGE6lUURKAaIltoPIE/wrbY3TEkqQt+X0m+7fQNnAv0keydnYvbiJFP1PnMhizmIWRWOG5KLhYyc/xl+g==}
     dev: false
 
   /@lmdb/lmdb-darwin-arm64@2.8.5:
@@ -747,8 +755,8 @@ packages:
       fastq: 1.16.0
     dev: true
 
-  /@oddbird/popover-polyfill@0.2.3:
-    resolution: {integrity: sha512-XDK+V/gUeE4NEsWp79eVzhlK3wuVcRDJuaas63qo0IJLJpyOLHqycJLFYvuq8kebgT1nl87P3sbSb5ZN6Vyf5g==}
+  /@oddbird/popover-polyfill@0.3.8:
+    resolution: {integrity: sha512-+aK7EHL3VggfsWGVqUwvtli2+kP5OWyseAsrefhzR2XWoi2oALUCeoDn63i5WS3ZOmLiXHRNBwHPeta8w+aM1g==}
     dev: false
 
   /@parcel/bundler-default@2.12.0(@parcel/core@2.12.0):
@@ -1714,6 +1722,12 @@ packages:
     resolution: {integrity: sha512-ApPbNhiWPHscs0+rLV76sCY75IEpPvDEZq9+iQXQqU6Tv5SLdax3PmzJlUHftlQ7O/eJnLO1dTEMEwj2Yn1BLA==}
     dev: false
 
+  /@primer/live-region-element@0.6.1:
+    resolution: {integrity: sha512-UvJ29igIhOzCfPgUJHPKgr2bY84niHYZagE2LC90ewXQfEFLC3q3ug+vYOzOpCqxspCvEpwPyQlnaOLu4mu87w==}
+    dependencies:
+      '@lit-labs/ssr-dom-shim': 1.2.0
+    dev: false
+
   /@primer/octicons-react@19.9.0(react@18.3.1):
     resolution: {integrity: sha512-Uk4XrHyfylyfzZN9d8VFjF8FpfYHEyT4sabw+9+oP+GWAJHhPvNPTz6gXvUzJZmoblAvgcTrDslIPjz8zMh76w==}
     engines: {node: '>=8'}
@@ -1723,31 +1737,44 @@ packages:
       react: 18.3.1
     dev: false
 
-  /@primer/primitives@7.15.5:
-    resolution: {integrity: sha512-tiJEMxy5hDi9a3YxgrBeJScLPUQSLuWsKDNuoXXiX7zLzejnYdxXXG3qOaNHzNyyn8TkSQkzmKx0ioaSLR2zNw==}
+  /@primer/primitives@7.17.1:
+    resolution: {integrity: sha512-SiPzEb+up1nDpV2NGwNiY8m6sGnF3OUqRb0has5s6T40vq6Li/g3cYVgl+oolEa4DUoNygEPs09jwJt24f/3zg==}
     dev: false
 
-  /@primer/react@35.32.2(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)(styled-components@5.3.11):
-    resolution: {integrity: sha512-DsTykP4Q6/3gL5HrvtSlr4mFyO3/92/qWJiK9cYYLXgMh1MFrS/mBCfw+Lz5ZhfYcEzRGNTEbAiCEnKdybsI/w==}
+  /@primer/react@36.22.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(@types/styled-components@5.1.34)(react-dom@18.3.1)(react@18.3.1)(styled-components@5.3.11):
+    resolution: {integrity: sha512-xKDdFNgjw+3e+fI/hXIOBWrWWPHjFds+7leTWZrrITMROZE6GdPFSfjTZzK08Z2Ayqt1ShOFUWi40LMauptYoQ==}
     engines: {node: '>=12', npm: '>=7'}
     peerDependencies:
-      react: ^17.0.0 || ^18.0.0
-      react-dom: ^17.0.0 || ^18.0.0
-      styled-components: 4.x || 5.x
+      '@types/react': ^18.0.0
+      '@types/react-dom': ^18.0.0
+      '@types/styled-components': ^5.1.11
+      react: ^18.0.0
+      react-dom: ^18.0.0
+      styled-components: 5.x
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+      '@types/styled-components':
+        optional: true
     dependencies:
       '@github/combobox-nav': 2.3.1
       '@github/markdown-toolbar-element': 2.2.1
       '@github/paste-markdown': 1.5.0
-      '@github/relative-time-element': 4.3.0
+      '@github/relative-time-element': 4.4.2
+      '@github/tab-container-element': 4.8.0
       '@lit-labs/react': 1.2.1
-      '@oddbird/popover-polyfill': 0.2.3
+      '@oddbird/popover-polyfill': 0.3.8
       '@primer/behaviors': 1.5.1
+      '@primer/live-region-element': 0.6.1
       '@primer/octicons-react': 19.9.0(react@18.3.1)
-      '@primer/primitives': 7.15.5
-      '@react-aria/ssr': 3.9.1(react@18.3.1)
+      '@primer/primitives': 7.17.1
       '@styled-system/css': 5.1.5
       '@styled-system/props': 5.1.5
       '@styled-system/theme-get': 5.1.2
+      '@types/react': 18.3.3
+      '@types/react-dom': 18.3.0
       '@types/react-is': 18.2.4
       '@types/styled-components': 5.1.34
       '@types/styled-system': 5.1.22
@@ -1764,23 +1791,12 @@ packages:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-intersection-observer: 9.5.3(react@18.3.1)
-      react-is: 18.2.0
+      react-is: 18.3.1
       react-markdown: 8.0.7(@types/react@18.3.3)(react@18.3.1)
       styled-components: 5.3.11(@babel/core@7.24.7)(react-dom@18.3.1)(react-is@18.3.1)(react@18.3.1)
       styled-system: 5.1.5
     transitivePeerDependencies:
-      - '@types/react'
       - supports-color
-    dev: false
-
-  /@react-aria/ssr@3.9.1(react@18.3.1):
-    resolution: {integrity: sha512-NqzkLFP8ZVI4GSorS0AYljC13QW2sc8bDqJOkBvkAt3M8gbcAXJWVRGtZBCRscki9RZF+rNlnPdg0G0jYkhJcg==}
-    engines: {node: '>= 12'}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-    dependencies:
-      '@swc/helpers': 0.5.3
-      react: 18.3.1
     dev: false
 
   /@styled-system/background@5.1.2:
@@ -1997,12 +2013,6 @@ packages:
       tslib: 2.6.3
     dev: true
 
-  /@swc/helpers@0.5.3:
-    resolution: {integrity: sha512-FaruWX6KdudYloq1AHD/4nU+UsMTdNE8CKyrseXWEcgjDAbvkwJg2QGPAnfIJLIWsjZOSPLOAykK6fuYp4vp4A==}
-    dependencies:
-      tslib: 2.6.2
-    dev: false
-
   /@swc/types@0.1.8:
     resolution: {integrity: sha512-RNFA3+7OJFNYY78x0FYwi1Ow+iF1eF5WvmfY1nXPOEH4R2p/D4Cr1vzje7dNAI2aLFqpv8Wyz4oKSWqIZArpQA==}
     dependencies:
@@ -2081,7 +2091,6 @@ packages:
     resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
     dependencies:
       '@types/react': 18.3.3
-    dev: true
 
   /@types/react-is@18.2.4:
     resolution: {integrity: sha512-wBc7HgmbCcrvw0fZjxbgz/xrrlZKzEqmABBMeSvpTvdm25u6KI6xdIi9pRE2G0C1Lw5ETFdcn4UbYZ4/rpqUYw==}
@@ -4489,7 +4498,7 @@ packages:
     resolution: {integrity: sha512-uD66tJj54JLYq0De10AhWycZWGQNUvDI55xPgk2sQM5kn1JYlhbCMTtEeT27+vAhW2FBQxLlOmS3pmA7/2z4aA==}
     dependencies:
       '@types/debug': 4.1.12
-      debug: 4.3.4(supports-color@5.5.0)
+      debug: 4.3.5
       decode-named-character-reference: 1.0.2
       micromark-core-commonmark: 1.1.0
       micromark-factory-space: 1.1.0
@@ -4931,10 +4940,6 @@ packages:
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
-  /react-is@18.2.0:
-    resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
-    dev: false
-
   /react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
@@ -4953,7 +4958,7 @@ packages:
       prop-types: 15.8.1
       property-information: 6.4.0
       react: 18.3.1
-      react-is: 18.2.0
+      react-is: 18.3.1
       remark-parse: 10.0.2
       remark-rehype: 10.1.0
       space-separated-tokens: 2.0.2
@@ -5550,10 +5555,6 @@ packages:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     dev: true
-
-  /tslib@2.6.2:
-    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
-    dev: false
 
   /tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
