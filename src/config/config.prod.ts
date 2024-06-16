@@ -8,9 +8,10 @@ export const config = {
         {
             gitlabCE: false,
             token: '',
-            address: 'https://gitlab.com',
+            address: '',
             draftInToReviewTab: true,
             projectDirectoryPrefix: ''
         }
-    ]
+    ],
+    refreshRate: 60
 } satisfies Configuration;

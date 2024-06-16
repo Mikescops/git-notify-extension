@@ -5,6 +5,7 @@ export interface Configuration {
     defaultTab: TabId;
     accounts: Account[];
     alertBadgeCounters: number[];
+    refreshRate: number;
 }
 
 export interface Account {

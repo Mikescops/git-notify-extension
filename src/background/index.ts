@@ -3,12 +3,13 @@ import { getLatestDataFromGitLab, setTodoAsDone } from './endpoints';
 import { getProjectsList } from './endpoints/getProjectsList';
 import { getMembersOfGroup } from './endpoints/getMembersOfGroup';
 import { setGlobalError } from '../common/globalError';
+import { readConfiguration } from '../common/configuration';
 
 console.log('background script loaded');
 
 let time: number; // dynamic interval
-browser.storage.local.get(['refreshRate']).then((settings) => {
-    time = settings.refreshRate ? settings.refreshRate : 40;
+readConfiguration<{ refreshRate: number }>(['refreshRate']).then((settings) => {
+    time = settings.refreshRate;
 
     browser.alarms.create('fetchGitLab', { when: Date.now() });
 
