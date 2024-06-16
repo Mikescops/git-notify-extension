@@ -23,7 +23,7 @@ import {
     FileDirectoryIcon
 } from '@primer/octicons-react';
 import './style.css';
-import { updateConfiguration, readConfiguration } from '../common/configuration';
+import { updateConfiguration, readConfiguration, updateAccountConfiguration } from '../common/configuration';
 import { Account, TabId } from '../common/types';
 
 const getSettings = readConfiguration<{
@@ -72,18 +72,18 @@ export const App = () => {
 
     const updateGitlabCE = async (event: any) => {
         setGitlabCE(event.target.checked);
-        await updateConfiguration({ gitlabCE: event.target.checked });
+        await updateAccountConfiguration(0, { gitlabCE: event.target.checked });
     };
 
     const updateGitlabToken = async (event: any) => {
         setGitlabToken(event.target.value);
-        await updateConfiguration({ gitlabToken: event.target.value });
+        await updateAccountConfiguration(0, { gitlabToken: event.target.value });
         setIsGitlabTokenInLocalStorage(true);
     };
 
     const updateGitlabAddress = async (event: any) => {
         setGitlabAddress(event.target.value);
-        await updateConfiguration({ gitlabAddress: event.target.value });
+        await updateAccountConfiguration(0, { gitlabAddress: event.target.value });
         setIsGitlabAddressInLocalStorage(true);
     };
 
@@ -107,12 +107,12 @@ export const App = () => {
 
     const updateDraftInToReviewTab = async (event: any) => {
         setDraftInToReviewTab(event.target.checked);
-        await updateConfiguration({ draftInToReviewTab: event.target.checked });
+        await updateAccountConfiguration(0, { draftInToReviewTab: event.target.checked });
     };
 
     const updateProjectDirectoryPrefix = async (event: any) => {
         setProjectDirectoryPrefix(event.target.value);
-        await updateConfiguration({ projectDirectoryPrefix: event.target.value });
+        await updateAccountConfiguration(0, { projectDirectoryPrefix: event.target.value });
     };
 
     const testConnection = useCallback(() => {
