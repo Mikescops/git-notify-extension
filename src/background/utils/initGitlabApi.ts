@@ -14,11 +14,11 @@ export const initGitlabApi = (settings: GetSettingsResponse): GitlabAPI => {
 
     const account = settings.accounts[0];
 
-    if (!account.token) {
+    if (!account.token || account.token === '') {
         throw new GitLabTokenNotSet();
     }
 
-    if (!account.address) {
+    if (!account.address || account.address === '') {
         throw new GitLabAddressNotSet();
     }
 

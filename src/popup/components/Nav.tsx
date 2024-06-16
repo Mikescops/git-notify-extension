@@ -14,7 +14,7 @@ export const Nav = (props: Props) => {
     const { currentTab, setCurrentTab, mrData } = props;
 
     const mrDataReviewRatio =
-        mrData?.mrReviewed || mrData?.mrGiven ? `${mrData.mrReviewed} / ${mrData.mrGiven.length}` : 'Unknown';
+        mrData?.mrReviewed || mrData?.mrGiven ? `${mrData.mrReviewed} / ${mrData.mrGiven.length}` : undefined;
     const issuesCount = mrData?.issues ? mrData.issues.length : 0;
 
     interface NavItem {
@@ -30,26 +30,26 @@ export const Nav = (props: Props) => {
             label: 'To Review',
             navigation: 'to_review',
             color: '220, 53, 69',
-            counter: mrData ? mrData.mrToReview : 0
+            counter: mrData?.mrToReview
         },
         {
             label: 'Under Review',
             navigation: 'under_review',
             color: '40, 167, 69',
-            counter: mrData ? mrDataReviewRatio : 0
+            counter: mrDataReviewRatio
         },
         {
             label: 'Drafts',
             navigation: 'drafts',
             color: '72, 72, 72',
-            counter: mrData?.myDrafts?.length ?? 0
+            counter: mrData?.myDrafts?.length
         },
         { label: 'Issues', navigation: 'issues', color: '253, 126, 20', counter: issuesCount },
         {
             label: 'To-Do List',
             navigation: 'todo_list',
             color: '31, 120, 209',
-            counter: mrData?.todos ? mrData.todos.length : 0
+            counter: mrData?.todos?.length
         },
         { label: 'Pick', navigation: 'pick', color: '200, 200, 200', icon: CodeOfConductIcon }
     ];
