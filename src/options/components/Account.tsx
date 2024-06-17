@@ -3,18 +3,19 @@ import { useCallback, useState } from 'react';
 import {
     InfoIcon,
     KeyIcon,
-    CheckIcon,
     ServerIcon,
     FileDirectoryIcon,
-    PackageDependenciesIcon
+    PackageDependenciesIcon,
+    TrashIcon
 } from '@primer/octicons-react';
-import { Button, Checkbox, FormControl, Link, Octicon, TextInput, Tooltip, Text } from '@primer/react';
+import { Box, Button, Checkbox, Flash, FormControl, Link, Octicon, TextInput, Tooltip } from '@primer/react';
 import { Account } from '../../common/types';
 import { updateAccountConfiguration } from '../../common/configuration';
 
 interface Props {
     accountIndex: number;
     account: Account;
+    removeAccount: () => void;
 }
 
 export const AccountConfiguration = (props: Props) => {
@@ -32,7 +33,17 @@ export const AccountConfiguration = (props: Props) => {
     }, []);
 
     return (
-        <>
+        <Box
+            display="grid"
+            sx={{
+                borderWidth: 1,
+                borderStyle: 'solid',
+                borderColor: 'border.default',
+                p: 3,
+                borderRadius: 2,
+                gap: 3
+            }}
+        >
             <FormControl>
                 <FormControl.Label>Using GitLab Community Edition</FormControl.Label>
                 <Checkbox
@@ -60,13 +71,13 @@ export const AccountConfiguration = (props: Props) => {
                 <TextInput
                     type="password"
                     leadingVisual={KeyIcon}
-                    trailingVisual={account.token ? CheckIcon : undefined}
                     block
                     name="gitlab-token"
                     value={account.token}
                     placeholder="<your_token_here>"
                     onChange={(e) => setAccountConfiguration({ token: e.target.value })}
                     aria-label="gitlab-token"
+                    sx={{ boxSizing: 'border-box' }}
                 />
             </FormControl>
             <FormControl>
@@ -78,13 +89,13 @@ export const AccountConfiguration = (props: Props) => {
                 </FormControl.Label>
                 <TextInput
                     leadingVisual={ServerIcon}
-                    trailingVisual={account.address ? CheckIcon : undefined}
                     block
                     name="gitlab-address"
                     value={account.address}
                     placeholder="<host_address_here>"
                     onChange={(e) => setAccountConfiguration({ address: e.target.value })}
                     aria-label="gitlab-address"
+                    sx={{ boxSizing: 'border-box' }}
                 />
             </FormControl>
             <FormControl>
@@ -116,28 +127,26 @@ export const AccountConfiguration = (props: Props) => {
                     block
                     name="project-directory-prefix"
                     value={account.projectDirectoryPrefix}
-                    trailingVisual={account.projectDirectoryPrefix ? CheckIcon : undefined}
                     placeholder="teams/code/projects/"
                     onChange={(e) => setAccountConfiguration({ projectDirectoryPrefix: e.target.value })}
                     aria-label="project-directory-prefix"
+                    sx={{ boxSizing: 'border-box' }}
                 />
             </FormControl>
 
-            <>
-                <Button onClick={testConnection} block variant="default">
-                    <PackageDependenciesIcon /> Test my settings
+            <Box display="flex" sx={{ columnGap: 2 }}>
+                <Button onClick={testConnection} variant="default" leadingVisual={PackageDependenciesIcon}>
+                    Test connection
                 </Button>
-                <Text
-                    opacity={testSuccess === null ? 0 : 100}
-                    sx={{
-                        color: testSuccess === true ? 'success.fg' : 'danger.fg',
-                        fontSize: 18,
-                        textAlign: 'center'
-                    }}
-                >
-                    {testSuccess === true ? 'Success' : 'Could not connect'}
-                </Text>
-            </>
-        </>
+                <Button onClick={props.removeAccount} variant="danger" leadingVisual={TrashIcon}>
+                    Remove this account
+                </Button>
+            </Box>
+            {testSuccess !== null && (
+                <Flash variant={testSuccess === true ? 'success' : 'danger'}>
+                    {testSuccess === true ? 'Connection successful' : 'Could not connect'}
+                </Flash>
+            )}
+        </Box>
     );
 };
