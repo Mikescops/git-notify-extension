@@ -1,5 +1,5 @@
 import * as browser from 'webextension-polyfill';
-import { Configuration, TabId } from '../common/types';
+import { Account, Configuration, TabId } from '../common/types';
 import { config } from '../config/config';
 
 export const updateConfiguration = async (objectToStore: Record<string, any>): Promise<void> => {
@@ -49,4 +49,12 @@ export const readConfiguration = async <T>(keys: string[]): Promise<T> => {
 
         return settings as T;
     });
+};
+
+export const defaultEmptyAccount: Account = {
+    token: '',
+    address: '',
+    gitlabCE: false,
+    draftInToReviewTab: false,
+    projectDirectoryPrefix: ''
 };
