@@ -86,7 +86,7 @@ export const IssueItem = ({ issue }: Props) => {
                         </Label>
                     </Box>
                 </Box>
-                <Box className={'avatarsList'}>
+                <Box display={'flex'} className={'avatarsList'}>
                     {avatars}{' '}
                     {assignees.length > 3 ? (
                         <Tooltip

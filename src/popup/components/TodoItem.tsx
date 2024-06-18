@@ -74,7 +74,7 @@ export const TodoItem = (props: Props) => {
                         </Label>
                     </div>
                 </Box>
-                <Box>
+                <Box display={'flex'} sx={{ alignItems: 'center' }}>
                     <Tooltip aria-label={'Mark as done'} direction="w">
                         <Button variant="default" size="small" className={'mt-1'} onClick={setTodoAsDone}>
                             <CheckIcon />
