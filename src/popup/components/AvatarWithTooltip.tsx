@@ -22,9 +22,9 @@ export const AvatarWithTooltip = (props: Props) => {
     );
 
     return (
-        <Tooltip className={'userAvatar'} aria-label={assignee.name} direction={props.direction ?? 'w'}>
+        <Tooltip aria-label={assignee.name} direction={props.direction ?? 'w'}>
             {assignee.approved ? approvedMark : null}
-            <Avatar src={assignee.avatar_url} alt={assignee.name} square size={props.size ?? 40} sx={{ mr: 1 }} />
+            <Avatar src={assignee.avatar_url} alt={assignee.name} square size={props.size ?? 40} />
         </Tooltip>
     );
 };

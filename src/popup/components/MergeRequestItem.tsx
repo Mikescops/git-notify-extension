@@ -117,7 +117,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         </Label>
                     </Box>
                 </Box>
-                <Box className={'avatarsList'}>
+                <Box display={'flex'} className={'avatarsList'}>
                     {avatarsUI}{' '}
                     {reviewers.length > 3 ? (
                         <Tooltip
