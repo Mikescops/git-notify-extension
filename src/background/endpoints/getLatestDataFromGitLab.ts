@@ -1,17 +1,30 @@
-import * as browser from 'webextension-polyfill';
-import { getSettings } from '../utils/getSettings';
 import { fetchMRExtraInfo } from '../utils/fetchMRExtraInfo';
-import { setBadge } from '../utils/setBadge';
-
 import { removeDuplicateObjectFromArray } from '../../popup/helpers';
 import { initGitlabApi } from '../utils/initGitlabApi';
-import { MergeRequestSchemaWithBasicLabels } from '@gitbeaker/rest';
+import { IssueSchemaWithBasicLabels, MergeRequestSchemaWithBasicLabels, TodoSchema } from '@gitbeaker/rest';
+import { Account } from '../../common/types';
+import { MergeRequestsDetails } from '../types';
 
-export const getLatestDataFromGitLab = async (): Promise<void> => {
-    console.log('>> POLLING GITLAB API');
+interface GetLatestDataFromGitLabParams {
+    account: Account;
+}
 
-    const settings = await getSettings();
-    const gitlabApi = initGitlabApi(settings);
+interface GetLatestDataFromGitLabResponse {
+    mrReceivedDetails: MergeRequestsDetails[];
+    mrToReview: number;
+    mrGivenDetailsNoDraft: MergeRequestsDetails[];
+    mrReviewed: number;
+    myDrafts: MergeRequestsDetails[];
+    issues: IssueSchemaWithBasicLabels[];
+    todos: TodoSchema[];
+}
+
+export const getLatestDataFromGitLab = async (
+    params: GetLatestDataFromGitLabParams
+): Promise<GetLatestDataFromGitLabResponse> => {
+    const { account } = params;
+
+    const gitlabApi = initGitlabApi({ account });
     const currentUser = await gitlabApi.Users.showCurrentUser();
 
     /** Fetching MR "To Review" */
@@ -47,7 +60,7 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         scope: 'assigned_to_me',
         perPage: 100,
         maxPages: 5
-    });
+    }) as Promise<IssueSchemaWithBasicLabels[]>;
 
     /** Fetching "Todos" */
 
@@ -55,7 +68,7 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         state: 'pending',
         perPage: 100,
         maxPages: 5
-    });
+    }) as Promise<TodoSchema[]>;
 
     const [mrAssigned, mrReceived, mrGiven, issues, todos] = await Promise.all([
         mrAssignedRequest,
@@ -76,13 +89,9 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
         await fetchMRExtraInfo({
             gitlabApi,
             mrList: requests,
-            gitlabCE: settings.accounts[0].gitlabCE
+            gitlabCE: account.gitlabCE
         })
-    ).filter(
-        (mr) =>
-            settings.accounts[0].draftInToReviewTab ||
-            (!settings.accounts[0].draftInToReviewTab && !mr.work_in_progress)
-    );
+    ).filter((mr) => account.draftInToReviewTab || (!account.draftInToReviewTab && !mr.work_in_progress));
 
     let mrToReview = 0;
     mrReceivedDetails.forEach((mr) => {
@@ -94,7 +103,7 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
     const mrGivenDetails = await fetchMRExtraInfo({
         gitlabApi,
         mrList: mrGiven,
-        gitlabCE: settings.accounts[0].gitlabCE
+        gitlabCE: account.gitlabCE
     });
 
     const mrGivenDetailsNoDraft = mrGivenDetails.filter((mr) => !mr.work_in_progress);
@@ -110,45 +119,13 @@ export const getLatestDataFromGitLab = async (): Promise<void> => {
 
     const myDrafts = mrGivenDetails.filter((mr) => mr.work_in_progress);
 
-    /** Update alert badge */
-
-    const alertBadgeCounters = settings.alertBadgeCounters;
-    const badgeText = [];
-    let badgeColor = 'black';
-
-    if (alertBadgeCounters.includes(0) && (mrToReview > 0 || alertBadgeCounters.length > 1)) {
-        badgeText.push(mrToReview);
-        badgeColor = '#dc3545'; // red
-    }
-    if (alertBadgeCounters.includes(1) && (mrReviewed > 0 || alertBadgeCounters.length > 1)) {
-        badgeText.push(mrReviewed);
-        badgeColor = '#28a745'; // green
-    }
-    if (alertBadgeCounters.includes(2) && (issues.length > 0 || alertBadgeCounters.length > 1)) {
-        badgeText.push(issues.length);
-        badgeColor = '#fd7e14'; // orange
-    }
-    if (alertBadgeCounters.includes(3) && (todos.length > 0 || alertBadgeCounters.length > 1)) {
-        badgeText.push(todos.length);
-        badgeColor = '#1f78d1'; // blue
-    }
-
-    /** Save the fetched data */
-
-    const lastUpdateDateUnix = new Date().getTime();
-
-    await browser.storage.local.set({
-        mrReceived: mrReceivedDetails,
+    return {
+        mrReceivedDetails,
         mrToReview,
-        mrGiven: mrGivenDetailsNoDraft,
+        mrGivenDetailsNoDraft,
         mrReviewed,
         myDrafts,
         issues,
-        todos,
-        lastUpdateDateUnix
-    });
-
-    await setBadge(badgeText.length > 0 ? badgeText.join('⋅') : '', badgeColor);
-
-    return console.log('API Fetched successfully');
+        todos
+    };
 };

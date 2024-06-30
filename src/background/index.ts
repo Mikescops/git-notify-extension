@@ -1,7 +1,5 @@
 import * as browser from 'webextension-polyfill';
-import { getLatestDataFromGitLab, setTodoAsDone } from './endpoints';
-import { getProjectsList } from './endpoints/getProjectsList';
-import { getMembersOfGroup } from './endpoints/getMembersOfGroup';
+import { getMembersOfGroup, getProjectsList, routine, setTodoAsDone } from './endpoints';
 import { setGlobalError } from '../common/globalError';
 import { readConfiguration } from '../common/configuration';
 
@@ -15,7 +13,7 @@ readConfiguration<{ refreshRate: number }>(['refreshRate']).then((settings) => {
 
     browser.alarms.onAlarm.addListener(async () => {
         try {
-            await getLatestDataFromGitLab();
+            await routine();
             await setGlobalError(null);
         } catch (error) {
             if (error instanceof Error) {
@@ -36,7 +34,7 @@ browser.runtime.onMessage.addListener((message) => {
     if (message.type === 'getLatestDataFromGitLab') {
         return new Promise(async (resolve) => {
             try {
-                await getLatestDataFromGitLab();
+                await routine();
                 await setGlobalError(null);
                 resolve(true);
             } catch (error) {
