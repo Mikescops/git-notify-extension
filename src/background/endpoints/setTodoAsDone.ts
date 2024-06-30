@@ -9,7 +9,7 @@ export const setTodoAsDone = async (id: number | undefined): Promise<void> => {
     }
 
     const settings = await getSettings();
-    const gitlabApi = initGitlabApi(settings);
+    const gitlabApi = initGitlabApi({ account: settings.accounts[0] });
 
     await gitlabApi.TodoLists.done({ todoId: id });
 

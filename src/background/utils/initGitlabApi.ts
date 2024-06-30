@@ -1,18 +1,14 @@
 import { Gitlab } from '@gitbeaker/rest';
-import { GitLabAddressNotSet, GitLabTokenNotSet, NoAccountSet } from '../../common/errors';
-import { FailFetchSettings } from '../errors';
-import { GetSettingsResponse, GitlabAPI } from '../types';
+import { GitLabAddressNotSet, GitLabTokenNotSet } from '../../common/errors';
+import { GitlabAPI } from '../types';
+import { Account } from '../../common/types';
 
-export const initGitlabApi = (settings: GetSettingsResponse): GitlabAPI => {
-    if (!settings) {
-        throw new FailFetchSettings();
-    }
+interface InitGitlabApiParams {
+    account: Account;
+}
 
-    if (!settings.accounts) {
-        throw new NoAccountSet();
-    }
-
-    const account = settings.accounts[0];
+export const initGitlabApi = (params: InitGitlabApiParams): GitlabAPI => {
+    const { account } = params;
 
     if (!account.token || account.token === '') {
         throw new GitLabTokenNotSet();
