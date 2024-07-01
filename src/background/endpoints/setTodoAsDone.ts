@@ -1,7 +1,7 @@
-import * as browser from 'webextension-polyfill';
 import { getSettings } from '../utils/getSettings';
 import { initGitlabApi } from '../utils/initGitlabApi';
 import { TodoSchema } from '@gitbeaker/rest';
+import { Storage } from '../../common/storage';
 
 export const setTodoAsDone = async (id: number | undefined): Promise<void> => {
     if (!id) {
@@ -13,11 +13,13 @@ export const setTodoAsDone = async (id: number | undefined): Promise<void> => {
 
     await gitlabApi.TodoLists.done({ todoId: id });
 
-    const storage = await browser.storage.local.get(['todos']);
+    const storage = new Storage();
 
-    const currentTodos: TodoSchema[] = storage.todos;
+    const currentTodos: TodoSchema[] = (await storage.getKeys(['todos'])).todos;
 
     const newTodos = id ? currentTodos.filter((todo) => todo.id !== id) : [];
 
-    return await browser.storage.local.set({ todos: newTodos });
+    await storage.setKeys({ todos: newTodos });
+
+    return;
 };

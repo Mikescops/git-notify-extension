@@ -1,9 +1,9 @@
-import * as browser from 'webextension-polyfill';
 import { NoAccountSet } from '../../common/errors';
 import { FailFetchSettings } from '../errors';
 import { getSettings } from '../utils/getSettings';
 import { setBadge } from '../utils/setBadge';
 import { getLatestDataFromGitLab } from './getLatestDataFromGitLab';
+import { Storage } from '../../common/storage';
 
 export const routine = async (): Promise<void> => {
     console.log('>> POLLING GITLAB API');
@@ -36,7 +36,7 @@ export const routine = async (): Promise<void> => {
 
     const lastUpdateDateUnix = new Date().getTime();
 
-    await browser.storage.local.set({
+    await new Storage().setKeys({
         mrReceived: mrReceivedDetails,
         mrToReview,
         mrGiven: mrGivenDetailsNoDraft,
