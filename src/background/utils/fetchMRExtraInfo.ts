@@ -3,8 +3,8 @@ import {
     MergeRequestLevelMergeRequestApprovalSchema,
     MergeRequestSchemaWithBasicLabels
 } from '@gitbeaker/rest';
-import { GitLabIsCE } from '../errors';
-import { MergeRequestsDetails, GitlabAPI } from '../types';
+import { GitLabIsCE } from '../../common/errors';
+import { GitlabAPI, MergeRequestsDetails } from '../../common/types';
 
 interface FetchMRExtraInfoParams {
     gitlabCE: boolean;

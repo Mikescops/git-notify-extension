@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Account, TabId } from '../../common/types';
+import { ErrorKeys, TabId } from '../../common/types';
 import { AppStatus } from '../types';
 import { MergeRequestSendMessageReply } from '../utils/mergeRequestDownloader';
 
@@ -11,7 +11,7 @@ import { MergeRequests } from '../pages/MergeRequests';
 import { Loading } from './Loading';
 import { GlobalError } from '../../common/errors';
 import { Onboarding } from '../pages/Onboarding';
-import { readConfiguration } from '../../common/configuration';
+import { getConfiguration } from '../../common/storage';
 
 interface Props {
     appStatus: AppStatus;
@@ -25,10 +25,42 @@ export const Content = (props: Props) => {
 
     const [draftInToReviewTab, setDraftInToReviewTab] = useState<boolean>(true);
 
+    const displayErrorsForCurrentTab = () => {
+        const mapTabToErrorKey: Record<Exclude<TabId, 'pick'>, ErrorKeys> = {
+            to_review: 'mrReceived',
+            under_review: 'mrGiven',
+            drafts: 'myDrafts',
+            issues: 'issues',
+            todo_list: 'todos'
+        };
+
+        if (currentTab === 'pick') {
+            return;
+        }
+
+        return mrData.errors.map((accountError) => {
+            const localError = accountError.errors[mapTabToErrorKey[currentTab]];
+            if (localError) {
+                return <ErrorFlash key={accountError.uuid} accountUuid={accountError.uuid} error={localError} />;
+            }
+            if (accountError.errors.general) {
+                return (
+                    <ErrorFlash
+                        key={accountError.uuid}
+                        accountUuid={accountError.uuid}
+                        error={accountError.errors.general}
+                    />
+                );
+            }
+        });
+    };
+
     const contentSettings = useCallback(() => {
-        const getSettings = readConfiguration<{ accounts: Account[] }>(['accounts']);
+        const getSettings = getConfiguration(['accounts']);
         getSettings.then((settings) => {
-            setDraftInToReviewTab(Boolean(settings.accounts[0].draftInToReviewTab));
+            setDraftInToReviewTab(
+                Boolean(settings.accounts.length > 0 ? settings.accounts[0].draftInToReviewTab : true)
+            );
         });
     }, []);
 
@@ -39,7 +71,11 @@ export const Content = (props: Props) => {
     }
 
     if (appStatus === 'error' && error) {
-        if (error.name === 'GitLabTokenNotSet' || error.name === 'GitLabAddressNotSet') {
+        if (
+            error.name === 'GitLabTokenNotSet' ||
+            error.name === 'GitLabAddressNotSet' ||
+            error.name === 'GitLabNoAccount'
+        ) {
             return <Onboarding />;
         }
 
@@ -47,11 +83,21 @@ export const Content = (props: Props) => {
     }
 
     if (currentTab === 'issues') {
-        return <Issues issues={mrData.issues} />;
+        return (
+            <>
+                {displayErrorsForCurrentTab()}
+                <Issues issues={mrData.issues} />
+            </>
+        );
     }
 
     if (currentTab === 'todo_list') {
-        return <Todos todos={mrData.todos} />;
+        return (
+            <>
+                {displayErrorsForCurrentTab()}
+                <Todos todos={mrData.todos} />
+            </>
+        );
     }
 
     if (currentTab === 'pick') {
@@ -70,5 +116,10 @@ export const Content = (props: Props) => {
         mergeRequestsToDisplay = mergeRequestsToDisplay?.filter((mr) => !mr.work_in_progress);
     }
 
-    return <MergeRequests mergeRequests={mergeRequestsToDisplay} />;
+    return (
+        <>
+            {displayErrorsForCurrentTab()}
+            <MergeRequests mergeRequests={mergeRequestsToDisplay} />{' '}
+        </>
+    );
 };

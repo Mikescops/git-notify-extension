@@ -46,7 +46,7 @@ export const IssueItem = ({ issue }: Props) => {
                         className={'mrIconButton'}
                         onClick={(e) => {
                             e.preventDefault();
-                            setOpen(!open ?? true);
+                            setOpen(!(open ?? false));
                         }}
                         icon={open ? ChevronDownIcon : ChevronRightIcon}
                         aria-labelledby="icon-button-label"

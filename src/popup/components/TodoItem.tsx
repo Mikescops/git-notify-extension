@@ -42,7 +42,7 @@ export const TodoItem = (props: Props) => {
 
     const setTodoAsDone = useCallback(() => {
         browser.runtime
-            .sendMessage({ type: 'setTodoAsDone', todoId: todo.id })
+            .sendMessage({ type: 'setTodoAsDone', todoId: todo.id, accountUuid: '1' }) // TODO: fix accountUuid
             .then(() => {
                 setError(undefined);
                 setVisibility(false);

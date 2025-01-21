@@ -1,7 +1,7 @@
 import { ActionList } from '@primer/react';
 import { EmptyItems } from '../components/EmptyItems';
-import { MergeRequestsDetails } from '../../background/types';
 import { MergeRequestItem } from '../components/MergeRequestItem';
+import { MergeRequestsDetails } from '../../common/types';
 
 interface Props {
     mergeRequests: MergeRequestsDetails[];

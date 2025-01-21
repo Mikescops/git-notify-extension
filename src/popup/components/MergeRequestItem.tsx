@@ -2,7 +2,6 @@ import { Avatar, ActionList, Box, Link, Label, Tooltip, Details, useDetails, Ico
 import { ChevronDownIcon, ChevronRightIcon, ClockIcon, CommentDiscussionIcon, PlusIcon } from '@primer/octicons-react';
 import { AvatarWithTooltip, UserWithApproval } from './AvatarWithTooltip';
 import { calculateTimeElapsed, cleanupDescription, removeDuplicateObjectFromArray } from '../helpers';
-import { MergeRequestsDetails } from '../../background/types';
 import { createNewTab } from '../utils/createNewTab';
 import { PipelineBadge } from './PipelineBadge';
 import { MergeBadge } from './MergeBadge';
@@ -10,6 +9,7 @@ import { ProjectName } from './ProjectName';
 import { MarkdownViewer } from '@primer/react/drafts';
 import { marked } from 'marked';
 import { UserSchema } from '@gitbeaker/rest';
+import { MergeRequestsDetails } from '../../common/types';
 
 interface Props {
     mr: MergeRequestsDetails;
@@ -62,7 +62,7 @@ export const MergeRequestItem = ({ mr }: Props) => {
                         className={'mrIconButton'}
                         onClick={(e) => {
                             e.preventDefault();
-                            setOpen(!open ?? true);
+                            setOpen(!(open ?? false));
                         }}
                         icon={open ? ChevronDownIcon : ChevronRightIcon}
                         aria-labelledby="icon-button-label"

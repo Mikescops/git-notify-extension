@@ -1,7 +1,6 @@
 import { Gitlab } from '@gitbeaker/rest';
 import { GitLabAddressNotSet, GitLabTokenNotSet } from '../../common/errors';
-import { GitlabAPI } from '../types';
-import { Account } from '../../common/types';
+import { Account, GitlabAPI } from '../../common/types';
 
 interface InitGitlabApiParams {
     account: Account;

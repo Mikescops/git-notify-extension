@@ -4,6 +4,9 @@ on:
         tags:
             - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
+permissions:
+    contents: write
+
 name: Upload Release Assets
 
 jobs:
@@ -13,7 +16,7 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [18]
+                node-version: [22]
 
         steps:
             - name: Checkout code
@@ -24,10 +27,10 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
 
-            - uses: pnpm/action-setup@v2
+            - uses: pnpm/action-setup@v4
               name: Install pnpm
               with:
-                  version: 8
+                  version: 9
                   run_install: false
 
             - name: Get pnpm store directory
@@ -35,7 +38,7 @@ jobs:
               run: |
                   echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-            - uses: actions/cache@v3
+            - uses: actions/cache@v4
               name: Setup pnpm cache
               with:
                   path: ${{ env.STORE_PATH }}
@@ -53,55 +56,17 @@ jobs:
 
             - name: Create Release
               id: create_release
-              uses: actions/create-release@v1
+              uses: softprops/action-gh-release@v2
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                   tag_name: ${{ github.ref }}
-                  release_name: Release ${{ github.ref }}
+                  name: Release ${{ github.ref }}
                   draft: false
                   prerelease: false
-
-            - name: Upload Source build
-              id: upload-source-build
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ./dist/source.zip
-                  asset_name: source.zip
-                  asset_content_type: application/zip
-
-            - name: Upload Firefox release
-              id: upload-firefox-release
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ./dist/firefox.zip
-                  asset_name: firefox.zip
-                  asset_content_type: application/zip
-
-            - name: Upload Chrome release
-              id: upload-chrome-release
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ./dist/chrome.zip
-                  asset_name: chrome.zip
-                  asset_content_type: application/zip
-
-            - name: Upload Edge release
-              id: upload-edge-release
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ./dist/edge.zip
-                  asset_name: edge.zip
-                  asset_content_type: application/zip
+                  files: |
+                      ./dist/source.zip
+                      ./dist/firefox.zip
+                      ./dist/chrome.zip
+                      ./dist/edge.zip
+                  generate_release_notes: true

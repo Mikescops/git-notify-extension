@@ -1,5 +1,5 @@
 import * as browser from 'webextension-polyfill';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import {
     InfoIcon,
     KeyIcon,
@@ -8,9 +8,9 @@ import {
     PackageDependenciesIcon,
     TrashIcon
 } from '@primer/octicons-react';
-import { Box, Button, Checkbox, Flash, FormControl, Link, Octicon, TextInput, Tooltip } from '@primer/react';
+import { Box, Button, Checkbox, Flash, FormControl, Link, Octicon, Text, TextInput, Tooltip } from '@primer/react';
 import { Account } from '../../common/types';
-import { updateAccountConfiguration } from '../../common/configuration';
+import { updateAccountConfiguration } from '../../common/storage';
 
 interface Props {
     accountIndex: number;
@@ -28,9 +28,9 @@ export const AccountConfiguration = (props: Props) => {
         setAccount({ ...account, ...data });
     };
 
-    const testConnection = useCallback(() => {
-        browser.runtime.sendMessage({ type: 'getLatestDataFromGitLab' }).then((success) => setTestSuccess(success));
-    }, []);
+    const testConnection = (accountUuid: string) => {
+        browser.runtime.sendMessage({ type: 'testAccount', accountUuid }).then((success) => setTestSuccess(success));
+    };
 
     return (
         <Box
@@ -44,6 +44,9 @@ export const AccountConfiguration = (props: Props) => {
                 gap: 3
             }}
         >
+            <Text>
+                <strong>Uuid:</strong> {account.uuid}
+            </Text>
             <FormControl>
                 <FormControl.Label>Using GitLab Community Edition</FormControl.Label>
                 <Checkbox
@@ -135,7 +138,11 @@ export const AccountConfiguration = (props: Props) => {
             </FormControl>
 
             <Box display="flex" sx={{ columnGap: 2 }}>
-                <Button onClick={testConnection} variant="default" leadingVisual={PackageDependenciesIcon}>
+                <Button
+                    onClick={() => testConnection(account.uuid)}
+                    variant="default"
+                    leadingVisual={PackageDependenciesIcon}
+                >
                     Test connection
                 </Button>
                 <Button onClick={props.removeAccount} variant="danger" leadingVisual={TrashIcon}>
