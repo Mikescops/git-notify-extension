@@ -5,12 +5,12 @@ import { Content } from './components/Content';
 import { Footer } from './components/Footer';
 import { getMergeRequestList, MergeRequestSendMessageReply } from './utils/mergeRequestDownloader';
 import { pingBackend } from './utils/ping';
-import { Account, TabId } from '../common/types';
-import { readConfiguration } from '../common/configuration';
+import { TabId } from '../common/types';
 import { AppStatus } from './types';
+import { GlobalError } from '../common/errors';
+import { getConfiguration } from '../common/storage';
 
 import './style.css';
-import { GlobalError } from '../common/errors';
 
 export const App = () => {
     const [appStatus, setAppStatus] = useState<AppStatus>('idle');
@@ -23,17 +23,18 @@ export const App = () => {
         myDrafts: [],
         issues: [],
         todos: [],
-        lastUpdateDateUnix: Date.now()
+        lastUpdateDateUnix: Date.now(),
+        errors: []
     });
 
     const [currentTab, setCurrentTab] = useState('to_review' as TabId);
     const [gitlabAddress, setGitlabAddress] = useState('');
 
     const applySettings = useCallback(() => {
-        const getSettings = readConfiguration<{ defaultTab: TabId; accounts: Account[] }>(['defaultTab', 'accounts']);
+        const getSettings = getConfiguration(['defaultTab', 'accounts']);
         getSettings.then((settings) => {
             setCurrentTab(settings.defaultTab ?? 'to_review');
-            setGitlabAddress(settings.accounts[0].address ?? 'https://gitlab.com');
+            setGitlabAddress(settings.accounts.length > 0 ? settings.accounts[0].address ?? 'https://gitlab.com' : '');
         });
     }, []);
 
@@ -60,9 +61,6 @@ export const App = () => {
                     .then((response) => {
                         if (!response) {
                             return setError(new Error('Something went wrong'));
-                        }
-                        if (response.error) {
-                            return setError(response.error);
                         }
 
                         setMrData(response);

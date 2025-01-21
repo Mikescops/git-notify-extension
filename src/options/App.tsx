@@ -3,17 +3,11 @@ import { useState, useEffect } from 'react';
 import { Box, Button, TextInput, Tooltip, Octicon, FormControl, Select, ThemeProvider } from '@primer/react';
 import { InfoIcon, ClockIcon } from '@primer/octicons-react';
 import './style.css';
-import { updateConfiguration, readConfiguration, defaultEmptyAccount } from '../common/configuration';
-import { Account, Configuration, TabId } from '../common/types';
+import { Configuration, TabId } from '../common/types';
 import { AccountConfiguration } from './components/Account';
+import { getConfiguration, updateConfiguration, defaultEmptyAccount, clearAccountStorage } from '../common/storage';
 
-const getSettings = readConfiguration<{
-    accounts: Account[];
-    refreshRate: number;
-    defaultTab: TabId;
-    alertBadgeCounters: number[];
-    mode: 'production' | 'development';
-}>(['accounts', 'refreshRate', 'defaultTab', 'alertBadgeCounters', 'mode']);
+const getSettings = getConfiguration(['accounts', 'refreshRate', 'defaultTab', 'alertBadgeCounters', 'mode']);
 
 export const App = () => {
     const [configuration, setConfiguration] = useState<Configuration>();
@@ -40,11 +34,12 @@ export const App = () => {
 
     const addNewAccount = () =>
         updateConfigurationInMemory({
-            accounts: [...(configuration?.accounts || []), defaultEmptyAccount]
+            accounts: [...(configuration?.accounts || []), defaultEmptyAccount()]
         });
 
     const removeAccount = (index: number) => {
         const accounts = configuration?.accounts || [];
+        void clearAccountStorage(accounts[index].uuid);
         accounts.splice(index, 1);
         updateConfigurationInMemory({ accounts });
     };

@@ -1,7 +1,6 @@
 import { IssueSchema, TodoSchema } from '@gitbeaker/rest';
-import { MergeRequestsDetails } from '../../background/types';
-import { GlobalError } from '../../common/errors';
-import { getLocalData } from '../../common/getLocalData';
+import { getAccountData, getConfiguration } from '../../common/storage';
+import { ErrorKeys, MergeRequestsDetails } from '../../common/types';
 
 export interface MergeRequestSendMessageReply {
     mrReceived: MergeRequestsDetails[];
@@ -12,15 +11,22 @@ export interface MergeRequestSendMessageReply {
     issues: IssueSchema[];
     todos: TodoSchema[];
     lastUpdateDateUnix: number;
-    error?: GlobalError;
+    errors: {
+        uuid: string;
+        errors: Partial<Record<ErrorKeys, Error>>;
+    }[];
 }
 
+// Function to fetch and merge data from all accounts
 export const getMergeRequestList = async (): Promise<MergeRequestSendMessageReply> => {
-    const response = await getLocalData();
+    try {
+        const { accounts } = await getConfiguration(['accounts']);
 
-    if ('error' in response) {
-        return {
-            error: response.error,
+        if (!accounts || accounts.length === 0) {
+            throw new Error('No accounts configured');
+        }
+
+        const mergedData: MergeRequestSendMessageReply = {
             mrReceived: [],
             mrToReview: 0,
             mrGiven: [],
@@ -28,9 +34,40 @@ export const getMergeRequestList = async (): Promise<MergeRequestSendMessageRepl
             myDrafts: [],
             issues: [],
             todos: [],
-            lastUpdateDateUnix: Date.now()
+            lastUpdateDateUnix: 0,
+            errors: []
+        };
+
+        // Fetch data from each account's storage and merge
+        for (const account of accounts) {
+            const data = await getAccountData(account.uuid);
+
+            if (data) {
+                mergedData.mrReceived.push(...(!(data.mrReceived instanceof Error) ? data.mrReceived : []));
+                mergedData.mrToReview += data.mrToReview;
+                mergedData.mrGiven.push(...(!(data.mrGiven instanceof Error) ? data.mrGiven : []));
+                mergedData.mrReviewed += data.mrReviewed;
+                mergedData.myDrafts.push(...(!(data.myDrafts instanceof Error) ? data.myDrafts : []));
+                mergedData.issues.push(...(!(data.issues instanceof Error) ? data.issues : []));
+                mergedData.todos.push(...(!(data.todos instanceof Error) ? data.todos : []));
+                mergedData.lastUpdateDateUnix = Math.max(mergedData.lastUpdateDateUnix, data.lastUpdateDateUnix);
+                mergedData.errors = [...mergedData.errors, ...[{ uuid: account.uuid, errors: data.errors }]];
+            }
+        }
+
+        return mergedData;
+    } catch (error) {
+        console.error('Failed to fetch merge request list:', error);
+        return {
+            mrReceived: [],
+            mrToReview: 0,
+            mrGiven: [],
+            mrReviewed: 0,
+            myDrafts: [],
+            issues: [],
+            todos: [],
+            lastUpdateDateUnix: Date.now(),
+            errors: []
         };
     }
-
-    return response as MergeRequestSendMessageReply;
 };

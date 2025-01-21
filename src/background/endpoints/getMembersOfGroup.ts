@@ -1,11 +1,11 @@
-import { getSettings } from '../utils/getSettings';
-import { GroupMember } from '../types';
 import { initGitlabApi } from '../utils/initGitlabApi';
 import { removeDuplicateObjectFromArray } from '../../popup/helpers';
 import { ExpandedMergeRequestSchema, MemberSchema } from '@gitbeaker/rest';
+import { getConfiguration } from '../../common/storage';
+import { GroupMember } from '../../common/types';
 
 export const getMembersOfGroup = async (groupId: number): Promise<GroupMember[]> => {
-    const settings = await getSettings();
+    const settings = await getConfiguration(['accounts']);
     const gitlabApi = initGitlabApi({ account: settings.accounts[0] });
     const groupMembers = (await gitlabApi.GroupMembers.all(groupId)) as MemberSchema[];
     const groupMembersWithCount = groupMembers.map((member) => {

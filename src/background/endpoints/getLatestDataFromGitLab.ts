@@ -2,21 +2,21 @@ import { fetchMRExtraInfo } from '../utils/fetchMRExtraInfo';
 import { removeDuplicateObjectFromArray } from '../../popup/helpers';
 import { initGitlabApi } from '../utils/initGitlabApi';
 import { IssueSchemaWithBasicLabels, MergeRequestSchemaWithBasicLabels, TodoSchema } from '@gitbeaker/rest';
-import { Account } from '../../common/types';
-import { MergeRequestsDetails } from '../types';
+import { Account, MergeRequestsDetails } from '../../common/types';
 
 interface GetLatestDataFromGitLabParams {
     account: Account;
 }
 
 interface GetLatestDataFromGitLabResponse {
-    mrReceivedDetails: MergeRequestsDetails[];
+    mrReceivedDetails: MergeRequestsDetails[] | Error;
     mrToReview: number;
-    mrGivenDetailsNoDraft: MergeRequestsDetails[];
+    mrGivenDetailsNoDraft: MergeRequestsDetails[] | Error;
     mrReviewed: number;
-    myDrafts: MergeRequestsDetails[];
-    issues: IssueSchemaWithBasicLabels[];
-    todos: TodoSchema[];
+    myDrafts: MergeRequestsDetails[] | Error;
+    issues: IssueSchemaWithBasicLabels[] | Error;
+    todos: TodoSchema[] | Error;
+    error?: Error;
 }
 
 export const getLatestDataFromGitLab = async (
@@ -24,100 +24,157 @@ export const getLatestDataFromGitLab = async (
 ): Promise<GetLatestDataFromGitLabResponse> => {
     const { account } = params;
 
-    const gitlabApi = initGitlabApi({ account });
-    const currentUser = await gitlabApi.Users.showCurrentUser();
+    let gitlabApi;
+    try {
+        gitlabApi = initGitlabApi({ account });
+    } catch (error) {
+        return {
+            mrReceivedDetails: [],
+            mrToReview: 0,
+            mrGivenDetailsNoDraft: [],
+            mrReviewed: 0,
+            myDrafts: [],
+            issues: [],
+            todos: [],
+            error: new Error('Failed to initialize GitLab API: ' + (error as Error).message)
+        };
+    }
 
-    /** Fetching MR "To Review" */
+    let currentUser;
+    try {
+        currentUser = await gitlabApi.Users.showCurrentUser();
+    } catch (error) {
+        return {
+            mrReceivedDetails: [],
+            mrToReview: 0,
+            mrGivenDetailsNoDraft: [],
+            mrReviewed: 0,
+            myDrafts: [],
+            issues: [],
+            todos: [],
+            error: new Error('Failed to fetch current user: ' + (error as Error).message)
+        };
+    }
 
-    const mrAssignedRequest = gitlabApi.MergeRequests.all({
-        state: 'opened',
-        scope: 'assigned_to_me',
-        perPage: 100,
-        maxPages: 5
-    }) as Promise<MergeRequestSchemaWithBasicLabels[]>;
+    // Helper function for independent error handling in requests
+    const safeFetch = async <T>(fetchFn: () => Promise<T>, defaultValue: T | Error): Promise<T | Error> => {
+        try {
+            return await fetchFn();
+        } catch (error) {
+            console.error('Fetch failed:', error);
+            return defaultValue;
+        }
+    };
 
-    const mrReceivedRequest = gitlabApi.MergeRequests.all({
-        state: 'opened',
-        scope: 'all',
-        reviewer_id: currentUser.id,
-        perPage: 100,
-        maxPages: 5
-    }) as Promise<MergeRequestSchemaWithBasicLabels[]>;
-
-    /** Fetching MR "Under review" */
-
-    const mrGivenRequest = gitlabApi.MergeRequests.all({
-        state: 'opened',
-        scope: 'created_by_me',
-        perPage: 100,
-        maxPages: 5
-    }) as Promise<MergeRequestSchemaWithBasicLabels[]>;
-
-    /** Fetching "Issues" */
-
-    const issuesRequest = gitlabApi.Issues.all({
-        state: 'opened',
-        scope: 'assigned_to_me',
-        perPage: 100,
-        maxPages: 5
-    }) as Promise<IssueSchemaWithBasicLabels[]>;
-
-    /** Fetching "Todos" */
-
-    const todosRequest = gitlabApi.TodoLists.all({
-        state: 'pending',
-        perPage: 100,
-        maxPages: 5
-    }) as Promise<TodoSchema[]>;
-
+    // Fetch data with independent error handling
     const [mrAssigned, mrReceived, mrGiven, issues, todos] = await Promise.all([
-        mrAssignedRequest,
-        mrReceivedRequest,
-        mrGivenRequest,
-        issuesRequest,
-        todosRequest
+        safeFetch(
+            () =>
+                gitlabApi.MergeRequests.all({
+                    state: 'opened',
+                    scope: 'assigned_to_me',
+                    perPage: 100,
+                    maxPages: 5
+                }) as Promise<MergeRequestSchemaWithBasicLabels[]>,
+            new Error('Failed to fetch MR assigned to user')
+        ),
+        safeFetch(
+            () =>
+                gitlabApi.MergeRequests.all({
+                    state: 'opened',
+                    scope: 'all',
+                    reviewer_id: currentUser.id,
+                    perPage: 100,
+                    maxPages: 5
+                }) as Promise<MergeRequestSchemaWithBasicLabels[]>,
+            new Error('Failed to fetch MR received')
+        ),
+        safeFetch(
+            () =>
+                gitlabApi.MergeRequests.all({
+                    state: 'opened',
+                    scope: 'created_by_me',
+                    perPage: 100,
+                    maxPages: 5
+                }) as Promise<MergeRequestSchemaWithBasicLabels[]>,
+            new Error('Failed to fetch MR created by user')
+        ),
+        safeFetch(
+            () =>
+                gitlabApi.Issues.all({
+                    state: 'opened',
+                    scope: 'assigned_to_me',
+                    perPage: 100,
+                    maxPages: 5
+                }) as Promise<IssueSchemaWithBasicLabels[]>,
+            new Error('Failed to fetch issues')
+        ),
+        safeFetch(
+            () => gitlabApi.TodoLists.all({ state: 'pending', perPage: 100, maxPages: 5 }) as Promise<TodoSchema[]>,
+            new Error('Failed to fetch todos')
+        )
     ]);
 
-    // On gitlab you can be the author of an MR, tagged as assignee or reviewer
-    // or all at the same time. We clean all unnecessary duplicates and MRs
-    // current user is the creator of from the requests list.
-    const requests = removeDuplicateObjectFromArray([...mrAssigned, ...mrReceived], 'iid').filter(
-        (merge) => merge.author.id !== currentUser.id
-    );
-
-    const mrReceivedDetails = (
-        await fetchMRExtraInfo({
-            gitlabApi,
-            mrList: requests,
-            gitlabCE: account.gitlabCE
-        })
-    ).filter((mr) => account.draftInToReviewTab || (!account.draftInToReviewTab && !mr.work_in_progress));
-
+    // Process "MR Received" details if no error
+    let mrReceivedDetails: MergeRequestsDetails[] | Error = [];
     let mrToReview = 0;
-    mrReceivedDetails.forEach((mr) => {
-        if (!mr.approvals.user_has_approved) {
-            mrToReview += 1;
+    if (!(mrReceived instanceof Error) && !(mrAssigned instanceof Error)) {
+        const requests = removeDuplicateObjectFromArray([...mrAssigned, ...mrReceived], 'iid').filter(
+            (merge) => merge.author.id !== currentUser.id
+        );
+
+        mrReceivedDetails = await safeFetch(
+            () =>
+                fetchMRExtraInfo({
+                    gitlabApi,
+                    mrList: requests,
+                    gitlabCE: account.gitlabCE
+                }),
+            new Error('Failed to fetch extra MR Received details')
+        );
+
+        if (!(mrReceivedDetails instanceof Error)) {
+            mrReceivedDetails = mrReceivedDetails.filter(
+                (mr) => account.draftInToReviewTab || (!account.draftInToReviewTab && !mr.work_in_progress)
+            );
+
+            mrReceivedDetails.forEach((mr) => {
+                if (!mr.approvals.user_has_approved) {
+                    mrToReview += 1;
+                }
+            });
         }
-    });
+    }
 
-    const mrGivenDetails = await fetchMRExtraInfo({
-        gitlabApi,
-        mrList: mrGiven,
-        gitlabCE: account.gitlabCE
-    });
-
-    const mrGivenDetailsNoDraft = mrGivenDetails.filter((mr) => !mr.work_in_progress);
-
+    // Process "MR Given" details if no error
+    let mrGivenDetailsNoDraft: MergeRequestsDetails[] | Error = [];
+    let myDrafts: MergeRequestsDetails[] | Error = [];
     let mrReviewed = 0;
-    mrGivenDetailsNoDraft.forEach((mr) => {
-        if (mr.approvals.approved) {
-            mrReviewed += 1;
+    if (!(mrGiven instanceof Error)) {
+        const mrGivenDetails = await safeFetch(
+            () =>
+                fetchMRExtraInfo({
+                    gitlabApi,
+                    mrList: mrGiven,
+                    gitlabCE: account.gitlabCE
+                }),
+            new Error('Failed to fetch extra MR Given details')
+        );
+
+        if (!(mrGivenDetails instanceof Error)) {
+            mrGivenDetailsNoDraft = mrGivenDetails.filter((mr) => !mr.work_in_progress);
+            myDrafts = mrGivenDetails.filter((mr) => mr.work_in_progress);
+
+            mrGivenDetailsNoDraft.forEach((mr) => {
+                if (mr.approvals.approved) {
+                    mrReviewed += 1;
+                }
+            });
+        } else {
+            mrGivenDetailsNoDraft = mrGivenDetails;
+            myDrafts = mrGivenDetails;
         }
-    });
-
-    /** Filtering "Drafts" */
-
-    const myDrafts = mrGivenDetails.filter((mr) => mr.work_in_progress);
+    }
 
     return {
         mrReceivedDetails,

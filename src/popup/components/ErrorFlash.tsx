@@ -1,7 +1,8 @@
-import { Details, Flash, FlashProps } from '@primer/react';
+import { Details, Flash, FlashProps, Text } from '@primer/react';
 
 interface Props extends FlashProps {
     error: Error;
+    accountUuid?: string;
 }
 
 export const ErrorFlash = (props: Props): JSX.Element => {
@@ -9,7 +10,12 @@ export const ErrorFlash = (props: Props): JSX.Element => {
 
     return (
         <Flash sx={{ margin: 2 }} variant="danger" {...other}>
-            {error.message}
+            {props.accountUuid && (
+                <>
+                    <Text sx={{ fontWeight: 'bold' }}>Account: {props.accountUuid}</Text> <br />
+                </>
+            )}
+            <Text>{error.message}</Text>
             <Details style={{ whiteSpace: 'normal' }}>{error.stack}</Details>
         </Flash>
     );

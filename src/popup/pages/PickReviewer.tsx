@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Autocomplete, FormControl, Button, Box, Text } from '@primer/react';
 import { PeopleIcon, SyncIcon } from '@primer/octicons-react';
 import * as browser from 'webextension-polyfill';
-import { GroupMember } from '../../background/types';
 import { AvatarWithTooltip } from '../components/AvatarWithTooltip';
 import { GroupSchema } from '@gitbeaker/rest';
+import { GroupMember } from '../../common/types';
 
 export const PickReviewer = () => {
     interface Group {
